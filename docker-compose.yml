@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  kraksim:
+    container_name: kraksim
+    build:
+      context: .
+    # uncomment 2 lines below on linux, requires 20.04< version od docker engine
+    #    extra_hosts:
+    #      - "host.docker.internal:host-gateway"
+    ports:
+      - 8060:8080
+      - 8061:8081
+    environment:
+      - TZ=Europe/Warsaw
+      - spring.profiles.active=development
+      - spring.liquibase.contexts=development
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:2731/postgres

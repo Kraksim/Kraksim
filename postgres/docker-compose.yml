@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+  kraksim-db:
+    container_name: kraksim-postgres
+    build: .
+    ports:
+      - 2731:5432
+    environment:
+      POSTGRES_PASSWORD: postgres

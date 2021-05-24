@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://host.docker.internal:2731/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate.ddl-auto: update
+
+app:
+  version: ${version}
+  name: ${name}
