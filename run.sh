@@ -1,3 +1,3 @@
-docker-compose rm -f -s -v "akamai_remote_server"
+docker-compose rm -f -s -v "kraksim"
 docker-compose pull
 docker-compose up --build
