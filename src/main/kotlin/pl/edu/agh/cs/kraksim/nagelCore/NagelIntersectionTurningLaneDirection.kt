@@ -1,8 +1,8 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
-class IntersectionTurningLaneDirection(
+class NagelIntersectionTurningLaneDirection(
     val from: NagelLane,
-    val to: Road
+    val to: NagelRoad
 ) {
 
 }

@@ -1,11 +1,11 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
-class Road(
+class NagelRoad(
     val id: Long,
     val lanes: List<NagelLane>,
-    val start: RoadNode,
-    val end: RoadNode,
-    val length: Int
+    val start: NagelRoadNode,
+    val end: NagelRoadNode,
+    val length: Int,
 ) {
 
 

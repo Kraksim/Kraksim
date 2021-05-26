@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.nagelCore
+package pl.edu.agh.cs.kraksim.comon
 
 class TrafficLightPhase(
     var phaseTime: Int,
@@ -7,6 +7,6 @@ class TrafficLightPhase(
 
 
     enum class LightColor {
-        RED, YELLOW, GREEN
+        RED, GREEN
     }
 }
