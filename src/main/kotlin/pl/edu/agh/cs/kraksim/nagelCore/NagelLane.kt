@@ -1,25 +1,28 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
+import pl.edu.agh.cs.kraksim.comon.addToFront
 import kotlin.math.roundToInt
 
 class NagelLane(
     private val id: Long,
+    val indexFromLeft: Int,
+    val parentRoad: NagelRoad,
     startingPoint: Int,
     endingPoint: Int,
-    val indexFromLeft: Int,
-    val parentRoad: NagelRoad
 ) {
-    val cars: MutableList<NagelCar> =
-        ArrayList(); // lista ma same auta, nie ma pustyc komórek. posortowana bo chcemy meic odtep łątwy do auta przed danym autem
-    var cellsCount: Int
+    // lista ma same auta, nie ma pustyc komórek. posortowana bo chcemy meic odtep łątwy do auta przed danym autem
+    val cars: MutableList<NagelCar> = ArrayList()
 
-    init {
-        val length = endingPoint - startingPoint;
-        cellsCount = (length / AVERAGE_CAR_LENGTH).roundToInt()
-    }
+    val length: Int = endingPoint - startingPoint
+    val cellsCount: Int = (length / AVERAGE_CAR_LENGTH).roundToInt()
 
     fun addCar(car: NagelCar) {
-        this.cars.add(car)
+        this.cars.addToFront(car)
+//        this.cars = ArrayList(mutableListOf(car) + (this.cars))
+    }
+
+    fun remove(car: NagelCar) {
+        this.cars.remove(car)
     }
 
     companion object {

@@ -5,11 +5,13 @@ class NagelGateway(
     val connectedRoads: List<NagelRoad>
 ) : NagelRoadNode {
 
-    override fun getPossibleRoads(lane: NagelLane): Collection<NagelRoad> {
-        return connectedRoads
-    }
+    val finishedCars: ArrayList<NagelCar> = ArrayList()
 
     override fun canEnterNodeFrom(lane: NagelLane): Boolean {
         return true
+    }
+
+    fun addCar(car: NagelCar) {
+        finishedCars.add(car)
     }
 }

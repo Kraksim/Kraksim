@@ -11,7 +11,7 @@ class NagelIntersection(
     val position: Position
 ) : NagelRoadNode {
 
-    override fun getPossibleRoads(lane: NagelLane): Collection<NagelRoad> {
+    fun getPossibleRoads(lane: NagelLane): List<NagelRoad> {
         return directions.filter { it.from == lane }
             .map { it.to }
     }
