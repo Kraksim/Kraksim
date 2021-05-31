@@ -7,8 +7,8 @@ class NagelLane(
     private val id: Long,
     val indexFromLeft: Int,
     val parentRoad: NagelRoad,
-    startingPoint: Int,
-    endingPoint: Int,
+    val startingPoint: Int,
+    val endingPoint: Int,
 ) {
     // lista ma same auta, nie ma pustyc komórek. posortowana bo chcemy meic odtep łątwy do auta przed danym autem
     val cars: MutableList<NagelCar> = ArrayList()
@@ -23,6 +23,10 @@ class NagelLane(
 
     fun remove(car: NagelCar) {
         this.cars.remove(car)
+    }
+
+    override fun toString(): String {
+        return "NagelLane(id=$id, indexFromLeft=$indexFromLeft, startingPoint=$startingPoint, endingPoint=$endingPoint, \ncars=${cars.map { it.toString() + "\n" }}, length=$length, cellsCount=$cellsCount)"
     }
 
     companion object {

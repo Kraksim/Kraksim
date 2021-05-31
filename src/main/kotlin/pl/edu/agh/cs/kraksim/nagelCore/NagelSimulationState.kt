@@ -9,4 +9,8 @@ class NagelSimulationState(
 ) : SimulationState {
 
 
+    override fun toString(): String {
+        return "NagelSimulationState(gateways=$gateways, roads=$roads, intersections=$intersections)"
+    }
+
 }

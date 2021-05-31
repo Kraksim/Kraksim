@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.nagelCore
 class NagelCar(
     var positionRelativeToStart: Int = 0,
     var velocity: Int,
-    var currentLane: NagelLane
+    var currentLane: NagelLane // todo zrobić na nullable
 ) {
     var distanceLeftToMove: Int = 0
 
@@ -18,6 +18,10 @@ class NagelCar(
         lane.addCar(this)
         positionRelativeToStart = newPosition
         distanceLeftToMove = 0
+    }
+
+    override fun toString(): String {
+        return "NagelCar(positionRelativeToStart=$positionRelativeToStart, velocity=$velocity, distanceLeftToMove=$distanceLeftToMove)"
     }
 
 }
