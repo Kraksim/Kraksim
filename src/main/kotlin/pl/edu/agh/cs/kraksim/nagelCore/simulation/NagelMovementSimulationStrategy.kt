@@ -40,7 +40,7 @@ class NagelMovementSimulationStrategy(
                     }
 
                     val distanceFromCarInFront =
-                        it.cars[index + 1].positionRelativeToStart - car.positionRelativeToStart
+                        it.cars[index + 1].positionRelativeToStart - car.positionRelativeToStart - 1
 
                     if (car.velocity > distanceFromCarInFront) {
                         car.velocity = distanceFromCarInFront
