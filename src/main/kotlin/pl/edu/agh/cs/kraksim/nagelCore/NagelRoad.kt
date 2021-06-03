@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.nagelCore
 
 class NagelRoad(
     val id: Long,
-    val length: Int,
+    val physicalLength: Int,
 ) {
 
     val lanes: ArrayList<NagelLane> = ArrayList()
@@ -16,21 +16,12 @@ class NagelRoad(
         return end!!
     }
 
-    /*
-     private val id: Long,
-    val indexFromLeft: Int,
-    val parentRoad: NagelRoad,
-    startingPoint: Int,
-    endingPoint: Int,
-     */
-
-    fun addLane(laneId: Long, indexFromLeft: Int, startingPoint: Int, endingPoint: Int) {
-        val newLane = NagelLane(laneId, indexFromLeft, this, startingPoint, endingPoint)
+    fun addLane(laneId: Long, indexFromLeft: Int, physicalStartingPoint: Int, physicalEndingPoint: Int) {
+        val newLane = NagelLane(laneId, indexFromLeft, this, physicalStartingPoint, physicalEndingPoint)
         lanes.add(newLane)
     }
 
     override fun toString(): String {
-        return "NagelRoad(id=$id, length=$length, lanes=$lanes)"
+        return "NagelRoad(id=$id, lanes=$lanes)"
     }
-
 }

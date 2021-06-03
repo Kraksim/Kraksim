@@ -6,18 +6,17 @@ class NagelGateway(
     override val startingRoads: List<NagelRoad>,
 ) : NagelRoadNode {
 
+    val finishedCars: ArrayList<NagelCar> = ArrayList()
+
     init {
         endingRoads.forEach { it.setEnd(this) }
     }
 
-    val finishedCars: ArrayList<NagelCar> = ArrayList()
-
-    override fun canEnterNodeFrom(lane: NagelLane): Boolean {
-        return endingRoads.flatMap { it.lanes }
-            .contains(lane)
-    }
-
     fun addCar(car: NagelCar) {
         finishedCars.add(car)
+    }
+
+    override fun toString(): String {
+        return "NagelGateway(id=$id, finishedCars=$finishedCars)"
     }
 }

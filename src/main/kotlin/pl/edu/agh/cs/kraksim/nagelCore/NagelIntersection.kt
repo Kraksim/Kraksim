@@ -7,6 +7,7 @@ class NagelIntersection(
     val directions: Set<NagelIntersectionTurningLaneDirection>,
     override val endingRoads: List<NagelRoad>,
     override val startingRoads: List<NagelRoad>,
+    var phases: Map<NagelLane, TrafficLightPhase> = emptyMap()
 //    val position: Position
 ) : NagelRoadNode {
 
@@ -14,16 +15,17 @@ class NagelIntersection(
         endingRoads.forEach { it.setEnd(this) }
     }
 
-    var phases: Map<NagelLane, TrafficLightPhase> = emptyMap()
-
     fun getPossibleRoads(lane: NagelLane): List<NagelRoad> {
         return directions.filter { it.from == lane }
             .map { it.to }
     }
 
-    override fun canEnterNodeFrom(lane: NagelLane): Boolean {
-//        return phases[lane]!!.state == TrafficLightPhase.LightColor.GREEN
-        return true
+    /**
+     * Answers if Intersection can be entered from [lane],
+     * depends on TrafficLightPhase assigned to that line
+     */
+    fun canGoThrough(lane: NagelLane): Boolean {
+        return phases[lane]!!.state == TrafficLightPhase.LightColor.GREEN
     }
 
 
