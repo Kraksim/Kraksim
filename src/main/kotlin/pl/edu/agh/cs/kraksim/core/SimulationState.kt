@@ -1,9 +1,6 @@
 package pl.edu.agh.cs.kraksim.core
 
-import pl.edu.agh.cs.kraksim.nagelCore.NagelGateway
-import pl.edu.agh.cs.kraksim.nagelCore.NagelIntersection
-import pl.edu.agh.cs.kraksim.nagelCore.NagelLane
-import pl.edu.agh.cs.kraksim.nagelCore.NagelRoad
+import pl.edu.agh.cs.kraksim.nagelCore.*
 
 interface SimulationState {
     var gateways: List<NagelGateway>
@@ -12,4 +9,7 @@ interface SimulationState {
 
     val lanes: List<NagelLane>
         get() = roads.flatMap { it.lanes }
+
+    val cars: List<NagelCar>
+        get() = lanes.flatMap { it.cars }
 }

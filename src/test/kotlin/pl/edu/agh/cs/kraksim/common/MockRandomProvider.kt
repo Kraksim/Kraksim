@@ -4,5 +4,5 @@ import pl.edu.agh.cs.kraksim.comon.random.RandomProvider
 
 class MockRandomProvider(private val booleanToReturn: Boolean = true) : RandomProvider {
 
-    override fun getBool(trueProbability: Double) = booleanToReturn
+    override fun getBoolean(trueProbability: Double) = booleanToReturn
 }

@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.nagelCore.simulation
 
 import pl.edu.agh.cs.kraksim.comon.adjacentPairs
 import pl.edu.agh.cs.kraksim.comon.random.RandomProvider
+import pl.edu.agh.cs.kraksim.comon.withoutLast
 import pl.edu.agh.cs.kraksim.core.SimulationState
 import pl.edu.agh.cs.kraksim.nagelCore.*
 import kotlin.math.min
@@ -19,7 +20,7 @@ class NagelMovementSimulationStrategy(
     }
 
     fun acceleration(state: SimulationState) {
-        state.lanes.flatMap { it.cars }
+        state.cars
             .forEach { car ->
                 if (car.velocity < MAX_VELOCITY)
                     car.velocity += 1
@@ -62,11 +63,11 @@ class NagelMovementSimulationStrategy(
 
     //TODO refactor and write tests
     fun randomization(state: SimulationState) {
-        state.lanes.flatMap { it.cars }
-            .forEach {
-                val shouldSlowDown = it.velocity > 0 && random.getBool(SLOW_DOWN_PROBABILITY)
+        state.cars
+            .forEach { car ->
+                val shouldSlowDown = car.velocity > 0 && random.getBoolean(SLOW_DOWN_PROBABILITY)
                 if (shouldSlowDown) {
-                    it.velocity -= 1
+                    car.velocity -= 1
                 }
             }
     }
@@ -75,20 +76,16 @@ class NagelMovementSimulationStrategy(
     fun motion(state: SimulationState): HashMap<NagelLane, ArrayList<NagelCar>> {
         val carsToResolve = HashMap<NagelLane, ArrayList<NagelCar>>()
 
-        state.roads.flatMap { it.lanes }
-            .filter { it.cars.isNotEmpty() }
+        state.lanes.filter { it.containsCar() }
             .forEach {
-                for ((index, car) in it.cars.withIndex()) {
-                    if (index == it.cars.size - 1) {
-                        continue
-                    }
+
+                it.cars.withoutLast().forEach { car ->
                     car.positionRelativeToStart += car.velocity
                     // todo pamietać o pasach ze się mogą skończyć
                 }
 
                 val lastCar = it.cars.last()
                 // todo ten lane musi być taki sam co w fazie slowing down - uwzględnić
-
 
                 val endNode = it.parentRoad.end()
                 val distanceFromIntersection = lastCar.distanceFromRoadNode()
