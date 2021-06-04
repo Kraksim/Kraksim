@@ -16,8 +16,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Kotlin Linter
-        uses: vroy/gha-kotlin-linter@v2
       - name: Build
         run: gradle clean build -x test
       - name: Test
