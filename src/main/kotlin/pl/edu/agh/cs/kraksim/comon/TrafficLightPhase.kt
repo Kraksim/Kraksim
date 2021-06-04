@@ -5,7 +5,6 @@ class TrafficLightPhase(
     var state: LightColor
 ) {
 
-
     enum class LightColor {
         RED, GREEN
     }

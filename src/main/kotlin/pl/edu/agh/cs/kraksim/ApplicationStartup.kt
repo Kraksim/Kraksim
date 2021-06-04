@@ -13,7 +13,6 @@ import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelSimulation
 class ApplicationStartup : CommandLineRunner {
     override fun run(vararg args: String?) {
 
-
         val road1 = NagelRoad(1, 18)
         val road2 = NagelRoad(2, 18)
         val road3 = NagelRoad(3, 18)
@@ -59,7 +58,6 @@ class ApplicationStartup : CommandLineRunner {
             NagelIntersectionTurningLaneDirection(road2.lanes[0], road4)
         )
 
-
         val phases = mapOf(
             road1.lanes[0] to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN),
             road2.lanes[0] to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN)
@@ -91,7 +89,6 @@ class ApplicationStartup : CommandLineRunner {
         )
         car2.moveToLane(road2.lanes[0], 2)
 
-
         val car3 = NagelCar(
             velocity = 4,
         )
@@ -106,6 +103,5 @@ class ApplicationStartup : CommandLineRunner {
         println(state.toString() + "\n")
         simulation.step()
         println(state.toString() + "\n")
-
     }
 }

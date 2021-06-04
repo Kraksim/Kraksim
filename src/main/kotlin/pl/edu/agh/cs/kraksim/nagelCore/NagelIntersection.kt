@@ -27,6 +27,4 @@ class NagelIntersection(
     fun canGoThrough(lane: NagelLane): Boolean {
         return phases[lane]!!.state == TrafficLightPhase.LightColor.GREEN
     }
-
-
 }
