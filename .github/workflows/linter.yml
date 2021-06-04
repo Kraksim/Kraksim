@@ -20,3 +20,4 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review # Change reporter
           level: info
+          filter_mode: nofilter
