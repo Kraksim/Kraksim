@@ -12,5 +12,4 @@ class NagelSimulationState(
     override fun toString(): String {
         return "NagelSimulationState(\n\tgateways=$gateways,\n\troads=$roads,\n\tintersections=$intersections)"
     }
-
 }
