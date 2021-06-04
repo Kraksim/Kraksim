@@ -16,3 +16,4 @@ jobs:
 
       - name: "ktlint"
         uses: "vroy/gha-kotlin-linter@v1"
+        continue-on-error: true
