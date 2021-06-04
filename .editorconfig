@@ -1,1 +1,3 @@
+[*.{kt, kts}]
+# for klinter
 disabled_rules = no-wildcard-imports
