@@ -1,4 +1,4 @@
-name: Kotlin CI build and test
+name: Kotlin CI
 
 on:
   push:
