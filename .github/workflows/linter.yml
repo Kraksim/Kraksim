@@ -13,7 +13,12 @@ jobs:
     steps:
       - name: "checkout"
         uses: actions/checkout@v2
+      - run: brew install ktlint
 
       - name: "ktlint"
-        uses: "vroy/gha-kotlin-linter@v1"
-        continue-on-error: true
+        id: klint-run
+        run: echo "::set-output name=klint-output::$(ktlint)\n"
+
+      - name: Execute tests
+#        if: steps.klint-run.outcome == 'success' && steps.klint-run.conclusion == 'success'
+        run: echo ${{steps.klint-run.outputs.klint-output}}
