@@ -1,25 +1,21 @@
 name: Code quality review
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
   ktlint:
+    name: Check Code Quality
     runs-on: ubuntu-latest
 
     steps:
-      - name: "checkout"
-        uses: actions/checkout@v2
-      - run: brew install ktlint
-
-      - name: "ktlint"
-        id: klint-run
-        run: echo "::set-output name=klint-output::$(ktlint)\n"
-      - uses: yutailang0119/action-ktlint@v1.0.0
-
-      - name: Execute tests
-#        if: steps.klint-run.outcome == 'success' && steps.klint-run.conclusion == 'success'
-        run: echo ${{steps.klint-run.outputs.klint-output}}
+      - name: Clone repo
+        uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+      - name: ktlint
+        uses: ScaCap/action-ktlint@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review # Change reporter
