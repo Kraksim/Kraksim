@@ -1,11 +1,10 @@
 package pl.edu.agh.cs.kraksim.nagelCore.simulation
 
-import pl.edu.agh.cs.kraksim.comon.RandomProvider
+import pl.edu.agh.cs.kraksim.comon.adjacentPairs
+import pl.edu.agh.cs.kraksim.comon.random.RandomProvider
+import pl.edu.agh.cs.kraksim.comon.withoutLast
 import pl.edu.agh.cs.kraksim.core.SimulationState
-import pl.edu.agh.cs.kraksim.nagelCore.NagelCar
-import pl.edu.agh.cs.kraksim.nagelCore.NagelGateway
-import pl.edu.agh.cs.kraksim.nagelCore.NagelIntersection
-import pl.edu.agh.cs.kraksim.nagelCore.NagelLane
+import pl.edu.agh.cs.kraksim.nagelCore.*
 import kotlin.math.min
 
 class NagelMovementSimulationStrategy(
@@ -18,88 +17,75 @@ class NagelMovementSimulationStrategy(
         randomization(state)
         val carsToResolve = motion(state)
         resolveIntersections(carsToResolve)
-
     }
 
-    private fun acceleration(state: SimulationState) {
-        state.roads.flatMap { it.lanes }
-            .flatMap { it.cars }
-            .forEach {
-                if (it.velocity < MAX_VELOCITY)
-                    it.velocity += 1
+    fun acceleration(state: SimulationState) {
+        state.cars
+            .forEach { car ->
+                if (car.velocity < MAX_VELOCITY)
+                    car.velocity += 1
             }
     }
 
-    private fun slowingDown(state: SimulationState) {
-        state.roads.flatMap { it.lanes }
-            .filter { it.cars.isNotEmpty() }
-            .forEach {
-                for ((index, car) in it.cars.withIndex()) {
-                    if (index == it.cars.size - 1) {
-                        continue
-                    }
-
-                    val distanceFromCarInFront =
-                        it.cars[index + 1].positionRelativeToStart - car.positionRelativeToStart - 1
-
-                    if (car.velocity > distanceFromCarInFront) {
-                        car.velocity = distanceFromCarInFront
-                    }
-                }
-
-                val lastCar = it.cars.last()
-
-                val endNode = it.parentRoad.end()
-                if (endNode.canEnterNodeFrom(it)) {
-                    // todo ostatnie auto przejazd przez skrzyżowanie (gdzie i kiedy?)
-                    // todo zmienić wybór drogi
-
-                    if (endNode is NagelIntersection) {
-                        val lane = endNode.getPossibleRoads(it)[0].lanes[0]
-                        val firstCarInNextLane: NagelCar? = lane.cars.getOrNull(0)
-                        val distanceFromIntersection = lastCar.distanceFromRoadNode()
-                        val spaceInDestinationLane = firstCarInNextLane?.positionRelativeToStart ?: it.length
-                        val distanceFromCarInFront = distanceFromIntersection + spaceInDestinationLane
-
-                        if (lastCar.velocity > distanceFromCarInFront) {
-                            lastCar.velocity = distanceFromCarInFront
-                        }
-
-                    }
-
-                }
-
+    fun slowingDown(state: SimulationState) {
+        state.lanes.filter { it.containsCar() }
+            .forEach { lane ->
+                slowAllCarsButLast(lane.cars)
+                slowLastCar(
+                    endNode = lane.parentRoad.end(),
+                    lane = lane,
+                    lastCar = lane.cars.last()
+                )
             }
     }
 
-    private fun randomization(state: SimulationState) {
-        state.roads.flatMap { it.lanes }
-            .flatMap { it.cars }
-            .forEach {
-                val shouldSlowDown = it.velocity > 0 && random.get() < RANDOM_PROPABILITY
+    private fun slowAllCarsButLast(cars: MutableList<NagelCar>) {
+        cars.adjacentPairs().forEach { (car, carInFront) ->
+            car.velocity = min(car.velocity, car.distanceFrom(carInFront))
+        }
+    }
+
+    private fun slowLastCar(endNode: NagelRoadNode, lane: NagelLane, lastCar: NagelCar) {
+        if (endNode is NagelIntersection) {
+            // TODO zmienić wybór drogi
+            val destinationLane = endNode.getPossibleRoads(lane)[0].lanes[0]
+
+            val freeSpaceInCarPath =
+                if (endNode.canGoThrough(lane)) {
+                    lastCar.distanceFromRoadNode() + destinationLane.getFreeSpaceInFront()
+                } else {
+                    lastCar.distanceFromRoadNode()
+                }
+
+            lastCar.velocity = min(lastCar.velocity, freeSpaceInCarPath)
+        }
+    }
+
+    //TODO refactor and write tests
+    fun randomization(state: SimulationState) {
+        state.cars
+            .forEach { car ->
+                val shouldSlowDown = car.velocity > 0 && random.getBoolean(SLOW_DOWN_PROBABILITY)
                 if (shouldSlowDown) {
-                    it.velocity -= 1
+                    car.velocity -= 1
                 }
             }
     }
 
-    private fun motion(state: SimulationState): HashMap<NagelLane, ArrayList<NagelCar>> {
+    //TODO refactor and write tests
+    fun motion(state: SimulationState): HashMap<NagelLane, ArrayList<NagelCar>> {
         val carsToResolve = HashMap<NagelLane, ArrayList<NagelCar>>()
 
-        state.roads.flatMap { it.lanes }
-            .filter { it.cars.isNotEmpty() }
+        state.lanes.filter { it.containsCar() }
             .forEach {
-                for ((index, car) in it.cars.withIndex()) {
-                    if (index == it.cars.size - 1) {
-                        continue
-                    }
+
+                it.cars.withoutLast().forEach { car ->
                     car.positionRelativeToStart += car.velocity
                     // todo pamietać o pasach ze się mogą skończyć
                 }
 
                 val lastCar = it.cars.last()
                 // todo ten lane musi być taki sam co w fazie slowing down - uwzględnić
-
 
                 val endNode = it.parentRoad.end()
                 val distanceFromIntersection = lastCar.distanceFromRoadNode()
@@ -118,7 +104,7 @@ class NagelMovementSimulationStrategy(
                     }
                     is NagelGateway -> {
                         endNode.addCar(lastCar)
-                        lastCar.currentLane.remove(lastCar)
+                        lastCar.currentLane!!.remove(lastCar)
                     }
                 }
 
@@ -128,27 +114,28 @@ class NagelMovementSimulationStrategy(
         return carsToResolve
     }
 
-    private fun resolveIntersections(carsToResolve: HashMap<NagelLane, ArrayList<NagelCar>>) {
+    //TODO refactor and write tests
+    fun resolveIntersections(carsToResolve: HashMap<NagelLane, ArrayList<NagelCar>>) {
         carsToResolve.forEach {
             val lane = it.key
             val carsTryingToGetToLane =
                 it.value.sortedWith(compareByDescending { car -> car.distanceLeftToMove }).toMutableList()
 
             val firstCarInNextLane = lane.cars.getOrNull(0)
-            var spaceLeft = firstCarInNextLane?.positionRelativeToStart ?: lane.length
+            var spaceLeft = firstCarInNextLane?.positionRelativeToStart ?: lane.cellsCount
 
             while (carsTryingToGetToLane.isNotEmpty() && spaceLeft > 0) {
                 val currentCar = carsTryingToGetToLane.removeAt(0)
                 val newPosition = min(spaceLeft - 1, currentCar.distanceLeftToMove)
 
-                currentCar.changeLane(lane, newPosition)
+                currentCar.moveToLane(lane, newPosition)
                 spaceLeft = newPosition
             }
         }
     }
 
     companion object {
-        const val RANDOM_PROPABILITY = 0.5
+        const val SLOW_DOWN_PROBABILITY = 0.5
         const val MAX_VELOCITY = 6
 //    minimalna predkość to 1 kratka na sekunde, przy długości auta równej 4.5 m  to daje nam 16.2 km/h. Max velocity wtedy to 97.2 km/h
     }

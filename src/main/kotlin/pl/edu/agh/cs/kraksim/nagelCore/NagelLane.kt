@@ -7,26 +7,32 @@ class NagelLane(
     private val id: Long,
     val indexFromLeft: Int,
     val parentRoad: NagelRoad,
-    val startingPoint: Int,
-    val endingPoint: Int,
+    private val physicalStartingPoint: Int,
+    private val physicalEndingPoint: Int,
 ) {
-    // lista ma same auta, nie ma pustyc komórek. posortowana bo chcemy meic odtep łątwy do auta przed danym autem
+    // lista ma same auta, nie ma pustych komórek. Posortowana po pozycji bo chcemy miec łatwy odstep do auta przed danym autem
     val cars: MutableList<NagelCar> = ArrayList()
 
-    val length: Int = endingPoint - startingPoint
-    val cellsCount: Int = (length / AVERAGE_CAR_LENGTH).roundToInt()
+    val physicalLength: Int = physicalEndingPoint - physicalStartingPoint
+    val cellsCount: Int = (physicalLength / AVERAGE_CAR_LENGTH).roundToInt()
 
     fun addCar(car: NagelCar) {
         this.cars.addToFront(car)
-//        this.cars = ArrayList(mutableListOf(car) + (this.cars))
     }
 
     fun remove(car: NagelCar) {
         this.cars.remove(car)
     }
 
+    fun containsCar(): Boolean = cars.isNotEmpty()
+
+    fun getFreeSpaceInFront(): Int {
+        val positionOfFirstCar: Int? = cars.getOrNull(0)?.positionRelativeToStart
+        return positionOfFirstCar ?: cellsCount
+    }
+
     override fun toString(): String {
-        return "NagelLane(id=$id, indexFromLeft=$indexFromLeft, startingPoint=$startingPoint, endingPoint=$endingPoint, \ncars=${cars.map { it.toString() + "\n" }}, length=$length, cellsCount=$cellsCount)"
+        return "NagelLane(id=$id, \n\t\tcars=$cars\n)"
     }
 
     companion object {
