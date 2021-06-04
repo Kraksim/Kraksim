@@ -38,4 +38,5 @@ class NagelLane(
     companion object {
         const val AVERAGE_CAR_LENGTH = 4.5
     }
+
 }
