@@ -10,7 +10,7 @@ class NagelLane(
     private val physicalStartingPoint: Int,
     private val physicalEndingPoint: Int,
 ) {
-    // lista ma same auta, nie ma pustych komórek. posortowana po pozycji bo chcemy meic odtep łątwy do auta przed danym autem
+    // lista ma same auta, nie ma pustych komórek. Posortowana po pozycji bo chcemy miec łatwy odstep do auta przed danym autem
     val cars: MutableList<NagelCar> = ArrayList()
 
     val physicalLength: Int = physicalEndingPoint - physicalStartingPoint
