@@ -7,7 +7,6 @@ fun <T> MutableList<T>.addToFront(element: T) {
 fun <T> MutableList<T>.withoutLast() =
     dropLast(1)
 
-
 fun <T> MutableList<T>.withoutFirst() =
     drop(1)
 
@@ -18,4 +17,3 @@ fun <T> MutableList<T>.withoutFirst() =
  */
 fun <T> MutableList<T>.adjacentPairs(): List<Pair<T, T>> =
     withoutLast().zip(withoutFirst())
-
