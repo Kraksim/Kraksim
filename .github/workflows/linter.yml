@@ -1,10 +1,10 @@
 name: ktlint
 
 on:
+  push:
+    branches: [ master ]
   pull_request:
-    paths:
-      - "**/*.kt"
-      - ".github/workflows/ktlint.yml"
+    branches: [ master ]
 
 jobs:
   ktlint:
