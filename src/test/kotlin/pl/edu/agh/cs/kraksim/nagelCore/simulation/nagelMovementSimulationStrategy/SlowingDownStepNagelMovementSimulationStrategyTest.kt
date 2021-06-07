@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.nagelCore.simulation.nagelMovementSimulationStrate
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.MockRandomProvider
-import pl.edu.agh.cs.kraksim.comon.TrafficLightPhase.LightColor
+import pl.edu.agh.cs.kraksim.common.TrafficLightPhase.LightColor
 import pl.edu.agh.cs.kraksim.nagelCore.NagelCar
 import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelMovementSimulationStrategy
 
@@ -77,7 +77,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
     }
 
     @Test
-    fun `Given car in front of intersection and next lane empty, when slowing down don't change velocity`() {
+    fun `Given car in front of intersection and destination lane empty, when slowing down don't change velocity`() {
         // given
         val initialVelocity = 6
         val expectedVelocity = 6

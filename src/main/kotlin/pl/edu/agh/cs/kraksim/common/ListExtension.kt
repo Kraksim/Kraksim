@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.comon
+package pl.edu.agh.cs.kraksim.common
 
 fun <T> MutableList<T>.addToFront(element: T) {
     add(0, element)

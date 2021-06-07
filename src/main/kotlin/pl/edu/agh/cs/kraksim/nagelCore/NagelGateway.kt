@@ -12,8 +12,9 @@ class NagelGateway(
         endingRoads.forEach { it.setEnd(this) }
     }
 
-    fun addCar(car: NagelCar) {
+    fun addFinishedCar(car: NagelCar) {
         finishedCars.add(car)
+        car.moveToLane(null)
     }
 
     override fun toString(): String {

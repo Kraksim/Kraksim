@@ -1,6 +1,6 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
-import pl.edu.agh.cs.kraksim.comon.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.common.TrafficLightPhase
 
 class NagelIntersection(
     val id: Long,
