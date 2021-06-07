@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.comon.random
+package pl.edu.agh.cs.kraksim.common.random
 
 import org.springframework.stereotype.Component
 

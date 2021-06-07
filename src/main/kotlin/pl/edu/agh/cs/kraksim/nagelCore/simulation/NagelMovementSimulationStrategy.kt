@@ -1,8 +1,8 @@
 package pl.edu.agh.cs.kraksim.nagelCore.simulation
 
-import pl.edu.agh.cs.kraksim.comon.adjacentPairs
-import pl.edu.agh.cs.kraksim.comon.random.RandomProvider
-import pl.edu.agh.cs.kraksim.comon.withoutLast
+import pl.edu.agh.cs.kraksim.common.adjacentPairs
+import pl.edu.agh.cs.kraksim.common.random.RandomProvider
+import pl.edu.agh.cs.kraksim.common.withoutLast
 import pl.edu.agh.cs.kraksim.core.SimulationState
 import pl.edu.agh.cs.kraksim.nagelCore.*
 import kotlin.math.min
@@ -15,8 +15,8 @@ class NagelMovementSimulationStrategy(
         acceleration(state)
         slowingDown(state)
         randomization(state)
-        val carsToResolve = motion(state)
-        resolveIntersections(carsToResolve)
+        motion(state)
+        resolveIntersections(state)
     }
 
     fun acceleration(state: SimulationState) {
@@ -29,14 +29,17 @@ class NagelMovementSimulationStrategy(
 
     fun slowingDown(state: SimulationState) {
         state.lanes.filter { it.containsCar() }
-            .forEach { lane ->
-                slowAllCarsButLast(lane.cars)
-                slowLastCar(
-                    endNode = lane.parentRoad.end(),
-                    lane = lane,
-                    lastCar = lane.cars.last()
-                )
-            }
+            .forEach { lane -> slowCars(lane) }
+    }
+
+    private fun slowCars(lane: NagelLane) {
+        slowAllCarsButLast(lane.cars)
+        // todo pamietać o pasach ze się mogą skończyć
+        slowLastCar(
+            endNode = lane.parentRoad.end(),
+            lane = lane,
+            lastCar = lane.cars.last()
+        )
     }
 
     private fun slowAllCarsButLast(cars: MutableList<NagelCar>) {
@@ -52,16 +55,15 @@ class NagelMovementSimulationStrategy(
 
             val freeSpaceInCarPath =
                 if (endNode.canGoThrough(lane)) {
-                    lastCar.distanceFromRoadNode() + destinationLane.getFreeSpaceInFront()
+                    lastCar.distanceFromRoadNode + destinationLane.getFreeSpaceInFront()
                 } else {
-                    lastCar.distanceFromRoadNode()
+                    lastCar.distanceFromRoadNode
                 }
 
             lastCar.velocity = min(lastCar.velocity, freeSpaceInCarPath)
         }
     }
 
-    //TODO refactor and write tests
     fun randomization(state: SimulationState) {
         state.cars
             .forEach { car ->
@@ -73,65 +75,69 @@ class NagelMovementSimulationStrategy(
     }
 
     //TODO refactor and write tests
-    fun motion(state: SimulationState): HashMap<NagelLane, ArrayList<NagelCar>> {
-        val carsToResolve = HashMap<NagelLane, ArrayList<NagelCar>>()
-
+    fun motion(state: SimulationState) {
         state.lanes.filter { it.containsCar() }
-            .forEach {
-
-                it.cars.withoutLast().forEach { car ->
-                    car.positionRelativeToStart += car.velocity
-                    // todo pamietać o pasach ze się mogą skończyć
-                }
-
-                val lastCar = it.cars.last()
-                // todo ten lane musi być taki sam co w fazie slowing down - uwzględnić
-
-                val endNode = it.parentRoad.end()
-                val distanceFromIntersection = lastCar.distanceFromRoadNode()
-                val distanceToMove = min(distanceFromIntersection, lastCar.velocity)
-                lastCar.positionRelativeToStart += distanceToMove
-                lastCar.distanceLeftToMove = lastCar.velocity - distanceToMove
-
-                when (endNode) {
-                    is NagelIntersection -> {
-                        val lane = endNode.getPossibleRoads(it)[0].lanes[0]
-                        if (lastCar.distanceLeftToMove != 0) {
-                            val cars: ArrayList<NagelCar> = carsToResolve[lane] ?: ArrayList()
-                            cars.add(lastCar)
-                            carsToResolve[lane] = cars
-                        }
-                    }
-                    is NagelGateway -> {
-                        endNode.addCar(lastCar)
-                        lastCar.currentLane!!.remove(lastCar)
-                    }
-                }
-
-
-            }
-
-        return carsToResolve
+            .forEach { lane -> moveCars(lane) }
     }
 
-    //TODO refactor and write tests
-    fun resolveIntersections(carsToResolve: HashMap<NagelLane, ArrayList<NagelCar>>) {
-        carsToResolve.forEach {
-            val lane = it.key
-            val carsTryingToGetToLane =
-                it.value.sortedWith(compareByDescending { car -> car.distanceLeftToMove }).toMutableList()
+    private fun moveCars(lane: NagelLane) {
+        moveAllCarsButLast(lane.cars)
 
-            val firstCarInNextLane = lane.cars.getOrNull(0)
-            var spaceLeft = firstCarInNextLane?.positionRelativeToStart ?: lane.cellsCount
+        // todo pamietać o pasach ze się mogą skończyć
+        moveLastCar(
+            lastCar = lane.cars.last(),
+            endNode = lane.parentRoad.end()
+        )
+    }
 
-            while (carsTryingToGetToLane.isNotEmpty() && spaceLeft > 0) {
-                val currentCar = carsTryingToGetToLane.removeAt(0)
-                val newPosition = min(spaceLeft - 1, currentCar.distanceLeftToMove)
-
-                currentCar.moveToLane(lane, newPosition)
-                spaceLeft = newPosition
-            }
+    private fun moveAllCarsButLast(cars: MutableList<NagelCar>) {
+        cars.withoutLast().forEach { car ->
+            car.positionRelativeToStart += car.velocity
         }
+    }
+
+    private fun moveLastCar(lastCar: NagelCar, endNode: NagelRoadNode) {
+        val distanceToMoveOnCurrentLane = min(lastCar.distanceFromRoadNode, lastCar.velocity)
+        lastCar.moveForward(distanceToMoveOnCurrentLane) // todo czy to mądre ze move forward liczy distance left to move, może jednak zostawić liczenie tego tutaj
+
+        if (lastCar.hasDistanceLeftToMove() && endNode is NagelGateway) {
+            endNode.addFinishedCar(lastCar)
+        }
+    }
+
+    //TODO refactor
+    fun resolveIntersections(state: SimulationState) {
+        getCarsToResolve(state.roads).forEach { (destinationLane, cars) ->
+            var spaceLeft = destinationLane.getFreeSpaceInFront()
+
+            cars.sortedWith(compareByDescending { car -> car.distanceLeftToMove })
+                .takeWhile { spaceLeft > 0 }
+                .forEach { car ->
+                    val newPosition = min(spaceLeft, car.distanceLeftToMove) - 1
+
+                    car.moveToLane(destinationLane, newPosition) // todo zamiast move to zapisać i ruszyć wszystkie naraz
+                    spaceLeft = newPosition
+                }
+        }
+    }
+
+    //TODO refactor
+    private fun getCarsToResolve(roads: List<NagelRoad>): HashMap<NagelLane, ArrayList<NagelCar>> {
+        val carsToResolve = HashMap<NagelLane, ArrayList<NagelCar>>()
+        roads.filter { it.end() is NagelIntersection }
+            .flatMap { it.lanes }
+            .filter { it.containsCar() }
+            .filter { it.cars.last().hasDistanceLeftToMove() }
+            .forEach {
+                // todo ten lane musi być taki sam co w fazie slowing down - uwzględnić
+                val lane = (it.parentRoad.end() as NagelIntersection).getPossibleRoads(it)[0].lanes[0]
+
+                val lastCar = it.cars.last()
+                val cars: ArrayList<NagelCar> = carsToResolve[lane] ?: ArrayList()
+                cars.add(lastCar)
+                carsToResolve[lane] = cars
+            }
+        return carsToResolve
     }
 
     companion object {

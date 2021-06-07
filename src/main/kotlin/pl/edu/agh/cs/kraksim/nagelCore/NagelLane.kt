@@ -1,6 +1,6 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
-import pl.edu.agh.cs.kraksim.comon.addToFront
+import pl.edu.agh.cs.kraksim.common.addToFront
 import kotlin.math.roundToInt
 
 class NagelLane(

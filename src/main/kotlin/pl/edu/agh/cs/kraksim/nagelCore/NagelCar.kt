@@ -10,16 +10,26 @@ class NagelCar(
 
     var distanceLeftToMove: Int = 0
 
-    fun moveToLane(lane: NagelLane, newPosition: Int) {
+    val distanceFromRoadNode: Int
+        get() {
+            return currentLane!!.cellsCount - positionRelativeToStart - 1
+        }
+
+    fun moveToLane(lane: NagelLane?, newPosition: Int = 0) {
         currentLane?.remove(this)
         currentLane = lane
-        lane.addCar(this)
+        lane?.addCar(this)
         positionRelativeToStart = newPosition
         distanceLeftToMove = 0
     }
 
-    fun distanceFromRoadNode(): Int {
-        return currentLane!!.cellsCount - positionRelativeToStart - 1
+    fun moveForward(distance: Int) {
+        positionRelativeToStart += distance
+        distanceLeftToMove = velocity - distance
+    }
+
+    fun hasDistanceLeftToMove(): Boolean {
+        return distanceLeftToMove > 0
     }
 
     fun distanceFrom(car: NagelCar): Int {

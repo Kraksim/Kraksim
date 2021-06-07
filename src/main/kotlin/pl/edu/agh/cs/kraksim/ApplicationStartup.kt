@@ -1,14 +1,6 @@
 package pl.edu.agh.cs.kraksim
 
-import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Component
-import pl.edu.agh.cs.kraksim.comon.TrafficLightPhase
-import pl.edu.agh.cs.kraksim.comon.TrafficLightPhase.LightColor
-import pl.edu.agh.cs.kraksim.comon.random.TrueRandomProvider
-import pl.edu.agh.cs.kraksim.nagelCore.*
-import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelMovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelSimulation
-
+/*
 @Component
 class ApplicationStartup : CommandLineRunner {
     override fun run(vararg args: String?) {
@@ -105,3 +97,4 @@ class ApplicationStartup : CommandLineRunner {
         println(state.toString() + "\n")
     }
 }
+*/
