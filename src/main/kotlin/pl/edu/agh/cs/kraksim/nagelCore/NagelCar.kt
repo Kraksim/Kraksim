@@ -1,13 +1,13 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
+import pl.edu.agh.cs.kraksim.core.Car
 import kotlin.math.abs
 
 class NagelCar(
-    var velocity: Int = 0,
-) {
+    override var velocity: Int = 0,
+):Car {
+    override var positionRelativeToStart: Int = 0
     var currentLane: NagelLane? = null
-    var positionRelativeToStart: Int = 0
-
     var distanceLeftToMove: Int = 0
 
     val distanceFromRoadNode: Int

@@ -3,23 +3,24 @@ package pl.edu.agh.cs.kraksim.nagelCore.simulation
 import pl.edu.agh.cs.kraksim.common.adjacentPairs
 import pl.edu.agh.cs.kraksim.common.random.RandomProvider
 import pl.edu.agh.cs.kraksim.common.withoutLast
+import pl.edu.agh.cs.kraksim.core.MovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.core.SimulationState
 import pl.edu.agh.cs.kraksim.nagelCore.*
 import kotlin.math.min
 
 class NagelMovementSimulationStrategy(
     private val random: RandomProvider
-) {
+) : MovementSimulationStrategy {
 
-    fun step(state: SimulationState) {
-        acceleration(state)
+    override fun step(state: SimulationState) {
+        acceleration(state as NagelSimulationState)
         slowingDown(state)
         randomization(state)
         motion(state)
         resolveIntersections(state)
     }
 
-    fun acceleration(state: SimulationState) {
+    fun acceleration(state: NagelSimulationState) {
         state.cars
             .forEach { car ->
                 if (car.velocity < MAX_VELOCITY)
@@ -27,7 +28,7 @@ class NagelMovementSimulationStrategy(
             }
     }
 
-    fun slowingDown(state: SimulationState) {
+    fun slowingDown(state: NagelSimulationState) {
         state.lanes.filter { it.containsCar() }
             .forEach { lane -> slowCars(lane) }
     }
@@ -64,7 +65,7 @@ class NagelMovementSimulationStrategy(
         }
     }
 
-    fun randomization(state: SimulationState) {
+    fun randomization(state: NagelSimulationState) {
         state.cars
             .forEach { car ->
                 val shouldSlowDown = car.velocity > 0 && random.getBoolean(SLOW_DOWN_PROBABILITY)
@@ -75,7 +76,7 @@ class NagelMovementSimulationStrategy(
     }
 
     //TODO refactor and write tests
-    fun motion(state: SimulationState) {
+    fun motion(state: NagelSimulationState) {
         state.lanes.filter { it.containsCar() }
             .forEach { lane -> moveCars(lane) }
     }
@@ -106,7 +107,7 @@ class NagelMovementSimulationStrategy(
     }
 
     //TODO refactor
-    fun resolveIntersections(state: SimulationState) {
+    fun resolveIntersections(state: NagelSimulationState) {
         getCarsToResolve(state.roads).forEach { (destinationLane, cars) ->
             var spaceLeft = destinationLane.getFreeSpaceInFront()
 

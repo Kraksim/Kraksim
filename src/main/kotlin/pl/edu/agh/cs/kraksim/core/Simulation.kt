@@ -1,5 +1,7 @@
 package pl.edu.agh.cs.kraksim.core
 
-class Simulation(
-    var state: SimulationState,
-)
+interface Simulation {
+    val state: SimulationState
+
+    fun step()
+}
