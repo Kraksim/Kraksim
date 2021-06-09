@@ -20,7 +20,7 @@ class PingService(
             name = name,
             version = version,
             time = LocalDateTime.now(),
-            senderIpAddress = request.getHeader("X-FORWARDED-FOR").ifBlank { request.remoteAddr }
+            senderIpAddress = request.remoteAddr
         )
     }
 
