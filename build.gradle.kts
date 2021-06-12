@@ -44,9 +44,6 @@ tasks {
         expand(project.properties)
     }
 
-    configureKlinter()
-
-
     withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -57,16 +54,22 @@ tasks {
     withType<Test> {
         useJUnitPlatform()
     }
+
+    disableCodeFormattingChecks("ktlintFormat", "ktlintCheck")
 }
 
-fun configureKlinter() {
-
+/**
+ * Disable code formatting checks,
+ * when e.x. `gradle build` we don't want to fail because of code format,
+ * so we disable tasks except those specified in [except]
+ */
+fun disableCodeFormattingChecks(vararg except: String) {
     project.gradle.taskGraph.whenReady {
-        if (!project.gradle.startParameter.taskNames.contains("ktlintFormat")) {
+        val taskNames = project.gradle.startParameter.taskNames
+        if (!taskNames.any { it in except }) {
             allTasks.filter {
                 it.name.contains("ktlint", true)
             }.forEach {
-                println("filtered ${it.name}")
                 it.enabled = false
             }
         }
