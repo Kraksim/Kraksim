@@ -61,7 +61,7 @@ tasks {
 /**
  * Disable code formatting checks,
  * when e.x. `gradle build` we don't want to fail because of code format,
- * so we disable tasks except those specified in [except]
+ * so we disable checks for all tasks except those specified in [except]
  */
 fun disableCodeFormattingChecks(vararg except: String) {
     project.gradle.taskGraph.whenReady {
