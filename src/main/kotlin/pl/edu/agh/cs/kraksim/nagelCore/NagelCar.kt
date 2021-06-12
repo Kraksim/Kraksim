@@ -5,7 +5,7 @@ import kotlin.math.abs
 
 class NagelCar(
     override var velocity: Int = 0,
-):Car {
+) : Car {
     override var positionRelativeToStart: Int = 0
     var currentLane: NagelLane? = null
     var distanceLeftToMove: Int = 0

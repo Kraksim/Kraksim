@@ -75,7 +75,7 @@ class NagelMovementSimulationStrategy(
             }
     }
 
-    //TODO refactor and write tests
+    // TODO refactor and write tests
     fun motion(state: NagelSimulationState) {
         state.lanes.filter { it.containsCar() }
             .forEach { lane -> moveCars(lane) }
@@ -106,7 +106,7 @@ class NagelMovementSimulationStrategy(
         }
     }
 
-    //TODO refactor
+    // TODO refactor
     fun resolveIntersections(state: NagelSimulationState) {
         getCarsToResolve(state.roads).forEach { (destinationLane, cars) ->
             var spaceLeft = destinationLane.getFreeSpaceInFront()
@@ -116,13 +116,16 @@ class NagelMovementSimulationStrategy(
                 .forEach { car ->
                     val newPosition = min(spaceLeft, car.distanceLeftToMove) - 1
 
-                    car.moveToLane(destinationLane, newPosition) // todo zamiast move to zapisać i ruszyć wszystkie naraz
+                    car.moveToLane(
+                        destinationLane,
+                        newPosition
+                    ) // todo zamiast move to zapisać i ruszyć wszystkie naraz
                     spaceLeft = newPosition
                 }
         }
     }
 
-    //TODO refactor
+    // TODO refactor
     private fun getCarsToResolve(roads: List<NagelRoad>): HashMap<NagelLane, ArrayList<NagelCar>> {
         val carsToResolve = HashMap<NagelLane, ArrayList<NagelCar>>()
         roads.filter { it.end() is NagelIntersection }

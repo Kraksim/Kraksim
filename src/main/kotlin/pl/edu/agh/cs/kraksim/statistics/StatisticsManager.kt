@@ -24,8 +24,8 @@ class StatisticsManager(
             density,
             roadFlowRatio
         )
-
-        /* todo
+        // todo refactor kodu, lepiej zmienne nazwać itp.
+        /* todo dokończyć
          var stats = StateStatistics(
               simulationId = state.id,
               turn = state.turn,
@@ -59,9 +59,9 @@ class StatisticsManager(
             .average()
 
         val roadAverageSpeed = roadsSpeed.map { (key, value) ->
-            key to AverageSpeed(
-                value.map { speed -> speed.value }
-                    .average())
+            val value1 = value.map { speed -> speed.value }
+                .average()
+            key to AverageSpeed(value1)
         }.toMap()
 
         return SpeedStatistics(wholeMapAverageSpeed, roadAverageSpeed)

@@ -7,7 +7,7 @@ class NagelSimulation(
     override val state: NagelSimulationState,
     var nagelMovementSimulationStrategy: NagelMovementSimulationStrategy
 //    var lightPhaseManager: LightPhaseManager
-) :Simulation{
+) : Simulation {
 
     override fun step() {
         nagelMovementSimulationStrategy.step(state)

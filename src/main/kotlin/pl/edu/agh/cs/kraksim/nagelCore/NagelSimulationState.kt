@@ -16,7 +16,6 @@ class NagelSimulationState(
     override val cars: List<NagelCar>
         get() = lanes.flatMap { it.cars }
 
-
     override fun toString(): String {
         return "NagelSimulationState(\n\tgateways=$gateways,\n\troads=$roads,\n\tintersections=$intersections)"
     }

@@ -1,3 +1,4 @@
+# For klinter rules that it should ignore
+# !!WARNING DO NOT FORMAT THIS FILE - there should not be spaces between arguments and equals sign
 [{*.kt,*.kts}]
-# for klinter
-disabled_rules=no-wildcard-imports
+disabled_rules=no-wildcard-imports,no-consecutive-blank-lines
