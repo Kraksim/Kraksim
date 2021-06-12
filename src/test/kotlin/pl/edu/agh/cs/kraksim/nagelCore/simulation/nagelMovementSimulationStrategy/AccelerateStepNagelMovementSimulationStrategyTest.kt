@@ -24,7 +24,7 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
         // when
         strategy.acceleration(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -42,7 +42,7 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
         // when
         strategy.acceleration(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(initialVelocity)
     }
 }

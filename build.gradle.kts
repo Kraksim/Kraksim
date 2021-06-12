@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.spring") version "1.5.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 //    kotlin("plugin.jpa") version "1.5.0" todo uncomment when database will be necessary
 }
 
@@ -43,6 +44,9 @@ tasks {
         expand(project.properties)
     }
 
+    configureKlinter()
+
+
     withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -52,5 +56,19 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+    }
+}
+
+fun configureKlinter() {
+
+    project.gradle.taskGraph.whenReady {
+        if (!project.gradle.startParameter.taskNames.contains("ktlintFormat")) {
+            allTasks.filter {
+                it.name.contains("ktlint", true)
+            }.forEach {
+                println("filtered ${it.name}")
+                it.enabled = false
+            }
+        }
     }
 }
