@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.spring") version "1.5.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
 //    kotlin("plugin.jpa") version "1.5.0" todo uncomment when database will be necessary
 }
 
@@ -52,5 +53,25 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
+    }
+
+    disableCodeFormattingChecks("ktlintFormat", "ktlintCheck")
+}
+
+/**
+ * Disable code formatting checks,
+ * when e.x. `gradle build` we don't want to fail because of code format,
+ * so we disable checks for all tasks except those specified in [except]
+ */
+fun disableCodeFormattingChecks(vararg except: String) {
+    project.gradle.taskGraph.whenReady {
+        val taskNames = project.gradle.startParameter.taskNames
+        if (!taskNames.any { it in except }) {
+            allTasks.filter {
+                it.name.contains("ktlint", true)
+            }.forEach {
+                it.enabled = false
+            }
+        }
     }
 }

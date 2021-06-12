@@ -33,6 +33,8 @@ fun getOneRoadSimulationState(
     road.setEnd(toGateway)
 
     return NagelSimulationState(
+        id = 1,
+        turn = 1,
         gateways = listOf(fromGateway, toGateway),
         roads = listOf(road),
         intersections = emptyList()
@@ -90,6 +92,8 @@ fun getTwoRoadConnectedWithIntersectionSimulationState(
     road2.setEnd(toGateway)
 
     return NagelSimulationState(
+        id = 2,
+        turn = 1,
         gateways = listOf(fromGateway, toGateway),
         roads = listOf(road1, road2),
         intersections = listOf(intersection)
@@ -166,6 +170,8 @@ fun getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState(
     road3.setEnd(toGateway)
 
     return NagelSimulationState(
+        id = 3,
+        turn = 1,
         gateways = listOf(road1StartGateway, road2StartGateway, toGateway),
         roads = listOf(road1, road2, road3),
         intersections = listOf(intersection)

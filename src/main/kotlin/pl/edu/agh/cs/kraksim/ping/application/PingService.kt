@@ -23,5 +23,4 @@ class PingService(
             senderIpAddress = request.remoteAddr
         )
     }
-
 }

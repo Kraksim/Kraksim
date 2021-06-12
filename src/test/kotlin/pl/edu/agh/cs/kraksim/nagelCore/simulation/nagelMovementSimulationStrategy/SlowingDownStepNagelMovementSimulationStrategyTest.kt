@@ -24,7 +24,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -47,7 +47,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(frontCar.velocity).isEqualTo(initialVelocity)
         assertThat(backCar.velocity).isEqualTo(expectedBackCarVelocity)
     }
@@ -71,7 +71,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(frontCar.velocity).isEqualTo(initialVelocity)
         assertThat(backCar.velocity).isEqualTo(expectedBackCarVelocity)
     }
@@ -94,7 +94,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -117,7 +117,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -140,7 +140,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -165,7 +165,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car1.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -190,7 +190,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car1.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -215,9 +215,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         // when
         strategy.slowingDown(state)
 
-        //then
+        // then
         assertThat(car1.velocity).isEqualTo(expectedVelocity)
     }
-
-
 }

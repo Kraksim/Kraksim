@@ -1,6 +1,8 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
-interface NagelRoadNode {
+import pl.edu.agh.cs.kraksim.core.RoadNode
+
+interface NagelRoadNode : RoadNode {
     val endingRoads: List<NagelRoad>
     val startingRoads: List<NagelRoad>
 }
