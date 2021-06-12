@@ -28,5 +28,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: "Code review failed\n\nYou can run `gradle ktlintFormat` to try fix problems automatically, if you find them valid."
+          msg: "Code review failed\n\nYou can run `gradle ktlintCheck` to list them locally or `gradle ktlintFormat` to try fix problems automatically, if you find them valid."
           check_for_duplicate_msg: false
