@@ -9,5 +9,4 @@ class KraksimApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

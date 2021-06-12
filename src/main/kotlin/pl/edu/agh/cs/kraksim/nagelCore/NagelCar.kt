@@ -39,5 +39,4 @@ class NagelCar(
     override fun toString(): String {
         return "NagelCar(positionRelativeToStart=$positionRelativeToStart, velocity=$velocity, distanceLeftToMove=$distanceLeftToMove)"
     }
-
 }
