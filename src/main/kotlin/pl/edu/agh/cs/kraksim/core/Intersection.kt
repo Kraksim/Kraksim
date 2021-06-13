@@ -1,5 +1,5 @@
 package pl.edu.agh.cs.kraksim.core
 
-interface Intersection {
+interface Intersection : RoadNode {
     val id: Long
 }

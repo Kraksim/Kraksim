@@ -5,11 +5,11 @@ import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulationState
 
 class NagelSimulation(
     override val state: NagelSimulationState,
-    var nagelMovementSimulationStrategy: NagelMovementSimulationStrategy
-//    var lightPhaseManager: LightPhaseManager
+    override var movementSimulationStrategy: NagelMovementSimulationStrategy,
+    override var lightPhaseManager: LightPhaseManager
 ) : Simulation {
 
     override fun step() {
-        nagelMovementSimulationStrategy.step(state)
+        movementSimulationStrategy.step(state)
     }
 }
