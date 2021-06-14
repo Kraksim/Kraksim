@@ -1,5 +1,5 @@
 package pl.edu.agh.cs.kraksim.core
 
-interface Gateway {
+interface Gateway : RoadNode {
     val id: Long
 }
