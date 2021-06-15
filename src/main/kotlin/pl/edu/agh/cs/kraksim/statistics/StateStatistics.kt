@@ -1,5 +1,10 @@
 package pl.edu.agh.cs.kraksim.statistics
 
+import pl.edu.agh.cs.kraksim.common.AverageSpeed
+import pl.edu.agh.cs.kraksim.common.Density
+import pl.edu.agh.cs.kraksim.common.FlowRatio
+import pl.edu.agh.cs.kraksim.common.RoadId
+
 data class StateStatistics(
     val simulationId: Long,
     val turn: Long,

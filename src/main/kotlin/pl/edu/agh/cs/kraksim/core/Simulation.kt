@@ -1,6 +1,7 @@
 package pl.edu.agh.cs.kraksim.core
 
-import pl.edu.agh.cs.kraksim.nagelCore.simulation.LightPhaseManager
+import pl.edu.agh.cs.kraksim.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseManager
 
 interface Simulation {
     val state: SimulationState
