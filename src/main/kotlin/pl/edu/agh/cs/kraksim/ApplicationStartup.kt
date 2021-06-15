@@ -85,7 +85,7 @@ class ApplicationStartup : CommandLineRunner {
 
         val lightPhaseManager = LightPhaseManager(
             state,
-            mapOf(LightPhaseStrategyType.TURN_BASED to listOf(IntersectionId(intersection.id)) )
+            mapOf(LightPhaseStrategyType.TURN_BASED to listOf(IntersectionId(intersection.id)))
         )
 
         val simulation = NagelSimulation(

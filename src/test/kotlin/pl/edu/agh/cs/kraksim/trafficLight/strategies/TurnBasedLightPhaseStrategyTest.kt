@@ -75,6 +75,5 @@ internal class TurnBasedLightPhaseStrategyTest {
         assertThat(lane2LightPhase?.phaseTime).isEqualTo(5)
         assertThat(lane2LightPhase?.state).isEqualTo(GREEN)
     }
-
 }
 
