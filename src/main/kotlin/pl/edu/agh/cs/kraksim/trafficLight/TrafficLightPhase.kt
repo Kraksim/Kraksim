@@ -5,7 +5,7 @@ class TrafficLightPhase(
     var state: LightColor = LightColor.RED
 ) {
 
-    fun switchLight(phaseTime: Int = this.phaseTime) {
+    fun switchLight(phaseTime: Int) {
         this.phaseTime = phaseTime
         state = when (state) {
             LightColor.RED -> LightColor.GREEN

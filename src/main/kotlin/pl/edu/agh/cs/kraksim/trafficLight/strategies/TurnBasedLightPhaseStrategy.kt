@@ -61,7 +61,6 @@ class TurnBasedLightPhaseStrategy(
         }
     }
 
-
     private fun Intersection.getLightPhasesOfLanesGroupedByRoad() =
         endingRoads.map { road -> lightPhasesOf(road) }
 }
