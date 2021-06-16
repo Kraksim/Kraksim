@@ -1,8 +1,8 @@
 package pl.edu.agh.cs.kraksim.trafficLight.strategies
 
+import pl.edu.agh.cs.kraksim.common.split
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseStrategy
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.GREEN
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.RED
 
@@ -22,29 +22,45 @@ class TurnBasedLightPhaseStrategy(
         intersections.forEach { switchLights(it) }
     }
 
+    /**
+     * Arbitrarily takes one road in [intersection] and sets its light as green, for rest sets red and assign time accordingly
+     */
     private fun initializeLights(intersection: Intersection) {
-        intersection.getLightPhasesOfLanesGroupedByRoad()
-            .forEachIndexed { index, phases ->
-                phases.forEach { phase ->
-                    phase.phaseTime = (index + 1) * turnLength
-                    phase.state = if (index == 0) GREEN else RED
-                }
+        val (head, tail) = intersection.getLightPhasesOfLanesGroupedByRoad().split()
+        head.forEach { phase ->
+            phase.phaseTime = turnLength
+            phase.state = GREEN
+        }
+
+        tail.forEachIndexed { index, phases ->
+            phases.forEach { phase ->
+                phase.phaseTime = (index + 1) * turnLength
+                phase.state = RED
             }
+        }
     }
 
     private fun switchLights(intersection: Intersection) {
         val roadsCount = intersection.endingRoads.size
 
-        val (first: List<TrafficLightPhase>, second: List<TrafficLightPhase>) =
+        val phasesToChange =
             intersection.getLightPhasesOfLanesGroupedByRoad()
                 .onEach { lanes -> lanes.forEach { it.phaseTime-- } }
-                .sortedBy { roadPhases -> roadPhases[0].phaseTime }
+                .filter { roadPhases -> roadPhases[0].phaseTime == 0 }
 
-        if (first[0].phaseTime == 0) {
-            first.forEach { it.switchLight(turnLength * roadsCount) }
-            second.forEach { it.switchLight() }
+        phasesToChange.forEach { lanePhases ->
+            lanePhases.forEach { phase ->
+                var phaseTime = turnLength
+
+                // light that will be red after change should last turnLength + what longest red light lasts
+                if (phase.state == GREEN) {
+                    phaseTime *= roadsCount - 1 // minus one green light
+                }
+                phase.switchLight(phaseTime)
+            }
         }
     }
+
 
     private fun Intersection.getLightPhasesOfLanesGroupedByRoad() =
         endingRoads.map { road -> lightPhasesOf(road) }

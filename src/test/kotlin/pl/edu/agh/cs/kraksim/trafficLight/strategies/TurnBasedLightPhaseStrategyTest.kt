@@ -24,7 +24,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         // then
         assertThat(phases[lane1]?.phaseTime).isEqualTo(5)
         assertThat(phases[lane1]?.state).isEqualTo(GREEN)
-        assertThat(phases[lane2]?.phaseTime).isEqualTo(10)
+        assertThat(phases[lane2]?.phaseTime).isEqualTo(5)
         assertThat(phases[lane2]?.state).isEqualTo(RED)
     }
 
@@ -45,7 +45,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         // then
         assertThat(phases[lane1]?.phaseTime).isEqualTo(4)
         assertThat(phases[lane1]?.state).isEqualTo(GREEN)
-        assertThat(phases[lane2]?.phaseTime).isEqualTo(9)
+        assertThat(phases[lane2]?.phaseTime).isEqualTo(4)
         assertThat(phases[lane2]?.state).isEqualTo(RED)
     }
 
@@ -62,7 +62,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         val lane2LightPhase = phases[lane2]
         lane1LightPhase?.phaseTime = 1
         lane1LightPhase?.state = GREEN
-        lane2LightPhase?.phaseTime = 6
+        lane2LightPhase?.phaseTime = 1
         lane2LightPhase?.state = RED
 
         // when
@@ -70,7 +70,7 @@ internal class TurnBasedLightPhaseStrategyTest {
 
 
         // then
-        assertThat(lane1LightPhase?.phaseTime).isEqualTo(10)
+        assertThat(lane1LightPhase?.phaseTime).isEqualTo(5)
         assertThat(lane1LightPhase?.state).isEqualTo(RED)
         assertThat(lane2LightPhase?.phaseTime).isEqualTo(5)
         assertThat(lane2LightPhase?.state).isEqualTo(GREEN)
