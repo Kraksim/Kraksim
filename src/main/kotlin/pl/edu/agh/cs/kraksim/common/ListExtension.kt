@@ -17,3 +17,9 @@ fun <T> MutableList<T>.withoutFirst() =
  */
 fun <T> MutableList<T>.adjacentPairs(): List<Pair<T, T>> =
     withoutLast().zip(withoutFirst())
+
+fun <K, V> Map<K, V>.getValues(keys: List<K>): List<V> {
+    return keys.map { get(it)!! }
+}
+
+fun <T> List<T>.split() = Pair(first(), drop(1))

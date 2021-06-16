@@ -1,6 +1,7 @@
 package pl.edu.agh.cs.kraksim.statistics
 
-import pl.edu.agh.cs.kraksim.core.SimulationState
+import pl.edu.agh.cs.kraksim.common.*
+import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
 class StatisticsManager(
     var states: List<StateStatistics> = ArrayList(),
