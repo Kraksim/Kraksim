@@ -8,7 +8,7 @@ class StatisticsManager(
     var expectedVelocity: Map<RoadId, Velocity> = HashMap()
 ) {
 
-    fun createStatistics(state: SimulationState) {
+    fun createStatistics(state: SimulationState): StateStatistics {
         val roadsSpeed = getRoadsSpeed(state)
         val roadData = getRoadData(state)
 
@@ -25,13 +25,10 @@ class StatisticsManager(
             density,
             roadFlowRatio
         )
-        // todo refactor kodu, lepiej zmienne nazwać itp.
-        /* todo dokończyć
-         var stats = StateStatistics(
-              simulationId = state.id,
-              turn = state.turn,
 
-              )*/
+        val totalStatisticsValues = createTotalStatisticsValues(currentStatisticsValues)
+
+        return StateStatistics(state.id, state.turn, currentStatisticsValues, totalStatisticsValues)
     }
 
     private fun getRoadsSpeed(state: SimulationState): Map<RoadId, List<CarSpeed>> {
@@ -65,6 +62,37 @@ class StatisticsManager(
             key to AverageSpeed(value1)
         }.toMap()
 
-        return SpeedStatistics(wholeMapAverageSpeed, roadAverageSpeed)
+        return SpeedStatistics(AverageSpeed(wholeMapAverageSpeed), roadAverageSpeed)
+    }
+
+    private fun createTotalStatisticsValues(currentStatisticsValues: StatisticsValues): StatisticsValues {
+
+        val statsList = states.map { it.currentStatisticsValues } + listOf(currentStatisticsValues)
+
+        val wholeMapAverageSpeed = statsList.map { it.speedStatistics.wholeMapAverageSpeed.value }.average()
+
+        val roadAverageSpeed = statsList
+            .flatMap { it.speedStatistics.roadAverageSpeed.asIterable() }
+            .groupBy { it.key }
+            .map { (key, value) -> key to AverageSpeed(value.map { (_, speed) -> speed.value }.average()) }
+            .toMap()
+
+        val roadDensity = statsList
+            .flatMap { it.density.asIterable() }
+            .groupBy { it.key }
+            .map { (key, value) -> key to Density(value.map { (_, density) -> density.value }.average()) }
+            .toMap()
+
+        val roadFlowRatio = statsList
+            .flatMap { it.roadFlowRatio.asIterable() }
+            .groupBy { it.key }
+            .map { (key, value) -> key to FlowRatio(value.map { (_, flow) -> flow.value }.average()) }
+            .toMap()
+
+        return StatisticsValues(
+            SpeedStatistics(roadAverageSpeed = roadAverageSpeed, wholeMapAverageSpeed = AverageSpeed(wholeMapAverageSpeed)),
+            roadDensity,
+            roadFlowRatio
+        )
     }
 }

@@ -20,7 +20,7 @@ data class StatisticsValues(
 )
 
 data class SpeedStatistics(
-    val wholeMapAverageSpeed: Double,
+    val wholeMapAverageSpeed: AverageSpeed,
     val roadAverageSpeed: Map<RoadId, AverageSpeed>
 )
 
