@@ -6,6 +6,7 @@ import pl.edu.agh.cs.kraksim.common.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.common.TrafficLightPhase.LightColor
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
 import pl.edu.agh.cs.kraksim.nagelCore.*
+import pl.edu.agh.cs.kraksim.nagelCore.simulation.LightPhaseManager
 import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelSimulation
 
@@ -72,12 +73,14 @@ class ApplicationStartup : CommandLineRunner {
         )
 
         val state = NagelSimulationState(
+            id = 1,
+            turn = 1,
             gateways = gateways,
             roads = roads,
             intersections = listOf(intersection)
         )
 
-        val simulation = NagelSimulation(state, NagelMovementSimulationStrategy(TrueRandomProvider()))
+        val simulation = NagelSimulation(state, NagelMovementSimulationStrategy(TrueRandomProvider()), LightPhaseManager())
 
         val car1 = NagelCar(
             velocity = 4,

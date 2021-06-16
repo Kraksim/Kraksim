@@ -24,7 +24,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         // when
         strategy.randomization(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -43,7 +43,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         // when
         strategy.randomization(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 
@@ -62,7 +62,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         // when
         strategy.randomization(state)
 
-        //then
+        // then
         assertThat(car.velocity).isEqualTo(expectedVelocity)
     }
 }

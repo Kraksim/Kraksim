@@ -1,15 +1,16 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
 import pl.edu.agh.cs.kraksim.common.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.core.Intersection
 
 class NagelIntersection(
-    val id: Long,
+    override val id: Long,
     val directions: Set<NagelIntersectionTurningLaneDirection>,
     override val endingRoads: List<NagelRoad>,
     override val startingRoads: List<NagelRoad>,
     var phases: Map<NagelLane, TrafficLightPhase> = emptyMap()
 //    val position: Position
-) : NagelRoadNode {
+) : NagelRoadNode, Intersection {
 
     init {
         endingRoads.forEach { it.setEnd(this) }

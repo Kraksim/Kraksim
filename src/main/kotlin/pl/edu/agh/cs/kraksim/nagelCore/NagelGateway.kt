@@ -1,10 +1,12 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
+import pl.edu.agh.cs.kraksim.core.Gateway
+
 class NagelGateway(
-    val id: Long,
+    override val id: Long,
     override val endingRoads: List<NagelRoad>,
     override val startingRoads: List<NagelRoad>,
-) : NagelRoadNode {
+) : NagelRoadNode, Gateway {
 
     val finishedCars: ArrayList<NagelCar> = ArrayList()
 

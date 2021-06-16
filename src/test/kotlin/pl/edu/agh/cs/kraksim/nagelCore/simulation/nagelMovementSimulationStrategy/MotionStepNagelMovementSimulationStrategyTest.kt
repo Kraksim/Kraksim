@@ -23,7 +23,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         // when
         strategy.motion(state)
 
-        //then
+        // then
         assertThat(car.positionRelativeToStart).isEqualTo(expectedPosition)
     }
 
@@ -41,7 +41,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         // when
         strategy.motion(state)
 
-        //then
+        // then
         assertThat(car.positionRelativeToStart).isEqualTo(expectedPosition)
         assertThat(car.currentLane).isNull()
         assertThat(endGateway.finishedCars).contains(car)
@@ -64,7 +64,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         // when
         strategy.motion(state)
 
-        //then
+        // then
         assertThat(car1.positionRelativeToStart).isEqualTo(firstCarExpectedPosition)
         assertThat(car2.positionRelativeToStart).isEqualTo(secondCarExpectedPosition)
     }
@@ -83,7 +83,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         // when
         strategy.motion(state)
 
-        //then
+        // then
         assertThat(car.positionRelativeToStart).isEqualTo(expectedPosition)
         assertThat(car.distanceLeftToMove).isEqualTo(expectedDistanceLeftToMove)
     }
@@ -102,7 +102,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         // when
         strategy.motion(state)
 
-        //then
+        // then
         assertThat(car.positionRelativeToStart).isEqualTo(expectedPosition)
         assertThat(car.distanceLeftToMove).isEqualTo(expectedDistanceLeftToMove)
     }

@@ -17,5 +17,4 @@ class PingController(
         val response = service.getPingResponse(request)
         return ResponseEntity.ok(response)
     }
-
 }

@@ -1,32 +1,35 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
 import pl.edu.agh.cs.kraksim.common.addToFront
+import pl.edu.agh.cs.kraksim.core.Car
+import pl.edu.agh.cs.kraksim.core.Lane
 import kotlin.math.roundToInt
 
 class NagelLane(
-    private val id: Long,
-    val indexFromLeft: Int,
-    val parentRoad: NagelRoad,
-    private val physicalStartingPoint: Int,
-    private val physicalEndingPoint: Int,
-) {
+    override val id: Long,
+    override val indexFromLeft: Int,
+    override val parentRoad: NagelRoad,
+    override val physicalStartingPoint: Int,
+    override val physicalEndingPoint: Int,
+) : Lane {
     // lista ma same auta, nie ma pustych komórek. Posortowana po pozycji bo chcemy miec łatwy odstep do auta przed danym autem
-    val cars: MutableList<NagelCar> = ArrayList()
 
-    val physicalLength: Int = physicalEndingPoint - physicalStartingPoint
+    override val cars: MutableList<NagelCar> = ArrayList()
+
+    override val physicalLength: Int = physicalEndingPoint - physicalStartingPoint
     val cellsCount: Int = (physicalLength / AVERAGE_CAR_LENGTH).roundToInt()
 
-    fun addCar(car: NagelCar) {
-        this.cars.addToFront(car)
+    override fun addCar(car: Car) {
+        this.cars.addToFront(car as NagelCar)
     }
 
-    fun remove(car: NagelCar) {
+    override fun remove(car: Car) {
         this.cars.remove(car)
     }
 
-    fun containsCar(): Boolean = cars.isNotEmpty()
+    override fun containsCar(): Boolean = cars.isNotEmpty()
 
-    fun getFreeSpaceInFront(): Int {
+    override fun getFreeSpaceInFront(): Int {
         val positionOfFirstCar: Int? = cars.getOrNull(0)?.positionRelativeToStart
         return positionOfFirstCar ?: cellsCount
     }

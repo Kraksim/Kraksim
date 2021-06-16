@@ -22,7 +22,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         // when
         strategy.resolveIntersections(state)
 
-        //then
+        // then
         assertThat(car.currentLane).isEqualTo(expectedLane)
         assertThat(car.positionRelativeToStart).isEqualTo(expectedPosition)
     }
@@ -41,7 +41,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         // when
         strategy.resolveIntersections(state)
 
-        //then
+        // then
         assertThat(car.currentLane).isEqualTo(expectedLane)
         assertThat(car.positionRelativeToStart).isEqualTo(expectedPosition)
     }
@@ -67,7 +67,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         // when
         strategy.resolveIntersections(state)
 
-        //then
+        // then
         assertThat(car1.currentLane).isEqualTo(destinationLane)
         assertThat(car2.currentLane).isEqualTo(destinationLane)
         assertThat(car1.positionRelativeToStart).isEqualTo(expectedCar1Position)
@@ -95,7 +95,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         // when
         strategy.resolveIntersections(state)
 
-        //then
+        // then
         assertThat(car1.currentLane).isEqualTo(destinationLane)
         assertThat(car2.currentLane).isEqualTo(destinationLane)
         assertThat(car1.positionRelativeToStart).isIn(expectedOneOfTheCarsPosition, expectedSecondOfTheCarsPosition)

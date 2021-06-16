@@ -1,18 +1,22 @@
 package pl.edu.agh.cs.kraksim.nagelCore
 
-class NagelRoad(
-    val id: Long,
-    val physicalLength: Int,
-) {
+import pl.edu.agh.cs.kraksim.core.Road
+import pl.edu.agh.cs.kraksim.core.RoadNode
 
-    val lanes: ArrayList<NagelLane> = ArrayList()
+class NagelRoad(
+    override val id: Long,
+    override val physicalLength: Int,
+) : Road {
+
+    override val lanes: ArrayList<NagelLane> = ArrayList()
+
     private var end: NagelRoadNode? = null
 
-    fun setEnd(end: NagelRoadNode) {
-        this.end = end
+    override fun setEnd(end: RoadNode) {
+        this.end = end as NagelRoadNode
     }
 
-    fun end(): NagelRoadNode {
+    override fun end(): NagelRoadNode {
         return end!!
     }
 
