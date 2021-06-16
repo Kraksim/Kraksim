@@ -2,13 +2,16 @@ package pl.edu.agh.cs.kraksim
 
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
-import pl.edu.agh.cs.kraksim.common.TrafficLightPhase
-import pl.edu.agh.cs.kraksim.common.TrafficLightPhase.LightColor
+import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
-import pl.edu.agh.cs.kraksim.nagelCore.*
-import pl.edu.agh.cs.kraksim.nagelCore.simulation.LightPhaseManager
-import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelMovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.nagelCore.simulation.NagelSimulation
+import pl.edu.agh.cs.kraksim.core.state.Lane
+import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
+import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
+import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseManager
+import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseStrategyType
+import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 
 @Component
 class ApplicationStartup : CommandLineRunner {
@@ -59,7 +62,7 @@ class ApplicationStartup : CommandLineRunner {
             NagelIntersectionTurningLaneDirection(road2.lanes[0], road4)
         )
 
-        val phases = mapOf(
+        val phases: Map<Lane, TrafficLightPhase> = mapOf(
             road1.lanes[0] to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN),
             road2.lanes[0] to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN)
         )
@@ -80,7 +83,15 @@ class ApplicationStartup : CommandLineRunner {
             intersections = listOf(intersection)
         )
 
-        val simulation = NagelSimulation(state, NagelMovementSimulationStrategy(TrueRandomProvider()), LightPhaseManager())
+        val lightPhaseManager = LightPhaseManager(
+            state,
+            mapOf(LightPhaseStrategyType.TURN_BASED to listOf(IntersectionId(intersection.id)))
+        )
+
+        val simulation = NagelSimulation(
+            state, NagelMovementSimulationStrategy(TrueRandomProvider()),
+            lightPhaseManager
+        )
 
         val car1 = NagelCar(
             velocity = 4,
@@ -97,6 +108,14 @@ class ApplicationStartup : CommandLineRunner {
         )
         car3.moveToLane(road2.lanes[0], 0)
 
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
         println(state.toString() + "\n")
         simulation.step()
         println(state.toString() + "\n")
