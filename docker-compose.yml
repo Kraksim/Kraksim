@@ -5,9 +5,8 @@ services:
     container_name: kraksim
     build:
       context: .
-    # uncomment 2 lines below on linux, requires 20.04< version od docker engine
-    #    extra_hosts:
-    #      - "host.docker.internal:host-gateway"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - 8060:8080
       - 8061:8081
