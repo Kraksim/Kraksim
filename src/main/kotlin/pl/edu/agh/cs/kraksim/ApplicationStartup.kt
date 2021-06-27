@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
 import pl.edu.agh.cs.kraksim.core.state.Lane
+import pl.edu.agh.cs.kraksim.gps.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
@@ -16,7 +17,6 @@ import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 @Component
 class ApplicationStartup : CommandLineRunner {
     override fun run(vararg args: String?) {
-
         val road1 = NagelRoad(1, 18)
         val road2 = NagelRoad(2, 18)
         val road3 = NagelRoad(3, 18)
@@ -95,19 +95,48 @@ class ApplicationStartup : CommandLineRunner {
 
         val car1 = NagelCar(
             velocity = 4,
+            RoadLengthGPS(gateway1, gateway3, state)
         )
         car1.moveToLane(road1.lanes[0], 0)
 
         val car2 = NagelCar(
             velocity = 4,
+            RoadLengthGPS(gateway2, gateway3, state)
         )
         car2.moveToLane(road2.lanes[0], 2)
 
         val car3 = NagelCar(
             velocity = 4,
+            RoadLengthGPS(gateway2, gateway4, state)
         )
         car3.moveToLane(road2.lanes[0], 0)
 
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
+        println(state.toString() + "\n")
+        simulation.step()
         println(state.toString() + "\n")
         simulation.step()
         println(state.toString() + "\n")

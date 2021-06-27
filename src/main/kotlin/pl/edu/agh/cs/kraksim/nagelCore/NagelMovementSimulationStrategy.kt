@@ -51,8 +51,8 @@ class NagelMovementSimulationStrategy(
 
     private fun slowLastCar(endNode: NagelRoadNode, lane: NagelLane, lastCar: NagelCar) {
         if (endNode is NagelIntersection) {
-            // TODO zmienić wybór drogi
-            val destinationLane = endNode.getPossibleRoads(lane)[0].lanes[0]
+            // TODO zastanowić się co z pasem
+            val destinationLane = lastCar.gps.getNext().lanes[0]
 
             val freeSpaceInCarPath =
                 if (endNode.canGoThrough(lane)) {
@@ -132,10 +132,11 @@ class NagelMovementSimulationStrategy(
             .filter { it.containsCar() }
             .filter { it.cars.last().hasDistanceLeftToMove() }
             .forEach {
-                // todo ten lane musi być taki sam co w fazie slowing down - uwzględnić
-                val lane = (it.parentRoad.end() as NagelIntersection).getPossibleRoads(it)[0].lanes[0]
-
                 val lastCar = it.cars.last()
+
+                // todo zastanowić się co z pasem
+                val lane = lastCar.gps.popNext().lanes[0] as NagelLane
+
                 val cars: ArrayList<NagelCar> = carsToResolve[lane] ?: ArrayList()
                 cars.add(lastCar)
                 carsToResolve[lane] = cars

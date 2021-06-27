@@ -1,10 +1,12 @@
 package pl.edu.agh.cs.kraksim.nagelCore.state
 
 import pl.edu.agh.cs.kraksim.core.state.Car
+import pl.edu.agh.cs.kraksim.gps.GPS
 import kotlin.math.abs
 
 class NagelCar(
     override var velocity: Int = 0,
+    override val gps: GPS,
 ) : Car {
     override var positionRelativeToStart: Int = 0
     var currentLane: NagelLane? = null

@@ -2,7 +2,8 @@ package pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.MockRandomProvider
+import pl.edu.agh.cs.kraksim.common.*
+import pl.edu.agh.cs.kraksim.common.gps.SetMockRoadGps
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
@@ -17,8 +18,9 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(0))
         )
-        car.moveToLane(state.roads[0].lanes[0], 0)
+        car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -36,12 +38,14 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val frontCar = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(0))
         )
-        frontCar.moveToLane(state.getLine(), 2)
+        frontCar.moveToLane(state.getLane(), 2)
         val backCar = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(0))
         )
-        backCar.moveToLane(state.getLine(), 1)
+        backCar.moveToLane(state.getLane(), 1)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -60,12 +64,14 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val frontCar = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(0))
         )
-        frontCar.moveToLane(state.getLine(), 5)
+        frontCar.moveToLane(state.getLane(), 5)
         val backCar = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(0))
         )
-        backCar.moveToLane(state.getLine(), 2)
+        backCar.moveToLane(state.getLane(), 2)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -87,8 +93,9 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         )
         val car = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car.moveToLane(state.getLine(), 3)
+        car.moveToLane(state.getLane(), 3)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -110,8 +117,9 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         )
         val car = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car.moveToLane(state.getLine(), 3)
+        car.moveToLane(state.getLane(), 3)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -133,8 +141,9 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         )
         val car = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car.moveToLane(state.getLine(), 1)
+        car.moveToLane(state.getLane(), 1)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -154,12 +163,14 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         )
         val car1 = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car1.moveToLane(state.getLine(), 3)
+        car1.moveToLane(state.getLane(), 3)
         val car2 = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car2.moveToLane(state.getLine(road = 1), 0)
+        car2.moveToLane(state.getLane(roadId = 1), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -179,12 +190,14 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         )
         val car1 = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car1.moveToLane(state.getLine(), 3)
+        car1.moveToLane(state.getLane(), 3)
         val car2 = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car2.moveToLane(state.getLine(road = 1), 1)
+        car2.moveToLane(state.getLane(roadId = 1), 1)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -204,12 +217,14 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         )
         val car1 = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car1.moveToLane(state.getLine(), 2)
+        car1.moveToLane(state.getLane(), 2)
         val car2 = NagelCar(
             velocity = initialVelocity,
+            gps = SetMockRoadGps(state.road(1))
         )
-        car2.moveToLane(state.getLine(road = 1), 1)
+        car2.moveToLane(state.getLane(roadId = 1), 1)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when

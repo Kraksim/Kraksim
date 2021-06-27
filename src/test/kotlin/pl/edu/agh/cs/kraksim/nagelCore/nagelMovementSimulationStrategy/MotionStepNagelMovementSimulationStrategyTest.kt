@@ -2,7 +2,8 @@ package pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.MockRandomProvider
+import pl.edu.agh.cs.kraksim.common.*
+import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
@@ -15,8 +16,11 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val initialPosition = 0
         val expectedPosition = 2
         val state = getOneRoadSimulationState()
-        val car = NagelCar(velocity = 2)
-        car.moveToLane(state.getLine(), newPosition = initialPosition)
+        val car = NagelCar(
+            velocity = 2,
+            gps = MockRoadGps()
+        )
+        car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -32,9 +36,12 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val initialPosition = 2
         val expectedPosition = 0
         val state = getOneRoadSimulationState()
-        val endGateway = state.roads[0].end() as NagelGateway
-        val car = NagelCar(velocity = 2)
-        car.moveToLane(state.getLine(), newPosition = initialPosition)
+        val endGateway = state.road(0).end() as NagelGateway
+        val car = NagelCar(
+            velocity = 2,
+            gps = MockRoadGps()
+        )
+        car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -54,10 +61,16 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val secondCarInitialPosition = 2
         val secondCarExpectedPosition = 4
         val state = getOneRoadSimulationState(roadLength = 36)
-        val car1 = NagelCar(velocity = 2)
-        val car2 = NagelCar(velocity = 2)
-        car2.moveToLane(state.getLine(), newPosition = secondCarInitialPosition)
-        car1.moveToLane(state.getLine(), newPosition = firstCarInitialPosition)
+        val car1 = NagelCar(
+            velocity = 2,
+            gps = MockRoadGps()
+        )
+        val car2 = NagelCar(
+            velocity = 2,
+            gps = MockRoadGps()
+        )
+        car2.moveToLane(state.getLane(), newPosition = secondCarInitialPosition)
+        car1.moveToLane(state.getLane(), newPosition = firstCarInitialPosition)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -75,8 +88,11 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val expectedPosition = 3
         val expectedDistanceLeftToMove = 2
         val state = getTwoRoadConnectedWithIntersectionSimulationState(firstRoadLength = 18)
-        val car = NagelCar(velocity = 2)
-        car.moveToLane(state.getLine(), newPosition = initialPosition)
+        val car = NagelCar(
+            velocity = 2,
+            gps = MockRoadGps()
+        )
+        car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -94,8 +110,11 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val expectedPosition = 3
         val expectedDistanceLeftToMove = 1
         val state = getTwoRoadConnectedWithIntersectionSimulationState(firstRoadLength = 18)
-        val car = NagelCar(velocity = 2)
-        car.moveToLane(state.getLine(), newPosition = initialPosition)
+        val car = NagelCar(
+            velocity = 2,
+            gps = MockRoadGps()
+        )
+        car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when

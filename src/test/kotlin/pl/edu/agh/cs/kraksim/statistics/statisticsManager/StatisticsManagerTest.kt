@@ -1,13 +1,10 @@
 package pl.edu.agh.cs.kraksim.statistics.statisticsManager
 
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.AverageSpeed
-import pl.edu.agh.cs.kraksim.common.Density
-import pl.edu.agh.cs.kraksim.common.RoadId
-import pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy.getLine
-import pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy.getOneRoadSimulationState
+import pl.edu.agh.cs.kraksim.common.*
+import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.statistics.*
+import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
 
 internal class StatisticsManagerTest {
     @Test
@@ -17,10 +14,11 @@ internal class StatisticsManagerTest {
         val initialVelocity = 6
         val car = NagelCar(
             velocity = initialVelocity,
+            gps = MockRoadGps()
         )
-        car.moveToLane(state.getLine(), 0)
+        car.moveToLane(state.getLane(), 0)
         val manager = StatisticsManager(emptyList(), emptyMap())
-        val roadId = RoadId(state.getLine().id)
+        val roadId = RoadId(state.getLane().id)
 
         // when
         val result = manager.createStatistics(state)
