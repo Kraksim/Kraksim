@@ -7,10 +7,8 @@ class SetMockRoadGps(override val route: ArrayList<Road>) : GPS {
 
     constructor(vararg route: Road) : this(ArrayList(route.map { it }))
 
-
     override fun getNext(): Road =
         route.first()
-
 
     override fun popNext(): Road =
         route.removeAt(0)

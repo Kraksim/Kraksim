@@ -3,7 +3,6 @@ package pl.edu.agh.cs.kraksim.trafficLight
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.trafficLight.strategies.TurnBasedLightPhaseStrategy
 
-
 data class LightStrategyGroup(
     val lightPhaseStrategy: LightPhaseStrategy,
     val intersections: List<Intersection>
@@ -21,4 +20,3 @@ enum class LightPhaseStrategyType {
 fun createLightPhaseStrategy(type: LightPhaseStrategyType): LightPhaseStrategy = when (type) {
     LightPhaseStrategyType.TURN_BASED -> TurnBasedLightPhaseStrategy()
 }
-

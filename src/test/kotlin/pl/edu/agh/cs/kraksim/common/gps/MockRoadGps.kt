@@ -10,7 +10,6 @@ class MockRoadGps : GPS {
     override fun getNext(): Road =
         throw IllegalStateException("Function shouldn't be called")
 
-
     override fun popNext(): Road =
         throw IllegalStateException("Function shouldn't be called")
 }

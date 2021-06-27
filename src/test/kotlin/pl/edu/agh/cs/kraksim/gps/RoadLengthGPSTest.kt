@@ -76,7 +76,6 @@ internal class RoadLengthGPSTest {
         Assertions.assertThat(gps.route).isEqualTo(expectedRoute)
     }
 
-
     /*
                0,18        1,180
         G(10) -----> I(0) --------- G(11)

@@ -4,7 +4,6 @@ import pl.edu.agh.cs.kraksim.nagelCore.state.*
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 
-
 class OneLaneNagelStateBuilder(
     private val intersectionsIds: IntRange,
     gatewaysIds: IntRange
@@ -129,7 +128,6 @@ fun getOneRoadSimulationState(
         .build(1)
 }
 
-
 /*
     G(1) ---> I(0) ---> G(2)
  */
@@ -150,7 +148,6 @@ fun getTwoRoadConnectedWithIntersectionSimulationState(
     }
     return state
 }
-
 
 /*
     G(1) ---> I(0) < --- G(2)
@@ -173,7 +170,6 @@ fun getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState(
         .turnDirection(intersectionId = 0, sourceRoadId = 0, destinationRoadId = 2)
         .turnDirection(intersectionId = 0, sourceRoadId = 1, destinationRoadId = 2)
         .build()
-
 
     state.intersection(0).phases.forEach { (_, phase) ->
         phase.state = LightColor.GREEN

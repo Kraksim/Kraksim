@@ -19,7 +19,6 @@ class StatisticsManager(
                 id to FlowRatio(carSpeeds.map { it.value }.average() / expectedVelocity[id]!!.value)
             }.toMap()
 
-
         val currentStatisticsValues = StatisticsValues(
             speedStatistics,
             density,

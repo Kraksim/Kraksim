@@ -25,33 +25,34 @@ abstract class DijkstraBasedGps(
     }
 
     private fun calculateDijkstra(state: SimulationState, source: Gateway, target: Gateway) {
-        val notReachedNodes = HashSet<RoadNode>()
-        val weightFromSource = HashMap<RoadNode, Double>()
-        val pathRecovery = HashMap<RoadNode, RoadNode>()
+        val (notReachedNodes, weightFromSource, pathRecovery) = initialize(state, source)
 
-        initialize(state, weightFromSource, notReachedNodes, source)
-        calculateShortestPath(notReachedNodes, weightFromSource, target, pathRecovery)
+        calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target)
         parseRecoveryToRoute(target, pathRecovery)
     }
 
     private fun initialize(
         state: SimulationState,
-        weightFromSource: HashMap<RoadNode, Double>,
-        notReachedNodes: HashSet<RoadNode>,
         source: Gateway
-    ) {
+    ): Triple<HashSet<RoadNode>, HashMap<RoadNode, Double>, HashMap<RoadNode, RoadNode>> {
+        val notReachedNodes = HashSet<RoadNode>()
+        val weightFromSource = HashMap<RoadNode, Double>()
+        val pathRecovery = HashMap<RoadNode, RoadNode>()
+
         for (node in state.gateways + state.intersections) {
             weightFromSource[node] = Double.MAX_VALUE
             notReachedNodes.add(node)
         }
         weightFromSource[source] = 0.0
+
+        return Triple(notReachedNodes, weightFromSource, pathRecovery)
     }
 
     private fun calculateShortestPath(
         notReachedNodes: HashSet<RoadNode>,
         weightFromSource: HashMap<RoadNode, Double>,
-        target: Gateway,
-        pathRecovery: HashMap<RoadNode, RoadNode>
+        pathRecovery: HashMap<RoadNode, RoadNode>,
+        target: Gateway
     ) {
         while (notReachedNodes.isNotEmpty()) {
             val currentNode = notReachedNodes.popMinBy { weightFromSource[it]!! }
@@ -89,7 +90,6 @@ abstract class DijkstraBasedGps(
 
     override fun getNext(): Road =
         route.first()
-
 
     override fun popNext(): Road =
         route.removeAt(0)

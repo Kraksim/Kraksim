@@ -38,7 +38,6 @@ class StateStatisticsAssert(private val stateStatistics: StateStatistics) {
         return this
     }
 
-
     fun assertTotalFlowRatio(roadId: RoadId, flowRatio: FlowRatio?): StateStatisticsAssert {
         val roadFlowRatio = stateStatistics.totalStatisticsValues.roadFlowRatio[roadId]
         assertThat(roadFlowRatio).isEqualTo(flowRatio)

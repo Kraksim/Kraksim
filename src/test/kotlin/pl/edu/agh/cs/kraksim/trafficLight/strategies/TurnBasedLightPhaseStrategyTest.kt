@@ -69,7 +69,6 @@ internal class TurnBasedLightPhaseStrategyTest {
         // when
         strategy.switchLight(state.intersections)
 
-
         // then
         assertThat(lane1LightPhase?.phaseTime).isEqualTo(5)
         assertThat(lane1LightPhase?.state).isEqualTo(RED)
@@ -77,4 +76,3 @@ internal class TurnBasedLightPhaseStrategyTest {
         assertThat(lane2LightPhase?.state).isEqualTo(GREEN)
     }
 }
-
