@@ -17,7 +17,7 @@ class NagelRoad(
     }
 
     override fun end(): NagelRoadNode {
-        return end!!
+        return end ?: throw IllegalStateException("Trying to access not existent end in roadId=$id")
     }
 
     fun addLane(laneId: Long, indexFromLeft: Int, physicalStartingPoint: Int, physicalEndingPoint: Int) {

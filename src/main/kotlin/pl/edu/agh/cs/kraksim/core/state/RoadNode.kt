@@ -4,4 +4,3 @@ interface RoadNode {
     val endingRoads: List<Road>
     val startingRoads: List<Road>
 }
-

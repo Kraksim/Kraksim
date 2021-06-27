@@ -2,7 +2,8 @@ package pl.edu.agh.cs.kraksim.trafficLight.strategies
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
+import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.GREEN
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.RED
 
@@ -14,8 +15,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
         val intersection = state.intersections[0]
-        val lane1 = state.roads[0].lanes[0]
-        val lane2 = state.roads[1].lanes[0]
+        val lane1 = state.getLane()
+        val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
 
         // when
@@ -34,8 +35,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
         val intersection = state.intersections[0]
-        val lane1 = state.roads[0].lanes[0]
-        val lane2 = state.roads[1].lanes[0]
+        val lane1 = state.getLane()
+        val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
         strategy.initializeLights(state.intersections)
 
@@ -55,8 +56,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
         val intersection = state.intersections[0]
-        val lane1 = state.roads[0].lanes[0]
-        val lane2 = state.roads[1].lanes[0]
+        val lane1 = state.getLane()
+        val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
         val lane1LightPhase = phases[lane1]
         val lane2LightPhase = phases[lane2]
@@ -68,7 +69,6 @@ internal class TurnBasedLightPhaseStrategyTest {
         // when
         strategy.switchLight(state.intersections)
 
-
         // then
         assertThat(lane1LightPhase?.phaseTime).isEqualTo(5)
         assertThat(lane1LightPhase?.state).isEqualTo(RED)
@@ -76,4 +76,3 @@ internal class TurnBasedLightPhaseStrategyTest {
         assertThat(lane2LightPhase?.state).isEqualTo(GREEN)
     }
 }
-
