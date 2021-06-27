@@ -23,3 +23,11 @@ fun <K, V> Map<K, V>.getValues(keys: List<K>): List<V> {
 }
 
 fun <T> List<T>.split() = Pair(first(), drop(1))
+
+fun <T> Iterable<T>.takeEachWhile(predicate: (T) -> Boolean, action: (T) -> Unit) {
+    for (item in this) {
+        if (!predicate(item))
+            break
+        action(item)
+    }
+}
