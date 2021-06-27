@@ -1,11 +1,10 @@
 package pl.edu.agh.cs.kraksim.gps
 
 import pl.edu.agh.cs.kraksim.common.addToFront
-import pl.edu.agh.cs.kraksim.common.adjacentPairs
 import pl.edu.agh.cs.kraksim.common.popMinBy
 import pl.edu.agh.cs.kraksim.core.state.Gateway
+import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.Road
-import pl.edu.agh.cs.kraksim.core.state.RoadNode
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
 abstract class DijkstraBasedGps(
@@ -27,64 +26,63 @@ abstract class DijkstraBasedGps(
     private fun calculateDijkstra(state: SimulationState, source: Gateway, target: Gateway) {
         val (notReachedNodes, weightFromSource, pathRecovery) = initialize(state, source)
 
-        calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target)
-        parseRecoveryToRoute(target, pathRecovery)
+        val fastestRoadLeadingToTarget = calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target)
+        parseRecoveryToRoute(fastestRoadLeadingToTarget, pathRecovery)
     }
 
     private fun initialize(
         state: SimulationState,
         source: Gateway
-    ): Triple<HashSet<RoadNode>, HashMap<RoadNode, Double>, HashMap<RoadNode, RoadNode>> {
-        val notReachedNodes = HashSet<RoadNode>()
-        val weightFromSource = HashMap<RoadNode, Double>()
-        val pathRecovery = HashMap<RoadNode, RoadNode>()
+    ): Triple<HashSet<Road>, HashMap<Road, Double>, HashMap<Road, Road>> {
+        val notReachedNodes = HashSet<Road>()
+        val weightFromSource = HashMap<Road, Double>()
+        val pathRecovery = HashMap<Road, Road>()
 
-        for (node in state.gateways + state.intersections) {
+        for (node in state.roads) {
             weightFromSource[node] = Double.MAX_VALUE
             notReachedNodes.add(node)
         }
-        weightFromSource[source] = 0.0
+
+        for (node in source.startingRoads) {
+            weightFromSource[node] = getRoadWeight(node)
+        }
 
         return Triple(notReachedNodes, weightFromSource, pathRecovery)
     }
 
     private fun calculateShortestPath(
-        notReachedNodes: HashSet<RoadNode>,
-        weightFromSource: HashMap<RoadNode, Double>,
-        pathRecovery: HashMap<RoadNode, RoadNode>,
+        notReachedNodes: HashSet<Road>,
+        weightFromSource: HashMap<Road, Double>,
+        pathRecovery: HashMap<Road, Road>,
         target: Gateway
-    ) {
+    ): Road? {
         while (notReachedNodes.isNotEmpty()) {
-            val currentNode = notReachedNodes.popMinBy { weightFromSource[it]!! }
+            val currentRoad = notReachedNodes.popMinBy { weightFromSource[it]!! }
 
-            if (currentNode == target) {
-                return
+            val end = currentRoad.end()
+            if (end == target) {
+                return currentRoad
             }
+            if (end is Intersection) {
+                for (roadFromCurrentNode in end.getPossibleRoads(currentRoad)) {
+                    val neighbourNodeWeightFromSource =
+                        weightFromSource[currentRoad]!! + getRoadWeight(roadFromCurrentNode)
 
-            for (roadFromCurrentNode in currentNode.startingRoads) {
-                val neighbourNode = roadFromCurrentNode.end()
-                val neighbourNodeWeightFromSource =
-                    weightFromSource[currentNode]!! + getRoadWeight(roadFromCurrentNode)
-
-                if (neighbourNodeWeightFromSource < weightFromSource[neighbourNode]!!) {
-                    weightFromSource[neighbourNode] = neighbourNodeWeightFromSource
-                    pathRecovery[neighbourNode] = currentNode
+                    if (neighbourNodeWeightFromSource < weightFromSource[roadFromCurrentNode]!!) {
+                        weightFromSource[roadFromCurrentNode] = neighbourNodeWeightFromSource
+                        pathRecovery[roadFromCurrentNode] = currentRoad
+                    }
                 }
             }
         }
+        return null
     }
 
-    private fun parseRecoveryToRoute(target: Gateway, pathRecovery: HashMap<RoadNode, RoadNode>) {
-        val nodeRoute = arrayListOf<RoadNode>(target)
-
-        var node: RoadNode? = pathRecovery[target]
-        while (node != null) {
-            nodeRoute.addToFront(node)
-            node = pathRecovery[node]
-        }
-        nodeRoute.adjacentPairs().forEach { (node, nextNode) ->
-            val el: Road = node.startingRoads.find { it.end() == nextNode }!!
-            route.add(el)
+    private fun parseRecoveryToRoute(target: Road?, pathRecovery: HashMap<Road, Road>) {
+        var find: Road? = target
+        while (find != null) {
+            route.addToFront(find)
+            find = pathRecovery[find]
         }
     }
 

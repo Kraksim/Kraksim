@@ -77,6 +77,36 @@ internal class RoadLengthGPSTest {
     }
 
     /*
+              0,18        1,18
+       G(10) -----> I(0) --------- G(11)
+                      |        ┐
+               2,18   |      /
+                      |    / 3, 18
+                      V  /
+                     I(1)
+    */
+    @Test
+    fun `Given starting point in G(10) and target G(11), but no turn direction leading to road(1), when RoadLengthGPS should find shortest route`() {
+        // given
+        val state = OneLaneNagelStateBuilder(0..1, 10..11)
+            .connect(sourceId = 10, destinationId = 0, length = 18, roadId = 0)
+            .connect(sourceId = 0, destinationId = 11, length = 18, roadId = 1)
+            .connect(sourceId = 0, destinationId = 1, length = 18, roadId = 2)
+            .connect(sourceId = 1, destinationId = 11, length = 18, roadId = 3)
+            .turnDirection(intersectionId = 0, sourceRoadId = 0, destinationRoadId = 2)
+            .turnDirection(intersectionId = 1, sourceRoadId = 2, destinationRoadId = 3)
+            .build()
+
+        val expectedRoute = listOf(state.road(0), state.road(2), state.road(3))
+
+        // when
+        val gps = RoadLengthGPS(state.gateway(10), state.gateway(11), state)
+
+        // then
+        Assertions.assertThat(gps.route).isEqualTo(expectedRoute)
+    }
+
+    /*
                0,18        1,180
         G(10) -----> I(0) --------- G(11)
                        |        ┐
