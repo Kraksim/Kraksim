@@ -18,9 +18,13 @@ class NagelIntersection(
         endingRoads.forEach { it.setEnd(this) }
     }
 
-    fun getPossibleRoads(lane: NagelLane): List<NagelRoad> {
+    override fun getPossibleRoads(lane: Lane): List<NagelRoad> {
         return directions.filter { it.from == lane }
             .map { it.to }
+    }
+
+    override fun getPossibleRoads(road: Road): List<NagelRoad> {
+        return road.lanes.flatMap { getPossibleRoads(it) }
     }
 
     /**
