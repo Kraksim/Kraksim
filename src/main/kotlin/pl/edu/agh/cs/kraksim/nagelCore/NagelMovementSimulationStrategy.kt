@@ -106,7 +106,6 @@ class NagelMovementSimulationStrategy(
         }
     }
 
-    // TODO refactor
     fun resolveIntersections(state: NagelSimulationState) {
         getCarsToResolve(state.roads).forEach { (destinationLane, cars) ->
             var spaceLeft = destinationLane.getFreeSpaceInFront()
@@ -131,7 +130,7 @@ class NagelMovementSimulationStrategy(
             .filter { it.hasDistanceLeftToMove() }
             .groupByTo(hashMapOf()) {
                 it.gps.popNext().lanes[0] as NagelLane
-            }
+            } // todo zastanowić się co z pasem
     }
 
     companion object {
