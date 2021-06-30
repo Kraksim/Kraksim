@@ -24,6 +24,29 @@ data class StateStatistics(
     }
 }
 
+private fun AsciiTable.insertStatistics(statisticsValues: StatisticsValues) {
+    addRule()
+    addRow("Road ID", "Speed", "Density", "Road Flow")
+    addRule()
+    addRow(
+        "Whole Map",
+        "%.2f".format(statisticsValues.speedStatistics.wholeMapAverageSpeed.value),
+        "------",
+        "------"
+    )
+    addRule()
+    for (RoadId in statisticsValues.density.keys) {
+        addRow(
+            RoadId.value,
+            statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value?.format(2) ?: "N/A",
+            statisticsValues.density[RoadId]?.value?.format(2) ?: "N/A",
+            statisticsValues.roadFlowRatio[RoadId]?.value?.format(2) ?: "N/A"
+
+        )
+        addRule()
+    }
+}
+
 data class StatisticsValues(
     val speedStatistics: SpeedStatistics,
     val density: Map<RoadId, Density>,
