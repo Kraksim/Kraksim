@@ -22,7 +22,6 @@ data class StateStatistics(
             insertStatistics(totalStatisticsValues)
         }.render()
     }
-
 }
 
 data class StatisticsValues(

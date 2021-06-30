@@ -3,8 +3,7 @@ package pl.edu.agh.cs.kraksim.common
 import de.vandermeer.asciitable.AsciiTable
 import pl.edu.agh.cs.kraksim.statistics.StatisticsValues
 
-fun AsciiTable.insertStatistics(statisticsValues: StatisticsValues)
-{
+fun AsciiTable.insertStatistics(statisticsValues: StatisticsValues) {
     addRule()
     addRow("Road ID", "Speed", "Density", "Road Flow")
     addRule()
