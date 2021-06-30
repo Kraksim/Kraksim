@@ -1,10 +1,7 @@
 package pl.edu.agh.cs.kraksim.statistics
 
-import pl.edu.agh.cs.kraksim.common.AverageSpeed
-import pl.edu.agh.cs.kraksim.common.Density
-import pl.edu.agh.cs.kraksim.common.FlowRatio
-import pl.edu.agh.cs.kraksim.common.RoadId
 import de.vandermeer.asciitable.AsciiTable
+import pl.edu.agh.cs.kraksim.common.*
 
 data class StateStatistics(
     val simulationId: Long,
@@ -42,14 +39,12 @@ data class StateStatistics(
             )
             addRule()
             for (RoadId in statisticsValues.density.keys) {
-                val speed = statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value
-                val density = statisticsValues.density[RoadId]?.value
-                val flow = statisticsValues.roadFlowRatio[RoadId]?.value
                 addRow(
                     RoadId.value,
-                    if (speed == null) "N/A" else "%.2f".format(speed),
-                    if (density == null) "N/A" else "%.2f".format(density),
-                    if (flow == null) "N/A" else "%.2f".format(flow)
+                    statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value?.format(2)?:"N/A",
+                    statisticsValues.density[RoadId]?.value?.format(2)?:"N/A",
+                    statisticsValues.roadFlowRatio[RoadId]?.value?.format(2)?:"N/A"
+
                 )
                 addRule()
             }
