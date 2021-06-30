@@ -5,3 +5,5 @@ inline fun <T, R : Comparable<R>> HashSet<T>.popMinBy(selector: (T) -> R): T {
     remove(value)
     return value
 }
+
+fun Double.format(digits: Int) = "%.${digits}f".format(this)
