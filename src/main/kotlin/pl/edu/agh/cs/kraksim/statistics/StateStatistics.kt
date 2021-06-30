@@ -30,7 +30,8 @@ data class StateStatistics(
         statistics: AsciiTable,
         statisticsValues: StatisticsValues
     ) {
-        statistics.apply { addRule()
+        statistics.apply {
+            addRule()
             addRow("Road ID", "Speed", "Density", "Road Flow")
             addRule()
             addRow(
