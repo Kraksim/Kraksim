@@ -33,6 +33,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("de.vandermeer:asciitable:0.3.2")
 }
 
 tasks {
