@@ -14,38 +14,44 @@ data class StateStatistics(
     val totalStatisticsValues: StatisticsValues,
 ) {
     override fun toString(): String {
-        val statistics = AsciiTable()
-        statistics.addRule()
-        statistics.addRow(null, "Simulation ID: $simulationId", null, "Turn: $turn")
-        statistics.addRule()
-        statistics.addRow(null, null, null, "Current Statistic Values")
-        insertStatistics(statistics, currentStatisticsValues)
-        statistics.addRow(null, null, null, "Total Statistic Values")
-        insertStatistics(statistics, totalStatisticsValues)
 
-        return statistics.render()
+        return AsciiTable().apply {
+            addRule()
+            addRow(null, "Simulation ID: $simulationId", null, "Turn: $turn")
+            addRule()
+            addRow(null, null, null, "Current Statistic Values")
+            insertStatistics(this, currentStatisticsValues)
+            addRow(null, null, null, "Total Statistic Values")
+            insertStatistics(this, totalStatisticsValues)
+        }.render()
     }
 
     private fun insertStatistics(
         statistics: AsciiTable,
         statisticsValues: StatisticsValues
     ) {
-        statistics.addRule()
-        statistics.addRow("Road ID", "Speed", "Density", "Road Flow")
-        statistics.addRule()
-        statistics.addRow("Whole Map", "%.2f".format(statisticsValues.speedStatistics.wholeMapAverageSpeed.value), "------", "------")
-        statistics.addRule()
-        for (RoadId in statisticsValues.density.keys) {
-            val speed = statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value
-            val density = statisticsValues.density[RoadId]?.value
-            val flow = statisticsValues.roadFlowRatio[RoadId]?.value
-            statistics.addRow(
-                RoadId.value,
-                if (speed == null) "N/A" else "%.2f".format(speed),
-                if (density == null) "N/A" else "%.2f".format(density),
-                if (flow == null) "N/A" else "%.2f".format(flow)
+        statistics.apply { addRule()
+            addRow("Road ID", "Speed", "Density", "Road Flow")
+            addRule()
+            addRow(
+                "Whole Map",
+                "%.2f".format(statisticsValues.speedStatistics.wholeMapAverageSpeed.value),
+                "------",
+                "------"
             )
-            statistics.addRule()
+            addRule()
+            for (RoadId in statisticsValues.density.keys) {
+                val speed = statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value
+                val density = statisticsValues.density[RoadId]?.value
+                val flow = statisticsValues.roadFlowRatio[RoadId]?.value
+                addRow(
+                    RoadId.value,
+                    if (speed == null) "N/A" else "%.2f".format(speed),
+                    if (density == null) "N/A" else "%.2f".format(density),
+                    if (flow == null) "N/A" else "%.2f".format(flow)
+                )
+                addRule()
+            }
         }
     }
 }
