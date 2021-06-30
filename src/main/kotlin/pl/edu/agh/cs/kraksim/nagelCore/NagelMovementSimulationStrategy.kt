@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.nagelCore
 
 import pl.edu.agh.cs.kraksim.common.adjacentPairs
 import pl.edu.agh.cs.kraksim.common.random.RandomProvider
+import pl.edu.agh.cs.kraksim.common.takeEachWhile
 import pl.edu.agh.cs.kraksim.common.withoutLast
 import pl.edu.agh.cs.kraksim.core.MovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
@@ -105,43 +106,31 @@ class NagelMovementSimulationStrategy(
         }
     }
 
-    // TODO refactor
     fun resolveIntersections(state: NagelSimulationState) {
         getCarsToResolve(state.roads).forEach { (destinationLane, cars) ->
             var spaceLeft = destinationLane.getFreeSpaceInFront()
 
             cars.sortedByDescending { car -> car.distanceLeftToMove }
-                .takeWhile { spaceLeft > 0 }
-                .forEach { car ->
+                .takeEachWhile({ spaceLeft > 0 }) { car ->
                     val newPosition = min(spaceLeft, car.distanceLeftToMove) - 1
 
                     car.moveToLane(
                         destinationLane,
                         newPosition
-                    ) // todo zamiast move to zapisać i ruszyć wszystkie naraz
+                    )
                     spaceLeft = newPosition
                 }
         }
     }
 
-    // TODO refactor
-    private fun getCarsToResolve(roads: List<NagelRoad>): HashMap<NagelLane, ArrayList<NagelCar>> {
-        val carsToResolve = HashMap<NagelLane, ArrayList<NagelCar>>()
-        roads.filter { it.end() is NagelIntersection }
+    private fun getCarsToResolve(roads: List<NagelRoad>): Map<NagelLane, List<NagelCar>> {
+        return roads.filter { it.end() is NagelIntersection }
             .flatMap { it.lanes }
-            .filter { it.containsCar() }
-            .filter { it.cars.last().hasDistanceLeftToMove() }
-            .forEach {
-                val lastCar = it.cars.last()
-
-                // todo zastanowić się co z pasem
-                val lane = lastCar.gps.popNext().lanes[0] as NagelLane
-
-                val cars: ArrayList<NagelCar> = carsToResolve[lane] ?: ArrayList()
-                cars.add(lastCar)
-                carsToResolve[lane] = cars
-            }
-        return carsToResolve
+            .mapNotNull { it.cars.lastOrNull() }
+            .filter { it.hasDistanceLeftToMove() }
+            .groupByTo(hashMapOf()) {
+                it.gps.popNext().lanes[0] as NagelLane
+            } // todo zastanowić się co z pasem
     }
 
     companion object {
