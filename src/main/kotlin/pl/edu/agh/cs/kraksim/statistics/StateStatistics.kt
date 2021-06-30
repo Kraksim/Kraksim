@@ -41,9 +41,9 @@ data class StateStatistics(
             for (RoadId in statisticsValues.density.keys) {
                 addRow(
                     RoadId.value,
-                    statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value?.format(2)?:"N/A",
-                    statisticsValues.density[RoadId]?.value?.format(2)?:"N/A",
-                    statisticsValues.roadFlowRatio[RoadId]?.value?.format(2)?:"N/A"
+                    statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value?.format(2) ?: "N/A",
+                    statisticsValues.density[RoadId]?.value?.format(2) ?: "N/A",
+                    statisticsValues.roadFlowRatio[RoadId]?.value?.format(2) ?: "N/A"
 
                 )
                 addRule()
