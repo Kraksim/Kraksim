@@ -6,7 +6,6 @@ import pl.edu.agh.cs.kraksim.ping.domain.Ping
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 
-
 @Service
 class PingService(
     @Value("\${app.version}")
@@ -23,5 +22,4 @@ class PingService(
             senderIpAddress = request.remoteAddr
         )
     }
-
 }
