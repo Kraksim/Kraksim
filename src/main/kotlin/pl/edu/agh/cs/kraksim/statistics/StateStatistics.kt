@@ -17,39 +17,12 @@ data class StateStatistics(
             addRow(null, "Simulation ID: $simulationId", null, "Turn: $turn")
             addRule()
             addRow(null, null, null, "Current Statistic Values")
-            insertStatistics(this, currentStatisticsValues)
+            insertStatistics(currentStatisticsValues)
             addRow(null, null, null, "Total Statistic Values")
-            insertStatistics(this, totalStatisticsValues)
+            insertStatistics(totalStatisticsValues)
         }.render()
     }
 
-    private fun insertStatistics(
-        statistics: AsciiTable,
-        statisticsValues: StatisticsValues
-    ) {
-        statistics.apply {
-            addRule()
-            addRow("Road ID", "Speed", "Density", "Road Flow")
-            addRule()
-            addRow(
-                "Whole Map",
-                "%.2f".format(statisticsValues.speedStatistics.wholeMapAverageSpeed.value),
-                "------",
-                "------"
-            )
-            addRule()
-            for (RoadId in statisticsValues.density.keys) {
-                addRow(
-                    RoadId.value,
-                    statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value?.format(2) ?: "N/A",
-                    statisticsValues.density[RoadId]?.value?.format(2) ?: "N/A",
-                    statisticsValues.roadFlowRatio[RoadId]?.value?.format(2) ?: "N/A"
-
-                )
-                addRule()
-            }
-        }
-    }
 }
 
 data class StatisticsValues(
