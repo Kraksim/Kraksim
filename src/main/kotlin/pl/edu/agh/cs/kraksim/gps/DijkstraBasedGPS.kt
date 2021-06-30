@@ -7,7 +7,7 @@ import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.Road
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
-abstract class DijkstraBasedGps(
+abstract class DijkstraBasedGPS(
     source: Gateway,
     target: Gateway,
     state: SimulationState

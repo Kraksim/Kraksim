@@ -8,7 +8,7 @@ class RoadLengthGPS(
     source: Gateway,
     target: Gateway,
     state: SimulationState
-) : DijkstraBasedGps(source, target, state) {
+) : DijkstraBasedGPS(source, target, state) {
 
     override fun getRoadWeight(node: Road): Double =
         node.physicalLength.toDouble()
