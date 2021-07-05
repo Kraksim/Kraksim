@@ -33,13 +33,9 @@ class StatisticsManager(
     }
 
     private fun getRoadsSpeed(state: SimulationState): Map<RoadId, List<CarSpeed>> {
-        val value = HashMap<RoadId, List<CarSpeed>>()
-        state.roads.forEach { road ->
-            val id = road.id
-            val speed = state.cars.map { it.velocity }
-            value[id] = speed
+        return state.roads.associate { road ->
+            road.id to state.cars.map { it.velocity }
         }
-        return value
     }
 
     private fun getRoadData(state: SimulationState): List<RoadData> {
@@ -54,14 +50,10 @@ class StatisticsManager(
 
     private fun speedStatistics(roadsSpeed: Map<RoadId, List<CarSpeed>>): SpeedStatistics {
         val wholeMapAverageSpeed = roadsSpeed.flatMap { it.value }
-            .map { speed -> speed }
             .average()
 
-        val roadAverageSpeed = roadsSpeed.map { (key, value) ->
-            val value1 = value.map { speed -> speed }
-                .average()
-            key to value1
-        }.toMap()
+        val roadAverageSpeed = roadsSpeed.map { (key, value) -> key to value.average() }
+            .toMap()
 
         return SpeedStatistics(wholeMapAverageSpeed, roadAverageSpeed)
     }
@@ -91,7 +83,7 @@ class StatisticsManager(
             .toMap()
 
         return StatisticsValues(
-            SpeedStatistics(roadAverageSpeed = roadAverageSpeed, wholeMapAverageSpeed = wholeMapAverageSpeed),
+            SpeedStatistics(wholeMapAverageSpeed, roadAverageSpeed),
             roadDensity,
             roadFlowRatio
         )
