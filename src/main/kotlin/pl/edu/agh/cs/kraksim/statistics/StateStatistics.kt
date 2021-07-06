@@ -30,17 +30,17 @@ private fun AsciiTable.insertStatistics(statisticsValues: StatisticsValues) {
     addRule()
     addRow(
         "Whole Map",
-        "%.2f".format(statisticsValues.speedStatistics.wholeMapAverageSpeed.value),
+        "%.2f".format(statisticsValues.speedStatistics.wholeMapAverageSpeed),
         "------",
         "------"
     )
     addRule()
     for (RoadId in statisticsValues.density.keys) {
         addRow(
-            RoadId.value,
-            statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.value?.format(2) ?: "N/A",
-            statisticsValues.density[RoadId]?.value?.format(2) ?: "N/A",
-            statisticsValues.roadFlowRatio[RoadId]?.value?.format(2) ?: "N/A"
+            RoadId,
+            statisticsValues.speedStatistics.roadAverageSpeed[RoadId]?.format(2) ?: "N/A",
+            statisticsValues.density[RoadId]?.format(2) ?: "N/A",
+            statisticsValues.roadFlowRatio[RoadId]?.format(2) ?: "N/A"
 
         )
         addRule()
