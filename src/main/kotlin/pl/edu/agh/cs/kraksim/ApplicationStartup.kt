@@ -2,7 +2,6 @@ package pl.edu.agh.cs.kraksim
 
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
-import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
 import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.gps.RoadLengthGPS
@@ -85,7 +84,7 @@ class ApplicationStartup : CommandLineRunner {
 
         val lightPhaseManager = LightPhaseManager(
             state,
-            mapOf(LightPhaseStrategyType.TURN_BASED to listOf(IntersectionId(intersection.id)))
+            mapOf(LightPhaseStrategyType.TURN_BASED to listOf(intersection.id))
         )
 
         val simulation = NagelSimulation(

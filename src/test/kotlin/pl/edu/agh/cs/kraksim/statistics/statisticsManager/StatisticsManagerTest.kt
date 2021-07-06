@@ -1,7 +1,8 @@
 package pl.edu.agh.cs.kraksim.statistics.statisticsManager
 
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.*
+import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
@@ -18,21 +19,22 @@ internal class StatisticsManagerTest {
         )
         car.moveToLane(state.getLane(), 0)
         val manager = StatisticsManager(emptyList(), emptyMap())
-        val roadId = RoadId(state.getLane().id)
+        val roadId = state.getLane().id
 
         // when
         val result = manager.createStatistics(state)
+        println(result)
 
         // then
         val assertObject = StateStatisticsAssert(result)
         assertObject
-            .assertCurrentDensity(roadId, Density(0.1))
+            .assertCurrentDensity(roadId, 0.1)
             .assertCurrentFlowRatio(roadId, null)
-            .assertCurrentRoadAverageSpeed(roadId, AverageSpeed(6.0))
-            .assertCurrentWholeMapAverageSpeed(AverageSpeed(6.0))
-            .assertTotalDensity(roadId, Density(0.1))
+            .assertCurrentRoadAverageSpeed(roadId, 6.0)
+            .assertCurrentWholeMapAverageSpeed(6.0)
+            .assertTotalDensity(roadId, 0.1)
             .assertTotalFlowRatio(roadId, null)
-            .assertTotalRoadAverageSpeed(roadId, AverageSpeed(6.0))
-            .assertTotalWholeMapAverageSpeed(AverageSpeed(6.0))
+            .assertTotalRoadAverageSpeed(roadId, 6.0)
+            .assertTotalWholeMapAverageSpeed(6.0)
     }
 }
