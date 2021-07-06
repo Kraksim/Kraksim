@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version "1.5.0"
     kotlin("plugin.spring") version "1.5.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
-//    kotlin("plugin.jpa") version "1.5.0" todo uncomment when database will be necessary
+    kotlin("plugin.jpa") version "1.5.0"
 }
 
 group = "pl.edu.agh.cs"
@@ -24,12 +24,12 @@ repositories {
 }
 
 dependencies {
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa") todo uncomment when database will be necessary
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.projectlombok:lombok")
-//    runtimeOnly("org.postgresql:postgresql") todo uncomment when database will be necessary
+    runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
