@@ -6,6 +6,8 @@ typealias AverageSpeed = Double
 
 typealias CarSpeed = Int
 typealias RoadId = Long
+typealias LaneId = Long
+typealias GatewayId = Long
 typealias Velocity = Long
 
 typealias IntersectionId = Long
