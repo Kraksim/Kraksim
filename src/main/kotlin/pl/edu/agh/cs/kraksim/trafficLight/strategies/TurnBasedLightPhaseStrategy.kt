@@ -18,7 +18,7 @@ class TurnBasedLightPhaseStrategy(
         intersections.forEach { initializeLights(it) }
     }
 
-    override fun switchLight(intersections: List<Intersection>) {
+    override fun switchLights(intersections: List<Intersection>) {
         intersections.forEach { switchLights(it) }
     }
 
@@ -60,7 +60,4 @@ class TurnBasedLightPhaseStrategy(
             }
         }
     }
-
-    private fun Intersection.getLightPhasesOfLanesGroupedByRoad() =
-        endingRoads.map { road -> lightPhasesOf(road) }
 }

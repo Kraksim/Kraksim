@@ -22,7 +22,7 @@ class LightPhaseManager(
 
     fun changeLights() {
         lightStrategyGroups.forEach { group ->
-            group.lightPhaseStrategy.switchLight(group.intersections)
+            group.lightPhaseStrategy.switchLights(group.intersections)
         }
     }
 }
