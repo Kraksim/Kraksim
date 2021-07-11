@@ -2,9 +2,14 @@ package pl.edu.agh.cs.kraksim.gps
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit4.SpringRunner
 import pl.edu.agh.cs.kraksim.common.OneLaneNagelStateBuilder
 import pl.edu.agh.cs.kraksim.common.gateway
 import pl.edu.agh.cs.kraksim.common.road
+import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
 
 /**
  * Below are tests in different scenarios, each has a map drawn over it
@@ -12,7 +17,11 @@ import pl.edu.agh.cs.kraksim.common.road
  * arrows are directional roads connecting them, next to each one is a pair of numbers `m, o`,
  * m is id and o is length of that road.
  */
-internal class RoadLengthGPSTest {
+@RunWith(SpringRunner::class)
+@SpringBootTest
+internal class RoadLengthGPSTest @Autowired constructor(
+    val algorithm: RoadLengthGPS
+) {
 
     /*
                0,18        1,18
@@ -39,7 +48,7 @@ internal class RoadLengthGPSTest {
         val expectedRoute = listOf(state.road(0), state.road(2), state.road(3))
 
         // when
-        val gps = RoadLengthGPS(state.gateway(10), state.gateway(12), state)
+        val gps = algorithm.calculate(state.gateway(10), state.gateway(12), state)
 
         // then
         Assertions.assertThat(gps.route).isEqualTo(expectedRoute)
@@ -70,7 +79,7 @@ internal class RoadLengthGPSTest {
         val expectedRoute = listOf(state.road(0), state.road(1))
 
         // when
-        val gps = RoadLengthGPS(state.gateway(10), state.gateway(11), state)
+        val gps = algorithm.calculate(state.gateway(10), state.gateway(11), state)
 
         // then
         Assertions.assertThat(gps.route).isEqualTo(expectedRoute)
@@ -100,7 +109,7 @@ internal class RoadLengthGPSTest {
         val expectedRoute = listOf(state.road(0), state.road(2), state.road(3))
 
         // when
-        val gps = RoadLengthGPS(state.gateway(10), state.gateway(11), state)
+        val gps = algorithm.calculate(state.gateway(10), state.gateway(11), state)
 
         // then
         Assertions.assertThat(gps.route).isEqualTo(expectedRoute)
@@ -131,7 +140,7 @@ internal class RoadLengthGPSTest {
         val expectedRoute = listOf(state.road(0), state.road(2), state.road(3))
 
         // when
-        val gps = RoadLengthGPS(state.gateway(10), state.gateway(11), state)
+        val gps = algorithm.calculate(state.gateway(10), state.gateway(11), state)
 
         // then
         Assertions.assertThat(gps.route).isEqualTo(expectedRoute)
@@ -164,7 +173,7 @@ internal class RoadLengthGPSTest {
         val expectedRoute = listOf(state.road(4), state.road(2), state.road(1))
 
         // when
-        val gps = RoadLengthGPS(state.gateway(10), state.gateway(11), state)
+        val gps = algorithm.calculate(state.gateway(10), state.gateway(11), state)
 
         // then
         Assertions.assertThat(gps.route).isEqualTo(expectedRoute)

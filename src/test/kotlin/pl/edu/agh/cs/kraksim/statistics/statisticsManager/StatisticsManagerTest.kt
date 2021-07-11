@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.statistics.statisticsManager
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
-import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
+import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
 
@@ -15,7 +15,7 @@ internal class StatisticsManagerTest {
         val initialVelocity = 6
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = MockRoadGps()
+            gps = GPS()
         )
         car.moveToLane(state.getLane(), 0)
         val manager = StatisticsManager(emptyList(), emptyMap())

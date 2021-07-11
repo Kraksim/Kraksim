@@ -5,6 +5,7 @@ import pl.edu.agh.cs.kraksim.gps.GPS
 import kotlin.math.abs
 
 class NagelCar(
+    override val id: Long = 0,
     override var velocity: Int = 0,
     override val gps: GPS,
 ) : Car {

@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.repository.entities
 
 import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.repository.LongArrayToStringConverter
+import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import javax.persistence.*
 
 @Entity
@@ -12,7 +13,7 @@ class TrafficStateEntity(
     @OneToOne
     var movementSimulationStrategy: MovementSimulationStrategyEntity,
     @OneToMany
-    var cars: List<CarEntity>,
+    var carsOnMap: List<CarEntity>,
     @OneToMany
     var trafficLights: List<TrafficLightEntity>,
     @OneToMany
@@ -29,8 +30,8 @@ class TrafficLightEntity(
     var intersectionId: IntersectionId,
     @OneToOne
     var lightPhaseStrategy: LightPhaseStrategyEntity,
-    @ElementCollection
-    var phases: Map<RoadId, Velocity>,
+    @OneToMany
+    var phases: List<PhaseEntity>,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,12 +43,8 @@ class PhaseEntity(
     @Id
     var laneId: LaneId,
     var phaseTime: Int,
-    var state: TrafficLightState
+    var state: TrafficLightPhase.LightColor
 )
-
-enum class TrafficLightState {
-    RED, GREEN
-}
 
 @Entity
 class LightPhaseStrategyEntity(
@@ -84,7 +81,6 @@ class GPSEntity(
 class CarEntity(
     var velocity: Velocity,
     var currentLaneId: LaneId,
-    var currentRoadID: RoadId,
     var positionRelativeToStart: Int,
     @OneToOne
     var gps: GPSEntity,

@@ -1,38 +1,45 @@
-package pl.edu.agh.cs.kraksim.gps
+package pl.edu.agh.cs.kraksim.gps.algorithms
 
+import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.addToFront
 import pl.edu.agh.cs.kraksim.common.popMinBy
 import pl.edu.agh.cs.kraksim.core.state.Gateway
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.Road
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.gps.GPS
 
-abstract class DijkstraBasedGPS(
-    source: Gateway,
-    target: Gateway,
-    state: SimulationState
-) : GPS {
+@Component
+class DijkstraBasedGPS {
 
-    override val route = ArrayList<Road>()
-
-    abstract fun getRoadWeight(node: Road): Double
-
-    init {
-        if (source != target) {
-            calculateDijkstra(state, source, target)
-        }
+    fun calculate(
+        source: Gateway,
+        target: Gateway,
+        state: SimulationState,
+        getRoadWeight: (Road) -> Double
+    ): GPS = if (source != target) {
+        calculateDijkstra(state, source, target, getRoadWeight)
+    } else {
+        GPS(ArrayList())
     }
 
-    private fun calculateDijkstra(state: SimulationState, source: Gateway, target: Gateway) {
-        val (notReachedNodes, weightFromSource, pathRecovery) = initialize(state, source)
+    private fun calculateDijkstra(
+        state: SimulationState,
+        source: Gateway,
+        target: Gateway,
+        getRoadWeight: (Road) -> Double
+    ): GPS {
+        val (notReachedNodes, weightFromSource, pathRecovery) = initialize(state, source, getRoadWeight)
 
-        val fastestRoadLeadingToTarget = calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target)
-        parseRecoveryToRoute(fastestRoadLeadingToTarget, pathRecovery)
+        val fastestRoadLeadingToTarget =
+            calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target, getRoadWeight)
+        return parseRecoveryToRoute(fastestRoadLeadingToTarget, pathRecovery)
     }
 
     private fun initialize(
         state: SimulationState,
-        source: Gateway
+        source: Gateway,
+        getRoadWeight: (Road) -> Double
     ): Triple<HashSet<Road>, HashMap<Road, Double>, HashMap<Road, Road>> {
         val notReachedNodes = HashSet<Road>()
         val weightFromSource = HashMap<Road, Double>()
@@ -54,7 +61,8 @@ abstract class DijkstraBasedGPS(
         notReachedNodes: HashSet<Road>,
         weightFromSource: HashMap<Road, Double>,
         pathRecovery: HashMap<Road, Road>,
-        target: Gateway
+        target: Gateway,
+        getRoadWeight: (Road) -> Double
     ): Road? {
         while (notReachedNodes.isNotEmpty()) {
             val currentRoad = notReachedNodes.popMinBy { weightFromSource[it]!! }
@@ -78,17 +86,13 @@ abstract class DijkstraBasedGPS(
         return null
     }
 
-    private fun parseRecoveryToRoute(target: Road?, pathRecovery: HashMap<Road, Road>) {
+    private fun parseRecoveryToRoute(target: Road?, pathRecovery: HashMap<Road, Road>): GPS {
         var find: Road? = target
+        val route = ArrayList<Road>()
         while (find != null) {
             route.addToFront(find)
             find = pathRecovery[find]
         }
+        return GPS(route)
     }
-
-    override fun getNext(): Road =
-        route.first()
-
-    override fun popNext(): Road =
-        route.removeAt(0)
 }

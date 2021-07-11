@@ -5,7 +5,7 @@ typealias Density = Double
 typealias AverageSpeed = Double
 
 typealias CarSpeed = Int
-typealias Velocity = Long
+typealias Velocity = Int
 
 typealias IntersectionId = Long
 typealias GatewayId = Long

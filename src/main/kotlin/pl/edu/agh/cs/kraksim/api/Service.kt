@@ -5,9 +5,12 @@ import pl.edu.agh.cs.kraksim.repository.MapRepository
 
 @Service
 class Service(
-    val repository: MapRepository
+    val repository: MapRepository,
+    val stateFactory: StateFactory
 ) {
 
-    fun xddd() {
+    fun main() {
+        val simulationEntity = repository.getById(0L)
+        val simulationState = stateFactory.from(simulationEntity)
     }
 }
