@@ -82,7 +82,7 @@ class OneLaneNagelStateBuilder(
             startingRoads = startingRoads,
             directions = directions,
             phases = endingRoads.flatMap { it.lanes }
-                .associateWith { TrafficLightPhase(Int.MAX_VALUE, LightColor.RED) }
+                .associate { lane -> lane.id to TrafficLightPhase(Int.MAX_VALUE, LightColor.RED) }
         )
     }
 
@@ -99,7 +99,7 @@ class OneLaneNagelStateBuilder(
         }
 
         IntersectionTurningLaneDirection(from.lanes[0].id, destinationRoadId)
-    }?.toSet() ?: emptySet()
+    } ?: emptyList()
 
     private fun createRoad(id: Long, length: Int): NagelRoad {
         val road = NagelRoad(id, length)

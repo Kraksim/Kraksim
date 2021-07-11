@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.nagelCore.state
 
+import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
@@ -9,10 +10,10 @@ import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
 class NagelIntersection(
     override val id: Long,
-    val directions: Set<IntersectionTurningLaneDirection>,
+    val directions: List<IntersectionTurningLaneDirection>,
     override val endingRoads: List<NagelRoad>,
     startingRoads: List<NagelRoad>,
-    override val phases: Map<Lane, TrafficLightPhase>
+    override val phases: Map<LaneId, TrafficLightPhase>
 //    val position: Position
 ) : NagelRoadNode, Intersection {
 
@@ -36,11 +37,11 @@ class NagelIntersection(
      * depends on TrafficLightPhase assigned to that line
      */
     fun canGoThrough(lane: NagelLane): Boolean {
-        return phases[lane]!!.state == TrafficLightPhase.LightColor.GREEN
+        return phases[lane.id]!!.state == TrafficLightPhase.LightColor.GREEN
     }
 
     override fun lightPhasesOf(road: Road): List<TrafficLightPhase> {
-        return road.lanes.map { phases[it]!! }
+        return road.lanes.map { phases[it.id]!! }
     }
 
     override fun toString(): String {

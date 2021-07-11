@@ -31,3 +31,17 @@ fun <T> Iterable<T>.takeEachWhile(predicate: (T) -> Boolean, action: (T) -> Unit
         action(item)
     }
 }
+
+inline fun <reified FIRST : T, reified SECOND : T, T> Iterable<T>.partitionByType(): Triple<List<FIRST>, List<SECOND>, List<T>> {
+    val first = ArrayList<FIRST>()
+    val second = ArrayList<SECOND>()
+    val rest = ArrayList<T>()
+    for (element in this) {
+        when (element) {
+            is FIRST -> first.add(element)
+            is SECOND -> second.add(element)
+            else -> rest.add(element)
+        }
+    }
+    return Triple(first, second, rest)
+}

@@ -2,9 +2,9 @@ package pl.edu.agh.cs.kraksim
 
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
+import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
 import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
-import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.gps.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
@@ -55,16 +55,16 @@ class ApplicationStartup : CommandLineRunner {
 
         val gateways = listOf(gateway1, gateway2, gateway3, gateway4)
 
-        val directions = setOf(
+        val directions = listOf(
             IntersectionTurningLaneDirection(road1.lanes[0].id, road3.id),
             IntersectionTurningLaneDirection(road1.lanes[0].id, road4.id),
             IntersectionTurningLaneDirection(road2.lanes[0].id, road3.id),
             IntersectionTurningLaneDirection(road2.lanes[0].id, road4.id)
         )
 
-        val phases: Map<Lane, TrafficLightPhase> = mapOf(
-            road1.lanes[0] to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN),
-            road2.lanes[0] to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN)
+        val phases: Map<LaneId, TrafficLightPhase> = mapOf(
+            road1.lanes[0].id to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN),
+            road2.lanes[0].id to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN)
         )
 
         val intersection = NagelIntersection(
