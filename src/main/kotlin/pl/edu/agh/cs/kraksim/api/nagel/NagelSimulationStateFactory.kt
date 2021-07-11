@@ -41,7 +41,6 @@ class NagelSimulationStateFactory(
 
         it.collectedCars.map { createCar(it) }
             .forEach { gateway.addFinishedCar(it) }
-
     }
 
     private fun insertTrafficLightState(it: TrafficLightEntity, intersections: Map<IntersectionId, NagelIntersection>) {
