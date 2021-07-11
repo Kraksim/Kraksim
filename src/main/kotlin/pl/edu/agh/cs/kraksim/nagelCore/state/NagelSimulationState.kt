@@ -17,8 +17,7 @@ class NagelSimulationState(
     override val gateways: Map<GatewayId, NagelGateway> = gatewayList.associateBy { it.id }
     override val intersections: Map<IntersectionId, NagelIntersection> = intersectionList.associateBy { it.id }
 
-    override val lanes: List<NagelLane>
-        get() = roads.flatMap { it.value.lanes }
+    override val lanes: List<NagelLane> = roads.flatMap { it.value.lanes }
 
     override val cars: List<NagelCar>
         get() = lanes.flatMap { it.cars }

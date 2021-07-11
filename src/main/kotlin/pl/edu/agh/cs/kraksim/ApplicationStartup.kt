@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
+import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
 import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.gps.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
@@ -30,35 +31,35 @@ class ApplicationStartup : CommandLineRunner {
 
         val gateway1 = NagelGateway(
             id = 1,
-            startingRoads = listOf(road1),
+            startingRoadList = listOf(road1),
             endingRoads = emptyList()
         )
 
         val gateway2 = NagelGateway(
             id = 2,
-            startingRoads = listOf(road2),
+            startingRoadList = listOf(road2),
             endingRoads = emptyList()
         )
 
         val gateway3 = NagelGateway(
             id = 3,
-            startingRoads = emptyList(),
+            startingRoadList = emptyList(),
             endingRoads = listOf(road3)
         )
 
         val gateway4 = NagelGateway(
             id = 4,
-            startingRoads = emptyList(),
+            startingRoadList = emptyList(),
             endingRoads = listOf(road4)
         )
 
         val gateways = listOf(gateway1, gateway2, gateway3, gateway4)
 
         val directions = setOf(
-            NagelIntersectionTurningLaneDirection(road1.lanes[0], road3),
-            NagelIntersectionTurningLaneDirection(road1.lanes[0], road4),
-            NagelIntersectionTurningLaneDirection(road2.lanes[0], road3),
-            NagelIntersectionTurningLaneDirection(road2.lanes[0], road4)
+            IntersectionTurningLaneDirection(road1.lanes[0].id, road3.id),
+            IntersectionTurningLaneDirection(road1.lanes[0].id, road4.id),
+            IntersectionTurningLaneDirection(road2.lanes[0].id, road3.id),
+            IntersectionTurningLaneDirection(road2.lanes[0].id, road4.id)
         )
 
         val phases: Map<Lane, TrafficLightPhase> = mapOf(
@@ -69,7 +70,7 @@ class ApplicationStartup : CommandLineRunner {
         val intersection = NagelIntersection(
             id = 1,
             endingRoads = listOf(road1, road2),
-            startingRoads = listOf(road3, road4),
+            startingRoadList = listOf(road3, road4),
             directions = directions,
             phases = phases
         )

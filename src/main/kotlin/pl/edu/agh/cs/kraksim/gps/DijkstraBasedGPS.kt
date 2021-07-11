@@ -43,7 +43,7 @@ abstract class DijkstraBasedGPS(
             notReachedNodes.add(node)
         }
 
-        for (node in source.startingRoads) {
+        for (node in source.startingRoads.values) {
             weightFromSource[node] = getRoadWeight(node)
         }
 
