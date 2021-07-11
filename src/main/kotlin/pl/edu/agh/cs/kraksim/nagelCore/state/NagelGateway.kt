@@ -13,7 +13,7 @@ class NagelGateway(
     override val startingRoads: Map<RoadId, NagelRoad> = startingRoads.associateBy { it.id }
 
     init {
-        endingRoads.forEach { it.setEnd(this) }
+        endingRoads.forEach { it.end = this }
     }
 
     fun addFinishedCar(car: NagelCar) {

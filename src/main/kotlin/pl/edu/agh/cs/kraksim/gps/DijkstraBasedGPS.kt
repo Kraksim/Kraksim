@@ -59,7 +59,7 @@ abstract class DijkstraBasedGPS(
         while (notReachedNodes.isNotEmpty()) {
             val currentRoad = notReachedNodes.popMinBy { weightFromSource[it]!! }
 
-            val end = currentRoad.end()
+            val end = currentRoad.end
             if (end == target) {
                 return currentRoad
             }

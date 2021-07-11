@@ -19,7 +19,7 @@ class NagelIntersection(
     override val startingRoads: Map<RoadId, NagelRoad> = startingRoads.associateBy { it.id }
 
     init {
-        endingRoads.forEach { it.setEnd(this) }
+        endingRoads.forEach { it.end = this }
     }
 
     override fun getPossibleRoads(lane: Lane): List<NagelRoad> {

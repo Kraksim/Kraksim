@@ -38,7 +38,7 @@ class NagelMovementSimulationStrategy(
         slowAllCarsButLast(lane.cars)
         // todo pamietać o pasach ze się mogą skończyć
         slowLastCar(
-            endNode = lane.parentRoad.end(),
+            endNode = lane.parentRoad.end,
             lane = lane,
             lastCar = lane.cars.last()
         )
@@ -87,7 +87,7 @@ class NagelMovementSimulationStrategy(
         // todo pamietać o pasach ze się mogą skończyć
         moveLastCar(
             lastCar = lane.cars.last(),
-            endNode = lane.parentRoad.end()
+            endNode = lane.parentRoad.end
         )
     }
 
@@ -124,7 +124,7 @@ class NagelMovementSimulationStrategy(
     }
 
     private fun getCarsToResolve(roads: Collection<NagelRoad>): Map<NagelLane, List<NagelCar>> {
-        return roads.filter { it.end() is NagelIntersection }
+        return roads.filter { it.end is NagelIntersection }
             .flatMap { it.lanes }
             .mapNotNull { it.cars.lastOrNull() }
             .filter { it.hasDistanceLeftToMove() }
