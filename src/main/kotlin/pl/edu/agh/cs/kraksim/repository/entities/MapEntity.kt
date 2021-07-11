@@ -40,8 +40,6 @@ class RoadEntity(
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long,
     var length: Int,
-    var sourceId: Long,
-    var destinationId: Long,
     @OneToMany
     var lanes: List<LaneEntity>,
 )

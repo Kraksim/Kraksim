@@ -7,9 +7,9 @@ import javax.persistence.*
 @Entity
 class TrafficStateEntity(
     var turn: Long = 0,
-//        var simulationId: Long,
     @ElementCollection
     var expectedVelocity: Map<RoadId, Velocity>,
+    @OneToOne
     var movementSimulationStrategy: MovementSimulationStrategyEntity,
     @OneToMany
     var cars: List<CarEntity>,
@@ -27,11 +27,11 @@ class TrafficStateEntity(
 @Entity
 class TrafficLightEntity(
     var intersectionId: IntersectionId,
+    @OneToOne
     var lightPhaseStrategy: LightPhaseStrategyEntity,
     @ElementCollection
     var phases: Map<RoadId, Velocity>,
 ) {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
@@ -86,6 +86,7 @@ class CarEntity(
     var currentLaneId: LaneId,
     var currentRoadID: RoadId,
     var positionRelativeToStart: Int,
+    @OneToOne
     var gps: GPSEntity,
 ) {
 
