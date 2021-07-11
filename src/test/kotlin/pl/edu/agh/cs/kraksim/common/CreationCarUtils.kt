@@ -7,7 +7,7 @@ import java.util.stream.IntStream
 import kotlin.streams.asSequence
 
 fun createListOfCars(amount: Int, velocity: Int, spaces: Int): List<Car> {
-    return IntStream.range(0, amount)
+    return (0 until amount)
         .asSequence()
         .map { num ->
             var car = NagelCar(velocity, gps = MockRoadGps())

@@ -6,7 +6,6 @@ import pl.edu.agh.cs.kraksim.common.createListOfCars
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
-import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
@@ -66,8 +65,9 @@ class SOTLLightPhaseStrategyTest {
         strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchTimes(3, state.intersections.values)
-
+        repeat(3) {
+            strategy.switchLights(state.intersections.values)
+        }
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
         assertThat(phases[lane1]?.phaseTime).isEqualTo(18)
@@ -84,20 +84,18 @@ class SOTLLightPhaseStrategyTest {
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
         strategy.initializeLights(state.intersections.values)
-        strategy.switchTimes(3, state.intersections.values)
+        repeat(3) {
+            strategy.switchLights(state.intersections.values)
+        }
 
         // when
-        strategy.switchTimes(4, state.intersections.values)
+        repeat(4) {
+            strategy.switchLights(state.intersections.values)
+        }
 
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
         assertThat(phases[lane1]?.phaseTime).isEqualTo(14)
-    }
-
-    private fun SOTLLightPhaseStrategy.switchTimes(num: Int, intersections: Collection<Intersection>) {
-        for (i in 1..num) {
-            switchLights(intersections)
-        }
     }
 
     @Test
@@ -111,11 +109,13 @@ class SOTLLightPhaseStrategyTest {
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
         strategy.initializeLights(state.intersections.values)
-        strategy.switchTimes(3, state.intersections.values)
-
+        repeat(3) {
+            strategy.switchLights(state.intersections.values)
+        }
         // when
-        strategy.switchTimes(18, state.intersections.values)
-
+        repeat(18) {
+            strategy.switchLights(state.intersections.values)
+        }
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
         assertThat(phases[lane1]?.phaseTime).isEqualTo(0)
@@ -135,8 +135,9 @@ class SOTLLightPhaseStrategyTest {
         strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchTimes(5, state.intersections.values)
-
+        repeat(5) {
+            strategy.switchLights(state.intersections.values)
+        }
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
         assertThat(phases[lane1]?.phaseTime).isEqualTo(5)
