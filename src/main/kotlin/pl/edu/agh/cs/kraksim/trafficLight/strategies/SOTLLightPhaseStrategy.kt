@@ -33,15 +33,12 @@ class SOTLLightPhaseStrategy(
     override fun switchLights(intersections: Collection<Intersection>) {
         // increment red, decrement green
         intersections.forEach {
-            it.getLightPhasesOfLanesGroupedByRoad()
-                .onEach { lanes ->
-                    lanes.forEach { phase ->
-                        when (phase.state) {
-                            GREEN -> phase.phaseTime--
-                            RED -> phase.phaseTime++
-                        }
-                    }
+            it.phases.forEach { (_, phase) ->
+                when (phase.state) {
+                    GREEN -> phase.phaseTime--
+                    RED -> phase.phaseTime++
                 }
+            }
         }
         intersections.forEach { switchLights(it) }
     }
