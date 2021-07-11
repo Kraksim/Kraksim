@@ -14,11 +14,11 @@ class TurnBasedLightPhaseStrategy(
     private val turnLength: Int = 5
 ) : LightPhaseStrategy {
 
-    override fun initializeLights(intersections: List<Intersection>) {
+    override fun initializeLights(intersections: Collection<Intersection>) {
         intersections.forEach { initializeLights(it) }
     }
 
-    override fun switchLights(intersections: List<Intersection>) {
+    override fun switchLights(intersections: Collection<Intersection>) {
         intersections.forEach { switchLights(it) }
     }
 

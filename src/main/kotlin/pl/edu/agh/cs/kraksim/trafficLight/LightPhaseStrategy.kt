@@ -4,6 +4,6 @@ import pl.edu.agh.cs.kraksim.core.state.Intersection
 
 interface LightPhaseStrategy {
 
-    fun initializeLights(intersections: List<Intersection>)
-    fun switchLights(intersections: List<Intersection>)
+    fun initializeLights(intersections: Collection<Intersection>)
+    fun switchLights(intersections: Collection<Intersection>)
 }

@@ -17,7 +17,7 @@ class SOTLLightPhaseStrategy(
     /*
      * Initialize all lights as red since SOTL switches to green based on amount of cars on a given lane
      */
-    override fun initializeLights(intersections: List<Intersection>) {
+    override fun initializeLights(intersections: Collection<Intersection>) {
         intersections.forEach { initializeLights(it) }
     }
 
@@ -30,7 +30,7 @@ class SOTLLightPhaseStrategy(
         }
     }
 
-    override fun switchLights(intersections: List<Intersection>) {
+    override fun switchLights(intersections: Collection<Intersection>) {
         // increment red, decrement green
         intersections.forEach {
             it.getLightPhasesOfLanesGroupedByRoad()

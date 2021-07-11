@@ -16,12 +16,12 @@ class SOTLLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
         // when
-        strategy.initializeLights(state.intersections)
+        strategy.initializeLights(state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.phaseTime).isEqualTo(0)
@@ -34,14 +34,14 @@ class SOTLLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
-        strategy.initializeLights(state.intersections)
+        strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchLights(state.intersections)
+        strategy.switchLights(state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.phaseTime).isEqualTo(1)
@@ -58,15 +58,15 @@ class SOTLLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val phases = intersection.phases
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
-        strategy.initializeLights(state.intersections)
+        strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchTimes(3, state.intersections)
+        strategy.switchTimes(3, state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
@@ -78,23 +78,23 @@ class SOTLLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val phases = intersection.phases
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
-        strategy.initializeLights(state.intersections)
-        strategy.switchTimes(3, state.intersections)
+        strategy.initializeLights(state.intersections.values)
+        strategy.switchTimes(3, state.intersections.values)
 
         // when
-        strategy.switchTimes(4, state.intersections)
+        strategy.switchTimes(4, state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
         assertThat(phases[lane1]?.phaseTime).isEqualTo(14)
     }
 
-    fun SOTLLightPhaseStrategy.switchTimes(num: Int, intersections: List<Intersection>) {
+    private fun SOTLLightPhaseStrategy.switchTimes(num: Int, intersections: Collection<Intersection>) {
         for (i in 1..num) {
             switchLights(intersections)
         }
@@ -105,17 +105,16 @@ class SOTLLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
-        val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
-        strategy.initializeLights(state.intersections)
-        strategy.switchTimes(3, state.intersections)
+        strategy.initializeLights(state.intersections.values)
+        strategy.switchTimes(3, state.intersections.values)
 
         // when
-        strategy.switchTimes(18, state.intersections)
+        strategy.switchTimes(18, state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
@@ -124,18 +123,19 @@ class SOTLLightPhaseStrategyTest {
 
     @Test
     fun `Given state with initialized intersection and proper amount of cars in lane, switch lights to green with min phaseTime value`() {
+        // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy(minPhaseLength = 5, phiFactor = 5.0)
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val phases = intersection.phases
         val lastCar = NagelCar(3, MockRoadGps())
         lastCar.positionRelativeToStart = 17
         lane1.addCar(lastCar)
-        strategy.initializeLights(state.intersections)
+        strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchTimes(5, state.intersections)
+        strategy.switchTimes(5, state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
