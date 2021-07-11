@@ -36,7 +36,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val initialPosition = 2
         val expectedPosition = 0
         val state = getOneRoadSimulationState()
-        val endGateway = state.road(0).end() as NagelGateway
+        val endGateway = state.road(0).end as NagelGateway
         val car = NagelCar(
             velocity = 2,
             gps = MockRoadGps()

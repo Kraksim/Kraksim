@@ -5,6 +5,5 @@ interface Road {
     val physicalLength: Int
     val lanes: List<Lane>
 
-    fun setEnd(end: RoadNode)
-    fun end(): RoadNode
+    val end: RoadNode
 }
