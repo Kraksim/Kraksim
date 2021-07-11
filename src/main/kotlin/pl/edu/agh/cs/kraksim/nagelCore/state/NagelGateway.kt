@@ -8,7 +8,7 @@ class NagelGateway(
     override val startingRoads: List<NagelRoad>,
 ) : NagelRoadNode, Gateway {
 
-    val finishedCars: ArrayList<NagelCar> = ArrayList()
+    override val finishedCars: ArrayList<NagelCar> = ArrayList()
 
     init {
         endingRoads.forEach { it.setEnd(this) }

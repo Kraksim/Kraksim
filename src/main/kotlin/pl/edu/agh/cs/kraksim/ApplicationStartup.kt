@@ -77,9 +77,9 @@ class ApplicationStartup : CommandLineRunner {
         val state = NagelSimulationState(
             id = 1,
             turn = 1,
-            gateways = gateways,
-            roads = roads,
-            intersections = listOf(intersection)
+            gatewayList = gateways,
+            roadList = roads,
+            intersectionList = listOf(intersection)
         )
 
         val lightPhaseManager = LightPhaseManager(

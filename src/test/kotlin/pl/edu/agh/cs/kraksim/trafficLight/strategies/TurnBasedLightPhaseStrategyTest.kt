@@ -14,13 +14,13 @@ internal class TurnBasedLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
 
         // when
-        strategy.initializeLights(state.intersections)
+        strategy.initializeLights(state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.phaseTime).isEqualTo(5)
@@ -34,14 +34,14 @@ internal class TurnBasedLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
-        strategy.initializeLights(state.intersections)
+        strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchLight(state.intersections)
+        strategy.switchLight(state.intersections.values)
 
         // then
         assertThat(phases[lane1]?.phaseTime).isEqualTo(4)
@@ -55,7 +55,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
-        val intersection = state.intersections[0]
+        val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
@@ -67,7 +67,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         lane2LightPhase?.state = RED
 
         // when
-        strategy.switchLight(state.intersections)
+        strategy.switchLight(state.intersections.values)
 
         // then
         assertThat(lane1LightPhase?.phaseTime).isEqualTo(5)

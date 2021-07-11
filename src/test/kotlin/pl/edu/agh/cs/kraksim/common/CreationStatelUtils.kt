@@ -59,9 +59,9 @@ class OneLaneNagelStateBuilder(
         return NagelSimulationState(
             id = stateId,
             turn = 1,
-            gateways = gateways,
-            roads = connections.values.flatten().map { it.roadConnecting },
-            intersections = intersections
+            gatewayList = gateways,
+            roadList = connections.values.flatten().map { it.roadConnecting },
+            intersectionList = intersections
         )
     }
 

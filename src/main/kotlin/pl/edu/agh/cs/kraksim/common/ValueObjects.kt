@@ -9,3 +9,4 @@ typealias RoadId = Long
 typealias Velocity = Long
 
 typealias IntersectionId = Long
+typealias GatewayId = Long

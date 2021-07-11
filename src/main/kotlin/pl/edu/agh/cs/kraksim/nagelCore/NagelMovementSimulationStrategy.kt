@@ -107,7 +107,7 @@ class NagelMovementSimulationStrategy(
     }
 
     fun resolveIntersections(state: NagelSimulationState) {
-        getCarsToResolve(state.roads).forEach { (destinationLane, cars) ->
+        getCarsToResolve(state.roads.values).forEach { (destinationLane, cars) ->
             var spaceLeft = destinationLane.getFreeSpaceInFront()
 
             cars.sortedByDescending { car -> car.distanceLeftToMove }
@@ -123,7 +123,7 @@ class NagelMovementSimulationStrategy(
         }
     }
 
-    private fun getCarsToResolve(roads: List<NagelRoad>): Map<NagelLane, List<NagelCar>> {
+    private fun getCarsToResolve(roads: Collection<NagelRoad>): Map<NagelLane, List<NagelCar>> {
         return roads.filter { it.end() is NagelIntersection }
             .flatMap { it.lanes }
             .mapNotNull { it.cars.lastOrNull() }
