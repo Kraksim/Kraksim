@@ -38,12 +38,12 @@ abstract class DijkstraBasedGPS(
         val weightFromSource = HashMap<Road, Double>()
         val pathRecovery = HashMap<Road, Road>()
 
-        for (node in state.roads) {
+        for (node in state.roads.values) {
             weightFromSource[node] = Double.MAX_VALUE
             notReachedNodes.add(node)
         }
 
-        for (node in source.startingRoads) {
+        for (node in source.startingRoads.values) {
             weightFromSource[node] = getRoadWeight(node)
         }
 
@@ -59,7 +59,7 @@ abstract class DijkstraBasedGPS(
         while (notReachedNodes.isNotEmpty()) {
             val currentRoad = notReachedNodes.popMinBy { weightFromSource[it]!! }
 
-            val end = currentRoad.end()
+            val end = currentRoad.end
             if (end == target) {
                 return currentRoad
             }
