@@ -6,11 +6,11 @@ import pl.edu.agh.cs.kraksim.core.state.Gateway
 class NagelGateway(
     override val id: Long,
     override val endingRoads: List<NagelRoad>,
-    startingRoadList: List<NagelRoad>,
+    startingRoads: List<NagelRoad>,
 ) : NagelRoadNode, Gateway {
 
     override val finishedCars: ArrayList<NagelCar> = ArrayList()
-    override val startingRoads: Map<RoadId, NagelRoad> = startingRoadList.associateBy { it.id }
+    override val startingRoads: Map<RoadId, NagelRoad> = startingRoads.associateBy { it.id }
 
     init {
         endingRoads.forEach { it.setEnd(this) }

@@ -7,17 +7,17 @@ import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
 class NagelSimulationState(
     override val id: Long,
-    roadList: List<NagelRoad>,
-    gatewayList: List<NagelGateway>,
-    intersectionList: List<NagelIntersection>,
+    roads: List<NagelRoad>,
+    gateways: List<NagelGateway>,
+    intersections: List<NagelIntersection>,
     override var turn: Long
 ) : SimulationState {
 
-    override val roads: Map<RoadId, NagelRoad> = roadList.associateBy { it.id }
-    override val gateways: Map<GatewayId, NagelGateway> = gatewayList.associateBy { it.id }
-    override val intersections: Map<IntersectionId, NagelIntersection> = intersectionList.associateBy { it.id }
+    override val roads: Map<RoadId, NagelRoad> = roads.associateBy { it.id }
+    override val gateways: Map<GatewayId, NagelGateway> = gateways.associateBy { it.id }
+    override val intersections: Map<IntersectionId, NagelIntersection> = intersections.associateBy { it.id }
 
-    override val lanes: List<NagelLane> = roads.flatMap { it.value.lanes }
+    override val lanes: List<NagelLane> = roads.flatMap { it.lanes }
 
     override val cars: List<NagelCar>
         get() = lanes.flatMap { it.cars }

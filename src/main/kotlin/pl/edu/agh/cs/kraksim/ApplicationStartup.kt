@@ -31,25 +31,25 @@ class ApplicationStartup : CommandLineRunner {
 
         val gateway1 = NagelGateway(
             id = 1,
-            startingRoadList = listOf(road1),
+            startingRoads = listOf(road1),
             endingRoads = emptyList()
         )
 
         val gateway2 = NagelGateway(
             id = 2,
-            startingRoadList = listOf(road2),
+            startingRoads = listOf(road2),
             endingRoads = emptyList()
         )
 
         val gateway3 = NagelGateway(
             id = 3,
-            startingRoadList = emptyList(),
+            startingRoads = emptyList(),
             endingRoads = listOf(road3)
         )
 
         val gateway4 = NagelGateway(
             id = 4,
-            startingRoadList = emptyList(),
+            startingRoads = emptyList(),
             endingRoads = listOf(road4)
         )
 
@@ -70,7 +70,7 @@ class ApplicationStartup : CommandLineRunner {
         val intersection = NagelIntersection(
             id = 1,
             endingRoads = listOf(road1, road2),
-            startingRoadList = listOf(road3, road4),
+            startingRoads = listOf(road3, road4),
             directions = directions,
             phases = phases
         )
@@ -78,9 +78,9 @@ class ApplicationStartup : CommandLineRunner {
         val state = NagelSimulationState(
             id = 1,
             turn = 1,
-            gatewayList = gateways,
-            roadList = roads,
-            intersectionList = listOf(intersection)
+            gateways = gateways,
+            roads = roads,
+            intersections = listOf(intersection)
         )
 
         val lightPhaseManager = LightPhaseManager(

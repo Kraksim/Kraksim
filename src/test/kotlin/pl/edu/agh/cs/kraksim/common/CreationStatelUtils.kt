@@ -53,7 +53,7 @@ class OneLaneNagelStateBuilder(
             } else {
                 val gateway = NagelGateway(
                     id = id,
-                    startingRoadList = startingRoads,
+                    startingRoads = startingRoads,
                     endingRoads = endingRoads
                 )
                 gateways.add(gateway)
@@ -63,9 +63,9 @@ class OneLaneNagelStateBuilder(
         return NagelSimulationState(
             id = stateId,
             turn = 1,
-            gatewayList = gateways,
-            roadList = connections.values.flatten().map { it.roadConnecting },
-            intersectionList = intersections
+            gateways = gateways,
+            roads = connections.values.flatten().map { it.roadConnecting },
+            intersections = intersections
         )
     }
 
@@ -79,7 +79,7 @@ class OneLaneNagelStateBuilder(
         return NagelIntersection(
             id = id,
             endingRoads = endingRoads,
-            startingRoadList = startingRoads,
+            startingRoads = startingRoads,
             directions = directions,
             phases = endingRoads.flatMap { it.lanes }
                 .associateWith { TrafficLightPhase(Int.MAX_VALUE, LightColor.RED) }

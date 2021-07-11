@@ -11,12 +11,12 @@ class NagelIntersection(
     override val id: Long,
     val directions: Set<IntersectionTurningLaneDirection>,
     override val endingRoads: List<NagelRoad>,
-    startingRoadList: List<NagelRoad>,
+    startingRoads: List<NagelRoad>,
     override val phases: Map<Lane, TrafficLightPhase>
 //    val position: Position
 ) : NagelRoadNode, Intersection {
 
-    override val startingRoads: Map<RoadId, NagelRoad> = startingRoadList.associateBy { it.id }
+    override val startingRoads: Map<RoadId, NagelRoad> = startingRoads.associateBy { it.id }
 
     init {
         endingRoads.forEach { it.setEnd(this) }
