@@ -1,17 +1,23 @@
 package pl.edu.agh.cs.kraksim.nagelCore.state
 
+import pl.edu.agh.cs.kraksim.common.GatewayId
+import pl.edu.agh.cs.kraksim.common.IntersectionId
+import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
 class NagelSimulationState(
     override val id: Long,
-    override val roads: List<NagelRoad>,
-    override val gateways: List<NagelGateway>,
-    override val intersections: List<NagelIntersection>,
+    roads: List<NagelRoad>,
+    gateways: List<NagelGateway>,
+    intersections: List<NagelIntersection>,
     override var turn: Long
 ) : SimulationState {
 
-    override val lanes: List<NagelLane>
-        get() = roads.flatMap { it.lanes }
+    override val roads: Map<RoadId, NagelRoad> = roads.associateBy { it.id }
+    override val gateways: Map<GatewayId, NagelGateway> = gateways.associateBy { it.id }
+    override val intersections: Map<IntersectionId, NagelIntersection> = intersections.associateBy { it.id }
+
+    override val lanes: List<NagelLane> = roads.flatMap { it.lanes }
 
     override val cars: List<NagelCar>
         get() = lanes.flatMap { it.cars }

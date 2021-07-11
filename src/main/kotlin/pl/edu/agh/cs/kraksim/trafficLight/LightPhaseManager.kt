@@ -8,21 +8,16 @@ class LightPhaseManager(
     strategies: Map<LightPhaseStrategyType, List<IntersectionId>>
 ) {
 
-    private val lightStrategyGroups: List<LightStrategyGroup>
-
-    init {
-        val allIntersections = simulationState.intersections.associateBy { it.id }
-        lightStrategyGroups = strategies.map { (type, intersectionIds) ->
-            val intersections = intersectionIds.map { id -> allIntersections[id]!! }
-            LightStrategyGroup(type, intersections)
-        }.onEach { group ->
-            group.lightPhaseStrategy.initializeLights(group.intersections)
-        }
+    private val lightStrategyGroups: List<LightStrategyGroup> = strategies.map { (type, intersectionIds) ->
+        val intersections = intersectionIds.map { id -> simulationState.intersections[id]!! }
+        LightStrategyGroup(type, intersections)
+    }.onEach { (lightPhaseStrategy, intersections) ->
+        lightPhaseStrategy.initializeLights(intersections)
     }
 
     fun changeLights() {
-        lightStrategyGroups.forEach { group ->
-            group.lightPhaseStrategy.switchLights(group.intersections)
+        lightStrategyGroups.forEach { (lightPhaseStrategy, intersections) ->
+            lightPhaseStrategy.switchLight(intersections)
         }
     }
 }

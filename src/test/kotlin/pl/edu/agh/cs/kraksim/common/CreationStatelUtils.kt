@@ -1,6 +1,10 @@
 package pl.edu.agh.cs.kraksim.common
 
-import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
+import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
+import pl.edu.agh.cs.kraksim.nagelCore.state.NagelIntersection
+import pl.edu.agh.cs.kraksim.nagelCore.state.NagelRoad
+import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 
@@ -87,12 +91,14 @@ class OneLaneNagelStateBuilder(
         endingRoads: List<NagelRoad>,
         startingRoads: List<NagelRoad>
     ) = directionRelations[id]?.map { (sourceRoadId, destinationRoadId) ->
-        val from = endingRoads.find { it.id == sourceRoadId }
-            ?: throw IllegalArgumentException("Bad configuration, no ending road of id: $sourceRoadId")
-        val to = startingRoads.find { it.id == destinationRoadId }
-            ?: throw IllegalArgumentException("Bad configuration, no starting road of id: $destinationRoadId")
+        requireNotNull(startingRoads.find { it.id == destinationRoadId }) {
+            "Bad configuration, no starting road of id: $destinationRoadId"
+        }
+        val from = requireNotNull(endingRoads.find { it.id == sourceRoadId }) {
+            "Bad configuration, no ending road of id: $sourceRoadId"
+        }
 
-        NagelIntersectionTurningLaneDirection(from.lanes[0], to)
+        IntersectionTurningLaneDirection(from.lanes[0].id, destinationRoadId)
     }?.toSet() ?: emptySet()
 
     private fun createRoad(id: Long, length: Int): NagelRoad {

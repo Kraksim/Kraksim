@@ -33,13 +33,13 @@ class StatisticsManager(
     }
 
     private fun getRoadsSpeed(state: SimulationState): Map<RoadId, List<CarSpeed>> {
-        return state.roads.associate { road ->
-            road.id to state.cars.map { it.velocity }
+        return state.roads.mapValues { (_, road) ->
+            road.lanes.flatMap { it.cars }.map { it.velocity }
         }
     }
 
     private fun getRoadData(state: SimulationState): List<RoadData> {
-        return state.roads.map { road ->
+        return state.roads.values.map { road ->
             RoadData(
                 id = road.id,
                 carsNumber = road.lanes.flatMap { lane -> lane.cars }.size,
