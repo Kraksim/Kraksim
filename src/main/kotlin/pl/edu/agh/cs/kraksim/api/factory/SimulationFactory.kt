@@ -42,5 +42,4 @@ class SimulationFactory {
             simulationState, movementStrategy, lightPhaseManager, statisticsManager
         )
     }
-
 }

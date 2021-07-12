@@ -42,6 +42,6 @@ class Service(
             simulation.step()
         }
 
-        //TODO zapisać to gówno do bazy spowrotem
+        // TODO zapisać to gówno do bazy spowrotem
     }
 }

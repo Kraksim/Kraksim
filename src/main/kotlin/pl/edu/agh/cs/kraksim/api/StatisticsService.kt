@@ -17,5 +17,4 @@ class StatisticsService {
     }
 
     fun getStates(simulationId: Long) = ArrayList<StateStatistics>() // TODO implement me
-
 }
