@@ -13,11 +13,14 @@ class TrafficStateEntity(
     @OneToOne
     var movementSimulationStrategy: MovementSimulationStrategyEntity,
     @OneToMany
+    var lightPhaseStrategies: List<LightPhaseStrategyEntity>,
+    @OneToMany
     var carsOnMap: List<CarEntity>,
     @OneToMany
     var trafficLights: List<TrafficLightEntity>,
     @OneToMany
     var gatewaysStates: List<GatewayStateEntity>,
+    var stateType: StateType
 ) {
 
     @Id
@@ -25,11 +28,13 @@ class TrafficStateEntity(
     var id: Long = 0
 }
 
+enum class StateType {
+    NAGEL_SCHRECKENBERG
+}
+
 @Entity
 class TrafficLightEntity(
     var intersectionId: IntersectionId,
-    @OneToOne
-    var lightPhaseStrategy: LightPhaseStrategyEntity,
     @OneToMany
     var phases: List<PhaseEntity>,
 ) {
@@ -49,7 +54,9 @@ class PhaseEntity(
 @Entity
 class LightPhaseStrategyEntity(
     var algorithm: AlgorithmType,
-    var turnLength: Int
+    var turnLength: Int,
+    @Convert(converter = LongArrayToStringConverter::class)
+    var intersections: List<IntersectionId>
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

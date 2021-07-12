@@ -10,8 +10,14 @@ import pl.edu.agh.cs.kraksim.nagelCore.state.*
 import kotlin.math.min
 
 class NagelMovementSimulationStrategy(
-    private val random: RandomProvider
+    private val random: RandomProvider,
+    private val maxVelocity: Int = 6
 ) : MovementSimulationStrategy {
+
+    init {
+//    minimalna predkość to 1 kratka na sekunde, przy długości auta równej 4.5 m to daje nam 16.2 km/h. Max velocity wtedy to 97.2 km/h
+        require(maxVelocity > 0) { "maxVelocity should be positive, but is $maxVelocity" } // TODO jakieś constrainty jeszcze?
+    }
 
     override fun step(state: SimulationState) {
         acceleration(state as NagelSimulationState)
@@ -24,7 +30,7 @@ class NagelMovementSimulationStrategy(
     fun acceleration(state: NagelSimulationState) {
         state.cars
             .forEach { car ->
-                if (car.velocity < MAX_VELOCITY)
+                if (car.velocity < maxVelocity)
                     car.velocity += 1
             }
     }
@@ -69,7 +75,7 @@ class NagelMovementSimulationStrategy(
     fun randomization(state: NagelSimulationState) {
         state.cars
             .forEach { car ->
-                val shouldSlowDown = car.velocity > 0 && random.getBoolean(SLOW_DOWN_PROBABILITY)
+                val shouldSlowDown = car.velocity > 0 && random.drawWhetherShouldSlowDown()
                 if (shouldSlowDown) {
                     car.velocity -= 1
                 }
@@ -131,11 +137,5 @@ class NagelMovementSimulationStrategy(
             .groupByTo(hashMapOf()) {
                 it.gps.popNext().lanes[0] as NagelLane
             } // todo zastanowić się co z pasem
-    }
-
-    companion object {
-        const val SLOW_DOWN_PROBABILITY = 0.5
-        const val MAX_VELOCITY = 6
-//    minimalna predkość to 1 kratka na sekunde, przy długości auta równej 4.5 m  to daje nam 16.2 km/h. Max velocity wtedy to 97.2 km/h
     }
 }

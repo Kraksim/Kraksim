@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.api.nagel
+package pl.edu.agh.cs.kraksim.api.factory.nagel
 
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.GatewayId

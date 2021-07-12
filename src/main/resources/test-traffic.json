@@ -2,18 +2,25 @@
   "id": 0,
   "turn": 0,
   "mapId": 0,
-  "expectedVelocity": [
-    {
-      "roadId": 0,
-      "velocity": 4
-    }
-  ],
   "movementSimulationStrategy": {
     "type": "NaSch",
     "randomProvider": "true",
     "slowDownProbability": 0.2137,
     "maxVelocity": 6
   },
+  "expectedVelocity": [
+    {
+      "roadId": 0,
+      "velocity": 4
+    }
+  ],
+  "lightPhaseStrategies": [
+    {
+      "algorithm": "turn-based",
+      "turnLength": 5,
+      "intersectionIds": [1]
+    }
+  ],
   "cars": [
     {
       "id": 0,
@@ -29,10 +36,6 @@
   "trafficLights": [
     {
       "intersectionId": 1,
-      "lightPhaseStrategy": {
-        "algorithm": "turn-based",
-        "turnLength": 5
-      },
       "phases": [
         {
           "laneId": 0,
@@ -45,7 +48,7 @@
   "gatewaysStates": [
     {
       "gatewayId": 0,
-      "generators": [
+      "generators": [ // TODO
         {
           "carsToRelease": 20,
           "releaseDelay": 2,

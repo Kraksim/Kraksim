@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 
 internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
@@ -22,7 +21,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         car.moveToLane(state.getLane(), newPosition = 3)
         car.distanceLeftToMove = 2
 
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.resolveIntersections(state)
@@ -44,7 +43,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         )
         car.moveToLane(state.getLane(), newPosition = 3)
         car.distanceLeftToMove = 0
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.resolveIntersections(state)
@@ -76,7 +75,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         car2.moveToLane(state.getLane(roadId = 1), newPosition = 3)
         car2.distanceLeftToMove = 1
 
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.resolveIntersections(state)
@@ -110,7 +109,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         car2.moveToLane(state.getLane(roadId = 1), newPosition = 3)
         car2.distanceLeftToMove = 2
 
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.resolveIntersections(state)

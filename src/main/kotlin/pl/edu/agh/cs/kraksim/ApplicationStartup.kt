@@ -9,10 +9,11 @@ import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
 import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseManager
-import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseStrategyType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
+import pl.edu.agh.cs.kraksim.trafficLight.strategies.TurnBasedLightPhaseStrategy
 
 @Component
 class ApplicationStartup(
@@ -88,12 +89,13 @@ class ApplicationStartup(
 
         val lightPhaseManager = LightPhaseManager(
             state,
-            mapOf(LightPhaseStrategyType.TURN_BASED to listOf(intersection.id))
+            mapOf(TurnBasedLightPhaseStrategy() to listOf(intersection.id))
         )
 
         val simulation = NagelSimulation(
-            state, NagelMovementSimulationStrategy(TrueRandomProvider()),
-            lightPhaseManager
+            state, NagelMovementSimulationStrategy(TrueRandomProvider(0.5)),
+            lightPhaseManager,
+            StatisticsManager()
         )
 
         val car1 = NagelCar(

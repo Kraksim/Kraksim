@@ -8,7 +8,7 @@ class SimulationEntity(
     var mapEntity: MapEntity,
     @OneToOne
     var trafficStateEntity: TrafficStateEntity,
-    var stateType: StateType
+    var simulationType: SimulationType
 ) {
 
     @Id
@@ -16,6 +16,6 @@ class SimulationEntity(
     var id: Long = 0
 }
 
-enum class StateType {
-    NAGEL_SCHRECKENBERG
+enum class SimulationType {
+    NAGEL_CORE
 }

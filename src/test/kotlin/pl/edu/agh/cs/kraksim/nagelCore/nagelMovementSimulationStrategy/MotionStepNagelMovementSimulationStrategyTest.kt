@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
 
@@ -21,7 +20,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             gps = GPS()
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.motion(state)
@@ -42,7 +41,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             gps = GPS()
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.motion(state)
@@ -71,7 +70,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         )
         car2.moveToLane(state.getLane(), newPosition = secondCarInitialPosition)
         car1.moveToLane(state.getLane(), newPosition = firstCarInitialPosition)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.motion(state)
@@ -93,7 +92,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             gps = GPS()
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.motion(state)
@@ -115,7 +114,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             gps = GPS()
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.motion(state)
