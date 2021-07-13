@@ -11,5 +11,5 @@ fun createListOfCars(amount: Int, velocity: Int, spaces: Int): List<Car> {
             var car = NagelCar(velocity, gps = MockRoadGps())
             car.positionRelativeToStart = num + (spaces * num)
             return@map car
-        }.toList()
+        }.toList().reversed()
 }

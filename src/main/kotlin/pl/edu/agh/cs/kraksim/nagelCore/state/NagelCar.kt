@@ -20,8 +20,8 @@ class NagelCar(
     fun moveToLane(lane: NagelLane?, newPosition: Int = 0) {
         currentLane?.remove(this)
         currentLane = lane
-        lane?.addCar(this)
         positionRelativeToStart = newPosition
+        lane?.addCar(this)
         distanceLeftToMove = 0
     }
 
