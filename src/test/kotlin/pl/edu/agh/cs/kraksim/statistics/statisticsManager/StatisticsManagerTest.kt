@@ -6,7 +6,6 @@ import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.getTwoRoadConnectedWithIntersectionSimulationState
 import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
-import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
@@ -43,7 +42,7 @@ internal class StatisticsManagerTest {
     }
 
     @Test
-    fun `Given a state in first turn, with multiple moving cars and without expected velocities , create statistics`(){
+    fun `Given a state in first turn, with multiple moving cars and without expected velocities , create statistics`() {
         // given
         val state = getOneRoadSimulationState(10)
         val initialVelocity1 = 3
@@ -78,10 +77,8 @@ internal class StatisticsManagerTest {
             .assertTotalWholeMapAverageSpeed(4.5)
     }
 
-
-
     @Test
-    fun `Given a state in first turn, with multiple moving cars and without expected velocities, with move , create statistics`(){
+    fun `Given a state in first turn, with multiple moving cars and without expected velocities, with move , create statistics`() {
         // given
         val state = getOneRoadSimulationState(100)
         val initialVelocity1 = 3
@@ -119,7 +116,7 @@ internal class StatisticsManagerTest {
     }
 
     @Test
-    fun `Given a state in first turn, with multiple moving cars on two lanes and without expected velocities, with move , create statistics`(){
+    fun `Given a state in first turn, with multiple moving cars on two lanes and without expected velocities, with move , create statistics`() {
         // given
         val state = getTwoRoadConnectedWithIntersectionSimulationState(10, 10)
         val initialVelocity1 = 3
