@@ -28,8 +28,9 @@ class StatisticsManager(
         )
 
         val totalStatisticsValues = createTotalStatisticsValues(currentStatisticsValues)
-
-        return StateStatistics(state.id, state.turn, currentStatisticsValues, totalStatisticsValues)
+        val currentState = StateStatistics(state.id, state.turn, currentStatisticsValues, totalStatisticsValues)
+        states += currentState
+        return currentState
     }
 
     private fun getRoadsSpeed(state: SimulationState): Map<RoadId, List<CarSpeed>> {
