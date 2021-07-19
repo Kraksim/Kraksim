@@ -5,10 +5,10 @@ import javax.persistence.*
 @Entity
 class SimulationEntity(
     @OneToOne
-    var mapEntity: MapEntity,
-    @OneToOne
-    var trafficStateEntity: TrafficStateEntity,
-    var simulationType: SimulationType
+    var mapEntity: MapEntity?,
+    @OneToMany(cascade = [CascadeType.ALL])
+    var trafficStateEntity: List<TrafficStateEntity>,
+    var simulationType: SimulationType?
 ) {
 
     @Id

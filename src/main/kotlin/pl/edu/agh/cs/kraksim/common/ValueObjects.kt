@@ -11,3 +11,4 @@ typealias IntersectionId = Long
 typealias GatewayId = Long
 typealias RoadId = Long
 typealias LaneId = Long
+typealias CarId = Long

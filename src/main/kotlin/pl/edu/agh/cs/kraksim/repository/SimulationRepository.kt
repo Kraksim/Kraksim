@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository
 import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 
 @Repository
-interface MapRepository : JpaRepository<SimulationEntity, Long>
+interface SimulationRepository : JpaRepository<SimulationEntity, Long>

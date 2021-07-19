@@ -11,10 +11,10 @@ class StateFactory(
     val nagelSimulationStateFactory: NagelSimulationStateFactory
 ) {
 
-    fun from(
-        entity: SimulationEntity
-    ): SimulationState =
-        when (entity.trafficStateEntity.stateType) {
-            StateType.NAGEL_SCHRECKENBERG -> nagelSimulationStateFactory.from(entity)
-        }
+//    fun from(
+//        entity: SimulationEntity
+//    ): SimulationState =
+//        when (entity.trafficStateEntity.stateType) {
+//            StateType.NAGEL_SCHRECKENBERG -> nagelSimulationStateFactory.from(entity)
+//        }
 }
