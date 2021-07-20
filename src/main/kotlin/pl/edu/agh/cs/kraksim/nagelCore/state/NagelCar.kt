@@ -14,9 +14,7 @@ class NagelCar(
     var distanceLeftToMove: Int = 0
 
     val distanceFromRoadNode: Int
-        get() {
-            return currentLane!!.cellsCount - positionRelativeToStart - 1
-        }
+        get() = currentLane!!.cellsCount - positionRelativeToStart - 1
 
     fun moveToLane(lane: NagelLane?, newPosition: Int = 0) {
         currentLane?.remove(this)

@@ -16,46 +16,6 @@ class MapEntity(
     var roads: List<RoadEntity>,
 )
 
-enum class MapType {
-    MAP, NO_MAP
-}
-
-enum class RoadNodeType {
-    INTERSECTION, GATEWAY
-}
-
-@Entity
-class LaneEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
-    var startingPoint: Int,
-    var endingPoint: Int,
-    var indexFromLeft: Int,
-)
-
-@Entity
-class RoadEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
-    var length: Int,
-    @OneToMany
-    var lanes: List<LaneEntity>,
-)
-
-@Embeddable
-class PositionEntity(x: Double, y: Double)
-
-@Entity
-class TurnDirectionEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
-    var sourceLaneId: Long,
-    var destinationRoadId: Long
-)
-
 @Entity
 class RoadNodeEntity(
     @Id
@@ -71,6 +31,46 @@ class RoadNodeEntity(
     @Convert(converter = LongArrayToStringConverter::class)
     var startingRoads: List<RoadId>,
     @OneToMany
-    var turnDirections: List<TurnDirectionEntity>?,
+    var turnDirections: List<TurnDirectionEntity>,
 
 )
+
+@Entity
+class RoadEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long,
+    var length: Int,
+    @OneToMany
+    var lanes: List<LaneEntity>,
+)
+
+@Entity
+class LaneEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long,
+    var startingPoint: Int,
+    var endingPoint: Int,
+    var indexFromLeft: Int,
+)
+
+@Entity
+class TurnDirectionEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long,
+    var sourceLaneId: Long,
+    var destinationRoadId: Long
+)
+
+enum class MapType {
+    MAP, NO_MAP
+}
+
+enum class RoadNodeType {
+    INTERSECTION, GATEWAY
+}
+
+@Embeddable
+class PositionEntity(x: Double, y: Double)

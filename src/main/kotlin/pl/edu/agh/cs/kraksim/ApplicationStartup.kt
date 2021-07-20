@@ -3,42 +3,31 @@ package pl.edu.agh.cs.kraksim
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
-import pl.edu.agh.cs.kraksim.nagelCore.state.*
-import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
-import pl.edu.agh.cs.kraksim.repository.TrafficStateRepository
-import pl.edu.agh.cs.kraksim.repository.entities.CarEntity
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
-import pl.edu.agh.cs.kraksim.repository.entities.TrafficStateEntity
-import pl.edu.agh.cs.kraksim.repository.entities.TrafficStateId
 
 @Component
 class ApplicationStartup(
-        val roadLengthGPS: RoadLengthGPS,
-        val rep: CarRepository,
-        val tfrep: TrafficStateRepository,
-        val simprep: SimulationRepository
+    val roadLengthGPS: RoadLengthGPS,
+    val simprep: SimulationRepository
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-        val simpog = SimulationEntity(null, ArrayList(), null)
-        val trafficStateEntity = TrafficStateEntity(1, simulation = simpog)
-        simpog.trafficStateEntity += trafficStateEntity
-        simprep.save(simpog)
-        val pog = CarEntity(3, 1, 5, null, TrafficStateId(trafficStateEntity, 10))
-        val champ = CarEntity(3, 1, 5, null, TrafficStateId(trafficStateEntity, 11))
-        rep.save(pog)
-        rep.save(champ)
-
-        val nextTrafficStateEntity = TrafficStateEntity(2, simulation = simpog)
-        simpog.trafficStateEntity += nextTrafficStateEntity
-        tfrep.save(nextTrafficStateEntity)
-        simprep.save(simpog)
-        val pog2 = CarEntity(3, 1, 5, null, TrafficStateId(nextTrafficStateEntity, pog.trafficStateId.id))
-        val champ2 = CarEntity(3, 1, 5, null, TrafficStateId(nextTrafficStateEntity, champ.trafficStateId.id) )
-        rep.save(pog2)
-        rep.save(champ2)
-
+//        val simpog = SimulationEntity(null, ArrayList(), null)
+//        val trafficStateEntity = TrafficStateEntity(1, simulation = simpog)
+//        simpog.trafficStateEntity += trafficStateEntity
+//
+//        val pog = CarEntity(3, 1, 5, null, TrafficStateId(trafficStateEntity, 10))
+//        val champ = CarEntity(3, 1, 5, null, TrafficStateId(trafficStateEntity, 11))
+//        trafficStateEntity.carsOnMap += listOf(pog, champ)
+//
+//        val nextTrafficStateEntity = TrafficStateEntity(2, simulation = simpog)
+//        simpog.trafficStateEntity += nextTrafficStateEntity
+//        val pog2 = CarEntity(3, 1, 5, null, TrafficStateId(nextTrafficStateEntity, pog.trafficStateId.id))
+//        val champ2 = CarEntity(3, 1, 5, null, TrafficStateId(nextTrafficStateEntity, champ.trafficStateId.id))
+//        nextTrafficStateEntity.carsOnMap += listOf(pog2, champ2)
+//
+//        simprep.save(simpog)
+//        Long.MAX_VALUE
 
 //        val road1 = NagelRoad(1, 18)
 //        val road2 = NagelRoad(2, 18)

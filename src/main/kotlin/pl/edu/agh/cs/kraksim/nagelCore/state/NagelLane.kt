@@ -20,6 +20,7 @@ class NagelLane(
     val cellsCount: Int = (physicalLength / AVERAGE_CAR_LENGTH).roundToInt()
 
     override fun addCar(car: Car) {
+        require(cars.isEmpty() || car.positionRelativeToStart < cars[0].positionRelativeToStart) { "Added car must be first in lane" }
         this.cars.addToFront(car as NagelCar)
     }
 

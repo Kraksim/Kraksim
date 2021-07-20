@@ -48,7 +48,7 @@ class NagelMapFactory {
 
         return NagelIntersection(
             id = node.id,
-            directions = node.turnDirections!!.map(this::createTurnDirectionFrom),
+            directions = node.turnDirections.map(this::createTurnDirectionFrom),
             endingRoads = node.endingRoads.map { roadIdMap[it]!! },
             startingRoads = node.startingRoads.map { roadIdMap[it]!! },
             // values of phases are defined by state, here we insert any (MAX_VALUE, RED) and replace them when given state
