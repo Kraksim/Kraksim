@@ -28,7 +28,7 @@ class NagelSimulationStateFactory(
                 gatewaysStates = state.gateways.entries.map { (id, gateway) -> GatewayStateEntity(
                         gatewayId = id, //to na 90% jest zle bo musi tu byc gatewayId a nie id
                         collectedCars = gateway.finishedCars.map { carToCarEntity(it) },
-                        generators = //???? co tu
+                        generators = emptyList()//???? co tu
                     )
                 },
                 trafficLights = state.intersections.map {(intersectionId, intersection) -> TrafficLightEntity(

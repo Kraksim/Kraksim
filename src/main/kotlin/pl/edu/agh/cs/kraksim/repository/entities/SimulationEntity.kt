@@ -12,7 +12,7 @@ class SimulationEntity(
         @OneToOne
     var mapEntity: MapEntity,
         @OneToMany(cascade = [CascadeType.ALL])
-    var trafficStateEntities: List<TrafficStateEntity>,
+    var trafficStateEntities: MutableList<TrafficStateEntity>,
         @OneToOne
     var movementSimulationStrategy: MovementSimulationStrategyEntity,
         var simulationType: SimulationType,
