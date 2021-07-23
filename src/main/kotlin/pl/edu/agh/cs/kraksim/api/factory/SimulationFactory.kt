@@ -19,7 +19,7 @@ class SimulationFactory {
         simulationState: SimulationState,
         movementStrategy: MovementSimulationStrategy,
         lightPhaseManager: LightPhaseManager,
-        statisticsManager: StatisticsManager
+        statisticsManager: StatisticsManager,
     ): Simulation = when (simulationType) {
         SimulationType.NAGEL_CORE -> createNagel(
             simulationState,
@@ -33,7 +33,7 @@ class SimulationFactory {
         simulationState: SimulationState,
         movementStrategy: MovementSimulationStrategy,
         lightPhaseManager: LightPhaseManager,
-        statisticsManager: StatisticsManager
+        statisticsManager: StatisticsManager,
     ): NagelSimulation {
         require(simulationState is NagelSimulationState) { "Error creating NagelSimulation - simulation state expected to be NagelSimulationState, but was $simulationState" }
         require(movementStrategy is NagelMovementSimulationStrategy) { "Error creating NagelSimulation - movement strategy expected to be NagelMovementSimulationStrategy, but was $movementStrategy" }

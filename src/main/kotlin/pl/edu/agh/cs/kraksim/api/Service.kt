@@ -22,12 +22,12 @@ class Service(
         val simulationEntity = repository.getById(simulationId)
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =
-            movementSimulationStrategyFactory.from(simulationEntity.latestTrafficStateEntity.movementSimulationStrategy)
+            movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
         val lightPhaseManager =
-            lightPhaseManagerFactory.from(simulationState, simulationEntity.latestTrafficStateEntity.lightPhaseStrategies)
+            lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
         val statisticsManager = statisticsService.createStatisticsManager(
             simulationId,
-            simulationEntity.latestTrafficStateEntity.expectedVelocity
+            simulationEntity.expectedVelocity
         )
 
         val simulation = simulationFactory.from(

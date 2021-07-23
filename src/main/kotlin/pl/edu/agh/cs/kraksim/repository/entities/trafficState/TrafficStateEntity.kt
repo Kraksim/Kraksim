@@ -8,12 +8,6 @@ import javax.persistence.*
 @Entity
 class TrafficStateEntity(
     var turn: Long = 0,
-    @ElementCollection
-    var expectedVelocity: Map<RoadId, Velocity>,
-    @OneToOne
-    var movementSimulationStrategy: MovementSimulationStrategyEntity,
-    @OneToMany
-    var lightPhaseStrategies: List<LightPhaseStrategyEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
     var carsOnMap: List<CarEntity>,
     @OneToMany
