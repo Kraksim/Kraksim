@@ -40,9 +40,8 @@ class Service(
 
         repeat(times) {
             simulation.step()
-            var stateEntity = stateFactory.toEntity(simulation.state, simulationEntity);
+            val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity);
             simulationEntity.trafficStateEntities.add(stateEntity)
-            // TODO zapisać to gówno do bazy spowrotem
         }
     }
 }
