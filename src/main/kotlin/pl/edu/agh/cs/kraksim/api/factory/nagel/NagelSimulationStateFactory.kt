@@ -7,7 +7,6 @@ import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
 import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
@@ -17,28 +16,33 @@ class NagelSimulationStateFactory(
     val nagelMapFactory: NagelMapFactory
 ) {
     fun toEntity(
-            state: NagelSimulationState,
-            simulationEntity: SimulationEntity,
-    ): TrafficStateEntity{
-        return TrafficStateEntity(
-                turn = state.turn,
-                simulation = simulationEntity,
-                stateType = StateType.NAGEL_SCHRECKENBERG,
-                carsOnMap = state.cars.map { carToCarEntity(it) },
-                gatewaysStates = state.gateways.entries.map { (id, gateway) -> GatewayStateEntity(
-                        gatewayId = id, //to na 90% jest zle bo musi tu byc gatewayId a nie id
-                        collectedCars = gateway.finishedCars.map { carToCarEntity(it) },
-                        generators = emptyList()//???? co tu
-                    )
-                },
-                trafficLights = state.intersections.map {(intersectionId, intersection) -> TrafficLightEntity(
-                        intersectionId = intersectionId,
-                        phases = intersection.phases.map{ (laneId, phase) -> PhaseEntity(
-                                laneId = laneId,
-                                phaseTime = phase.phaseTime,
-                                state = phase.state
-                        ) }
-                ) }
+        state: NagelSimulationState,
+        simulationEntity: SimulationEntity,
+    ): SimulationStateEntity {
+        return SimulationStateEntity(
+            turn = state.turn,
+            simulation = simulationEntity,
+            stateType = StateType.NAGEL_SCHRECKENBERG,
+            carsOnMap = state.cars.map { carToCarEntity(it) },
+            gatewaysStates = state.gateways.entries.map { (id, gateway) ->
+                GatewayStateEntity(
+                    gatewayId = id, // to na 90% jest zle bo musi tu byc gatewayId a nie id
+                    collectedCars = gateway.finishedCars.map { carToCarEntity(it) },
+                    generators = emptyList() // ???? co tu
+                )
+            },
+            trafficLights = state.intersections.map { (intersectionId, intersection) ->
+                TrafficLightEntity(
+                    intersectionId = intersectionId,
+                    phases = intersection.phases.map { (laneId, phase) ->
+                        PhaseEntity(
+                            laneId = laneId,
+                            phaseTime = phase.phaseTime,
+                            state = phase.state
+                        )
+                    }
+                )
+            }
         )
     }
     fun from(entity: SimulationEntity): SimulationState {
@@ -53,7 +57,11 @@ class NagelSimulationStateFactory(
             trafficState.turn
         )
 
-        trafficState.carsOnMap.forEach { putCarOnMap(it, simState.roads) }
+        trafficState.carsOnMap
+                .groupBy { it.currentLaneId }
+                .forEach {(_, cars) -> cars
+                        .sortedByDescending { it.positionRelativeToStart }
+                        .forEach{ putCarOnMap(it, simState.roads) }}
         trafficState.trafficLights.forEach { insertTrafficLightState(it, simState.intersections) }
 
         trafficState.gatewaysStates.forEach { adjustGatewayState(it, simState.gateways) }
@@ -98,16 +106,16 @@ class NagelSimulationStateFactory(
         )
     }
 
-    private fun carToCarEntity(car: NagelCar): CarEntity{
+    private fun carToCarEntity(car: NagelCar): CarEntity {
         return CarEntity(
-                carId = car.id,
-                velocity = car.velocity,
-                currentLaneId = car.currentLane?.id!!,
-                positionRelativeToStart = car.positionRelativeToStart,
-                gps = GPSEntity(
-                        route = car.gps.route.map { route -> route.id },
-                        type = car.gps.type
-                )
+            carId = car.id,
+            velocity = car.velocity,
+            currentLaneId = car.currentLane?.id,
+            positionRelativeToStart = car.positionRelativeToStart,
+            gps = GPSEntity(
+                route = car.gps.route.map { route -> route.id },
+                type = car.gps.type
+            )
         )
     }
 }

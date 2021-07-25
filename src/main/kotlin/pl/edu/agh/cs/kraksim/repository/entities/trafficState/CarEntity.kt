@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.repository.entities.trafficState
 
+import org.springframework.lang.Nullable
 import pl.edu.agh.cs.kraksim.common.CarId
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
@@ -11,9 +12,10 @@ import javax.persistence.*
 class CarEntity(
     var carId: CarId,
     var velocity: Velocity,
-    var currentLaneId: LaneId,
+    @Nullable
+    var currentLaneId: LaneId?,
     var positionRelativeToStart: Int,
-    @OneToOne
+    @OneToOne(cascade = [CascadeType.ALL])
     var gps: GPSEntity
 ) {
     @Id

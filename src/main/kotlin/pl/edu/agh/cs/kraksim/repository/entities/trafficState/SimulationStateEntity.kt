@@ -1,18 +1,21 @@
 package pl.edu.agh.cs.kraksim.repository.entities.trafficState
 
-import pl.edu.agh.cs.kraksim.common.RoadId
-import pl.edu.agh.cs.kraksim.common.Velocity
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 import javax.persistence.*
 
 @Entity
-class TrafficStateEntity(
+class SimulationStateEntity(
     var turn: Long = 0,
     @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
     var carsOnMap: List<CarEntity>,
     @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     var trafficLights: List<TrafficLightEntity>,
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
     var gatewaysStates: List<GatewayStateEntity>,
     @ManyToOne
     var simulation: SimulationEntity,

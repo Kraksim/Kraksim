@@ -25,6 +25,7 @@ class NagelMovementSimulationStrategy(
         randomization(state)
         motion(state)
         resolveIntersections(state)
+        state.turn++
     }
 
     fun acceleration(state: NagelSimulationState) {

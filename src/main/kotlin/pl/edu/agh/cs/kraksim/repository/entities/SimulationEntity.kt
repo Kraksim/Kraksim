@@ -1,28 +1,33 @@
 package pl.edu.agh.cs.kraksim.repository.entities
 
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.LightPhaseStrategyEntity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.MovementSimulationStrategyEntity
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.TrafficStateEntity
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEntity
 import javax.persistence.*
 
 @Entity
 class SimulationEntity(
-        @OneToOne
+    @OneToOne
     var mapEntity: MapEntity,
-        @OneToMany(cascade = [CascadeType.ALL])
-    var trafficStateEntities: MutableList<TrafficStateEntity>,
-        @OneToOne
+    //todo maybe we can somehow eager load only the last one?
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var simulationStateEntities: MutableList<SimulationStateEntity>,
+    @OneToOne(cascade = [CascadeType.ALL])
     var movementSimulationStrategy: MovementSimulationStrategyEntity,
-        var simulationType: SimulationType,
-        @ElementCollection
+    var simulationType: SimulationType,
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     var expectedVelocity: Map<RoadId, Velocity>,
-        @OneToMany
-        var lightPhaseStrategies: List<LightPhaseStrategyEntity>
+    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    var lightPhaseStrategies: List<LightPhaseStrategyEntity>
 ) {
     val latestTrafficStateEntity
-        get() = trafficStateEntities.maxByOrNull { it.turn }!!
+        get() = simulationStateEntities.maxByOrNull { it.turn }!!
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

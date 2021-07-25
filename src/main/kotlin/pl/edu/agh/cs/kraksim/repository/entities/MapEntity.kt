@@ -1,68 +1,76 @@
 package pl.edu.agh.cs.kraksim.repository.entities
 
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.repository.LongArrayToStringConverter
 import javax.persistence.*
 
 @Entity
 class MapEntity(
+    var type: MapType,
+    @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
+    var roadNodes: List<RoadNodeEntity>,
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = [CascadeType.ALL])
+    var roads: List<RoadEntity>,
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
-    var type: MapType,
-    @OneToMany
-    var roadNodes: List<RoadNodeEntity>,
-    @OneToMany
-    var roads: List<RoadEntity>,
-)
+    var id: Long = 0
+}
 
 @Entity
 class RoadNodeEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
     var type: RoadNodeType,
     @Embedded
     var position: PositionEntity,
-    @Column
-    @Convert(converter = LongArrayToStringConverter::class)
-    var endingRoads: List<RoadId>,
-    @Column
-    @Convert(converter = LongArrayToStringConverter::class)
-    var startingRoads: List<RoadId>,
+    @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
+    var endingRoads: List<RoadEntity>,
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    var startingRoads: List<RoadEntity>,
     @OneToMany
     var turnDirections: List<TurnDirectionEntity>,
-
-)
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long = 0
+}
 
 @Entity
 class RoadEntity(
+    var length: Int,
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var lanes: List<LaneEntity>,
+) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
-    var length: Int,
-    @OneToMany
-    var lanes: List<LaneEntity>,
-)
+    var id: Long = 0
+}
 
 @Entity
 class LaneEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
     var startingPoint: Int,
     var endingPoint: Int,
     var indexFromLeft: Int,
-)
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long = 0
+}
 
 @Entity
 class TurnDirectionEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
     var sourceLaneId: Long,
     var destinationRoadId: Long
-)
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long = 0
+}
 
 enum class MapType {
     MAP, NO_MAP

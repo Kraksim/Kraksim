@@ -6,9 +6,9 @@ import javax.persistence.*
 @Entity
 class GatewayStateEntity(
     var gatewayId: GatewayId,
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     var collectedCars: List<CarEntity>,
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     var generators: List<GeneratorEntity>
 ) {
     @Id

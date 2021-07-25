@@ -19,7 +19,7 @@ class Service(
 
     fun simulateStep(simulationId: Long = 0L, times: Int = 1) {
 
-        val simulationEntity = repository.getById(simulationId)
+        var simulationEntity = repository.getById(simulationId)
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =
             movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
@@ -40,8 +40,9 @@ class Service(
 
         repeat(times) {
             simulation.step()
-            val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity);
-            simulationEntity.trafficStateEntities.add(stateEntity)
+            val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
+            simulationEntity.simulationStateEntities.add(stateEntity)
+            simulationEntity = repository.save(simulationEntity)
         }
     }
 }

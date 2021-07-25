@@ -7,7 +7,9 @@ class LongArrayToStringConverter : AttributeConverter<List<Long>, String> {
         return attribute?.joinToString(",")
     }
 
-    override fun convertToEntityAttribute(dbData: String?): List<Long> {
-        return dbData?.split(",")?.map { it.toLong() } ?: emptyList()
-    }
+    override fun convertToEntityAttribute(dbData: String?): List<Long> =
+        when (dbData) {
+            null, "" -> emptyList()
+            else -> dbData.split(",").map { it.toLong() }
+        }
 }

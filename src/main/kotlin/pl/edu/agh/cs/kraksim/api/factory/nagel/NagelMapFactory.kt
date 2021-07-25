@@ -49,10 +49,10 @@ class NagelMapFactory {
         return NagelIntersection(
             id = node.id,
             directions = node.turnDirections.map(this::createTurnDirectionFrom),
-            endingRoads = node.endingRoads.map { roadIdMap[it]!! },
-            startingRoads = node.startingRoads.map { roadIdMap[it]!! },
+            endingRoads = node.endingRoads.map { roadIdMap[it.id]!! },
+            startingRoads = node.startingRoads.map { roadIdMap[it.id]!! },
             // values of phases are defined by state, here we insert any (MAX_VALUE, RED) and replace them when given state
-            phases = node.endingRoads.flatMap { roadIdMap[it]!!.lanes }
+            phases = node.endingRoads.flatMap { roadIdMap[it.id]!!.lanes }
                 .associate { lane -> lane.id to TrafficLightPhase(Int.MAX_VALUE, TrafficLightPhase.LightColor.RED) }
         )
     }
@@ -60,8 +60,8 @@ class NagelMapFactory {
     private fun createGateway(node: RoadNodeEntity, roadIdMap: Map<Long, NagelRoad>): Gateway {
         return NagelGateway(
             id = node.id,
-            endingRoads = node.endingRoads.map { roadIdMap[it]!! },
-            startingRoads = node.startingRoads.map { roadIdMap[it]!! }
+            endingRoads = node.endingRoads.map { roadIdMap[it.id]!! },
+            startingRoads = node.startingRoads.map { roadIdMap[it.id]!! }
         )
     }
 

@@ -8,6 +8,7 @@ import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.Road
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 @Component
 class DijkstraBasedGPS {
@@ -16,24 +17,26 @@ class DijkstraBasedGPS {
         source: Gateway,
         target: Gateway,
         state: SimulationState,
-        getRoadWeight: (Road) -> Double
+        getRoadWeight: (Road) -> Double,
+        gpsType: GPSType
     ): GPS = if (source != target) {
-        calculateDijkstra(state, source, target, getRoadWeight)
+        calculateDijkstra(state, source, target, getRoadWeight, gpsType)
     } else {
-        GPS(ArrayList())
+        GPS(ArrayList(), gpsType)
     }
 
     private fun calculateDijkstra(
         state: SimulationState,
         source: Gateway,
         target: Gateway,
-        getRoadWeight: (Road) -> Double
+        getRoadWeight: (Road) -> Double,
+        gpsType: GPSType
     ): GPS {
         val (notReachedNodes, weightFromSource, pathRecovery) = initialize(state, source, getRoadWeight)
 
         val fastestRoadLeadingToTarget =
             calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target, getRoadWeight)
-        return parseRecoveryToRoute(fastestRoadLeadingToTarget, pathRecovery)
+        return parseRecoveryToRoute(fastestRoadLeadingToTarget, pathRecovery, gpsType)
     }
 
     private fun initialize(
@@ -86,13 +89,13 @@ class DijkstraBasedGPS {
         return null
     }
 
-    private fun parseRecoveryToRoute(target: Road?, pathRecovery: HashMap<Road, Road>): GPS {
+    private fun parseRecoveryToRoute(target: Road?, pathRecovery: HashMap<Road, Road>, gpsType: GPSType): GPS {
         var find: Road? = target
         val route = ArrayList<Road>()
         while (find != null) {
             route.addToFront(find)
             find = pathRecovery[find]
         }
-        return GPS(route)
+        return GPS(route, gpsType)
     }
 }

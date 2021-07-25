@@ -2,134 +2,105 @@ package pl.edu.agh.cs.kraksim
 
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
+import pl.edu.agh.cs.kraksim.api.Service
 import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
+import pl.edu.agh.cs.kraksim.repository.MapRepository
+import pl.edu.agh.cs.kraksim.repository.RoadRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
+import pl.edu.agh.cs.kraksim.repository.entities.*
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 
 @Component
 class ApplicationStartup(
     val roadLengthGPS: RoadLengthGPS,
-    val simprep: SimulationRepository
+    val simprep: SimulationRepository,
+    val service: Service,
+    val mapRepository: MapRepository,
+    val roadRepository: RoadRepository
 ) : CommandLineRunner {
 
     override fun run(vararg args: String?) {
-//        val simpog = SimulationEntity(null, ArrayList(), null)
-//        val trafficStateEntity = TrafficStateEntity(1, simulation = simpog)
-//        simpog.trafficStateEntity += trafficStateEntity
-//
-//        val pog = CarEntity(3, 1, 5, null, TrafficStateId(trafficStateEntity, 10))
-//        val champ = CarEntity(3, 1, 5, null, TrafficStateId(trafficStateEntity, 11))
-//        trafficStateEntity.carsOnMap += listOf(pog, champ)
-//
-//        val nextTrafficStateEntity = TrafficStateEntity(2, simulation = simpog)
-//        simpog.trafficStateEntity += nextTrafficStateEntity
-//        val pog2 = CarEntity(3, 1, 5, null, TrafficStateId(nextTrafficStateEntity, pog.trafficStateId.id))
-//        val champ2 = CarEntity(3, 1, 5, null, TrafficStateId(nextTrafficStateEntity, champ.trafficStateId.id))
-//        nextTrafficStateEntity.carsOnMap += listOf(pog2, champ2)
-//
-//        simprep.save(simpog)
-//        Long.MAX_VALUE
+        var lane = LaneEntity(
+            startingPoint = 0,
+            endingPoint = 20,
+            indexFromLeft = 0
+        )
+        var road = RoadEntity(
+            length = 20,
+            lanes = listOf(lane)
+        )
 
-//        val road1 = NagelRoad(1, 18)
-//        val road2 = NagelRoad(2, 18)
-//        val road3 = NagelRoad(3, 18)
-//        val road4 = NagelRoad(4, 18)
-//
-//        road1.addLane(1, 0, 0, 18)
-//        road2.addLane(2, 0, 0, 18)
-//        road3.addLane(3, 0, 0, 18)
-//        road4.addLane(4, 0, 0, 18)
-//
-//        val roads = listOf(road1, road2, road3, road4)
-//
-//        val gateway1 = NagelGateway(
-//            id = 1,
-//            startingRoads = listOf(road1),
-//            endingRoads = emptyList()
-//        )
-//
-//        val gateway2 = NagelGateway(
-//            id = 2,
-//            startingRoads = listOf(road2),
-//            endingRoads = emptyList()
-//        )
-//
-//        val gateway3 = NagelGateway(
-//            id = 3,
-//            startingRoads = emptyList(),
-//            endingRoads = listOf(road3)
-//        )
-//
-//        val gateway4 = NagelGateway(
-//            id = 4,
-//            startingRoads = emptyList(),
-//            endingRoads = listOf(road4)
-//        )
-//
-//        val gateways = listOf(gateway1, gateway2, gateway3, gateway4)
-//
-//        val directions = listOf(
-//            IntersectionTurningLaneDirection(road1.lanes[0].id, road3.id),
-//            IntersectionTurningLaneDirection(road1.lanes[0].id, road4.id),
-//            IntersectionTurningLaneDirection(road2.lanes[0].id, road3.id),
-//            IntersectionTurningLaneDirection(road2.lanes[0].id, road4.id)
-//        )
-//
-//        val phases: Map<LaneId, TrafficLightPhase> = mapOf(
-//            road1.lanes[0].id to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN),
-//            road2.lanes[0].id to TrafficLightPhase(Int.MAX_VALUE, LightColor.GREEN)
-//        )
-//
-//        val intersection = NagelIntersection(
-//            id = 1,
-//            endingRoads = listOf(road1, road2),
-//            startingRoads = listOf(road3, road4),
-//            directions = directions,
-//            phases = phases
-//        )
-//
-//        val state = NagelSimulationState(
-//            id = 1,
-//            turn = 1,
-//            gateways = gateways,
-//            roads = roads,
-//            intersections = listOf(intersection)
-//        )
-//
-//        val lightPhaseManager = LightPhaseManager(
-//            state,
-//            mapOf(TurnBasedLightPhaseStrategy() to listOf(intersection.id))
-//        )
-//
-//        val simulation = NagelSimulation(
-//            state, NagelMovementSimulationStrategy(TrueRandomProvider(0.5)),
-//            lightPhaseManager,
-//            StatisticsManager()
-//        )
-//
-//        val car1 = NagelCar(
-//            0,
-//            velocity = 4,
-//            roadLengthGPS.calculate(gateway1, gateway3, state)
-//        )
-//        car1.moveToLane(road1.lanes[0], 0)
-//
-//        val car2 = NagelCar(
-//            1,
-//            velocity = 4,
-//            roadLengthGPS.calculate(gateway2, gateway3, state)
-//        )
-//        car2.moveToLane(road2.lanes[0], 2)
-//
-//        val car3 = NagelCar(
-//            2,
-//            velocity = 4,
-//            roadLengthGPS.calculate(gateway2, gateway4, state)
-//        )
-//        car3.moveToLane(road2.lanes[0], 0)
-//
-//        repeat(22) {
-//            println(state.toString() + "\n")
-//            simulation.step()
-//        }
+        var mapEntity = MapEntity(
+            type = MapType.MAP,
+            roadNodes = listOf(
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(1.0, 1.0),
+                    endingRoads = emptyList(),
+                    startingRoads = listOf(road),
+                    turnDirections = emptyList()
+                ),
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(21.0, 1.0),
+                    endingRoads = listOf(road),
+                    startingRoads = emptyList(),
+                    turnDirections = emptyList()
+                )
+            ),
+            roads = listOf(road)
+        )
+        mapRepository.save(mapEntity)
+
+        mapEntity = mapRepository.getById(1)
+        lane = road.lanes.first()
+
+        var simulationEntity = SimulationEntity(
+            mapEntity = mapEntity,
+            simulationStateEntities = ArrayList(),
+            movementSimulationStrategy = MovementSimulationStrategyEntity(
+                type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
+                randomProvider = RandomProviderType.TRUE,
+                slowDownProbability = 0.3,
+                maxVelocity = 6
+            ),
+            simulationType = SimulationType.NAGEL_CORE,
+            expectedVelocity = emptyMap(),
+            lightPhaseStrategies = emptyList()
+        )
+
+        var simulationStateEntity = SimulationStateEntity(
+            turn = 0,
+            trafficLights = emptyList(),
+            simulation = simulationEntity,
+            stateType = StateType.NAGEL_SCHRECKENBERG,
+            gatewaysStates = emptyList(),
+            carsOnMap = listOf(
+                CarEntity(
+                    carId = 1,
+                    velocity = 2,
+                    currentLaneId = lane.id,
+                    positionRelativeToStart = 6,
+                    gps = GPSEntity(
+                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
+                        route = emptyList()
+                    )
+                ),
+                CarEntity(
+                    carId = 2,
+                    velocity = 6,
+                    currentLaneId = lane.id,
+                    positionRelativeToStart = 10,
+                    gps = GPSEntity(
+                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
+                        route = emptyList()
+                    )
+                )
+            )
+        )
+        simulationEntity.simulationStateEntities.add(simulationStateEntity)
+        simulationEntity = simprep.save(simulationEntity)
+
+        service.simulateStep(simulationEntity.id, 1);
     }
 }
