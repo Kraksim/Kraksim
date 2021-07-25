@@ -2,8 +2,6 @@ package pl.edu.agh.cs.kraksim.repository.entities
 
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
-import pl.edu.agh.cs.kraksim.common.RoadId
-import pl.edu.agh.cs.kraksim.repository.LongArrayToStringConverter
 import javax.persistence.*
 
 @Entity

@@ -22,11 +22,11 @@ class ApplicationStartup(
     override fun run(vararg args: String?) {
         var lane = LaneEntity(
             startingPoint = 0,
-            endingPoint = 20,
+            endingPoint = 400,
             indexFromLeft = 0
         )
         var road = RoadEntity(
-            length = 20,
+            length = 400,
             lanes = listOf(lane)
         )
 
@@ -101,6 +101,6 @@ class ApplicationStartup(
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simprep.save(simulationEntity)
 
-        service.simulateStep(simulationEntity.id, 1);
+        service.simulateStep(simulationEntity.id, 1)
     }
 }

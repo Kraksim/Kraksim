@@ -13,7 +13,7 @@ import javax.persistence.*
 class SimulationEntity(
     @OneToOne
     var mapEntity: MapEntity,
-    //todo maybe we can somehow eager load only the last one?
+    // todo maybe we can somehow eager load only the last one?
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var simulationStateEntities: MutableList<SimulationStateEntity>,
     @OneToOne(cascade = [CascadeType.ALL])

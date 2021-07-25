@@ -58,10 +58,12 @@ class NagelSimulationStateFactory(
         )
 
         trafficState.carsOnMap
-                .groupBy { it.currentLaneId }
-                .forEach {(_, cars) -> cars
-                        .sortedByDescending { it.positionRelativeToStart }
-                        .forEach{ putCarOnMap(it, simState.roads) }}
+            .groupBy { it.currentLaneId }
+            .forEach { (_, cars) ->
+                cars
+                    .sortedByDescending { it.positionRelativeToStart }
+                    .forEach { putCarOnMap(it, simState.roads) } 
+            }
         trafficState.trafficLights.forEach { insertTrafficLightState(it, simState.intersections) }
 
         trafficState.gatewaysStates.forEach { adjustGatewayState(it, simState.gateways) }
