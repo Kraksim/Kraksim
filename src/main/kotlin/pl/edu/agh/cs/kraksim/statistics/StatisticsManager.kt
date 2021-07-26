@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
 class StatisticsManager(
-    var states: ArrayList<StateStatistics> = ArrayList(),
+    var states: List<StateStatistics> = ArrayList(),
     var expectedVelocity: Map<RoadId, Velocity> = HashMap()
 ) {
 
@@ -28,10 +28,9 @@ class StatisticsManager(
         )
 
         val totalStatisticsValues = createTotalStatisticsValues(currentStatisticsValues)
-
-        val stateStatistics = StateStatistics(state.id, state.turn, currentStatisticsValues, totalStatisticsValues)
-        states.add(stateStatistics)
-        return stateStatistics
+        val currentState = StateStatistics(state.id, state.turn, currentStatisticsValues, totalStatisticsValues)
+        states += currentState
+        return currentState
     }
 
     private fun getRoadsSpeed(state: SimulationState): Map<RoadId, List<CarSpeed>> {

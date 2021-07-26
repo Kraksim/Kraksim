@@ -41,7 +41,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         strategy.initializeLights(state.intersections.values)
 
         // when
-        strategy.switchLight(state.intersections.values)
+        strategy.switchLights(state.intersections.values)
 
         // then
         assertThat(phases[lane1.id]?.phaseTime).isEqualTo(4)
@@ -67,7 +67,7 @@ internal class TurnBasedLightPhaseStrategyTest {
         lane2LightPhase?.state = RED
 
         // when
-        strategy.switchLight(state.intersections.values)
+        strategy.switchLights(state.intersections.values)
 
         // then
         assertThat(lane1LightPhase?.phaseTime).isEqualTo(5)
