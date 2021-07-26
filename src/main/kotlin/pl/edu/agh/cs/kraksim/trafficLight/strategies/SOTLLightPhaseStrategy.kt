@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.trafficLight.strategies
 
+import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseStrategy
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.GREEN
@@ -44,9 +45,10 @@ class SOTLLightPhaseStrategy(
     }
 
     private fun switchLights(intersection: Intersection) {
-        intersection.phases.forEach { (lane, phase) ->
+        intersection.phases.forEach { (laneId: LaneId /* = kotlin.Long */, phase) ->
             when (phase.state) {
                 RED -> {
+                    val lane = intersection.endingRoads.flatMap { it.lanes }.find { it.id == laneId }!! // todo properly fix
                     val duration = phase.phaseTime
                     val carsCount = lane.cars.count()
                     if (duration * carsCount >= phiFactor && minPhaseLength <= duration) {

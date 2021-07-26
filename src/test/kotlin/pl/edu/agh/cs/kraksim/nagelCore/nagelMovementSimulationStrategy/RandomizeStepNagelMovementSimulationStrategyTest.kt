@@ -8,6 +8,7 @@ import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 internal class RandomizeStepNagelMovementSimulationStrategyTest {
 
@@ -19,7 +20,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = true))
@@ -39,7 +40,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = false))
@@ -59,7 +60,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = true))

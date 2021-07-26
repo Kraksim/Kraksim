@@ -6,6 +6,7 @@ import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 internal class MotionStepNagelMovementSimulationStrategyTest {
 
@@ -17,7 +18,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
@@ -38,7 +39,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val endGateway = state.road(0).end as NagelGateway
         val car = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
@@ -62,11 +63,11 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState(roadLength = 36)
         val car1 = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         val car2 = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car2.moveToLane(state.getLane(), newPosition = secondCarInitialPosition)
         car1.moveToLane(state.getLane(), newPosition = firstCarInitialPosition)
@@ -89,7 +90,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val state = getTwoRoadConnectedWithIntersectionSimulationState(firstRoadLength = 18)
         val car = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
@@ -111,7 +112,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
         val state = getTwoRoadConnectedWithIntersectionSimulationState(firstRoadLength = 18)
         val car = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()

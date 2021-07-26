@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.createListOfCars
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
-import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
+import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
 class SOTLLightPhaseStrategyTest {
@@ -23,11 +24,12 @@ class SOTLLightPhaseStrategyTest {
         strategy.initializeLights(state.intersections.values)
 
         // then
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(0)
-        assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
-        assertThat(phases[lane2]?.phaseTime).isEqualTo(0)
-        assertThat(phases[lane2]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(0)
+        assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
+        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(0)
+        assertThat(phases[lane2.id]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
     }
+
     @Test
     fun `Given state with initialized intersection lights, when lights are switched increase red phaseTime`() {
         // given
@@ -43,10 +45,10 @@ class SOTLLightPhaseStrategyTest {
         strategy.switchLights(state.intersections.values)
 
         // then
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(1)
-        assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
-        assertThat(phases[lane2]?.phaseTime).isEqualTo(1)
-        assertThat(phases[lane2]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(1)
+        assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
+        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(1)
+        assertThat(phases[lane2.id]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
     }
 
     /*
@@ -69,8 +71,8 @@ class SOTLLightPhaseStrategyTest {
             strategy.switchLights(state.intersections.values)
         }
         // then
-        assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(18)
+        assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(18)
     }
 
     @Test
@@ -94,8 +96,8 @@ class SOTLLightPhaseStrategyTest {
         }
 
         // then
-        assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(14)
+        assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(14)
     }
 
     @Test
@@ -117,8 +119,8 @@ class SOTLLightPhaseStrategyTest {
             strategy.switchLights(state.intersections.values)
         }
         // then
-        assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(0)
+        assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.RED)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(0)
     }
 
     @Test
@@ -129,7 +131,7 @@ class SOTLLightPhaseStrategyTest {
         val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val phases = intersection.phases
-        val lastCar = NagelCar(3, MockRoadGps())
+        val lastCar = NagelCar(velocity = 3, gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH))
         lastCar.positionRelativeToStart = 17
         lane1.addCar(lastCar)
         strategy.initializeLights(state.intersections.values)
@@ -139,7 +141,7 @@ class SOTLLightPhaseStrategyTest {
             strategy.switchLights(state.intersections.values)
         }
         // then
-        assertThat(phases[lane1]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(5)
+        assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(5)
     }
 }

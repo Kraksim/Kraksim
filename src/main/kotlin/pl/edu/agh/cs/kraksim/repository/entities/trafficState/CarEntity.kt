@@ -7,10 +7,11 @@ import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.repository.LongArrayToStringConverter
 import javax.persistence.*
+import kotlin.random.Random
 
 @Entity
 class CarEntity(
-    var carId: CarId,
+    var carId: CarId = Random.nextLong(),
     var velocity: Velocity,
     @Nullable
     var currentLaneId: LaneId?,

@@ -7,6 +7,7 @@ import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.testNagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 internal class AccelerateStepNagelMovementSimulationStrategyTest {
 
@@ -18,7 +19,7 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = testNagelMovementSimulationStrategy()
@@ -37,7 +38,7 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = GPS()
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = testNagelMovementSimulationStrategy()

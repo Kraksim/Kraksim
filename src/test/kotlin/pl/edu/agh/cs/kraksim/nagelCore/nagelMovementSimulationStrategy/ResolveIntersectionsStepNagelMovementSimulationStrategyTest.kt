@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
 
@@ -16,7 +17,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         val expectedLane = state.getLane(roadId = 1)
         val car = NagelCar(
             velocity = 2,
-            gps = GPS(state.road(1))
+            gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = 3)
         car.distanceLeftToMove = 2
@@ -39,7 +40,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         val expectedLane = state.getLane(roadId = 0)
         val car = NagelCar(
             velocity = 2,
-            gps = GPS()
+            gps = GPS( type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = 3)
         car.distanceLeftToMove = 0
@@ -63,14 +64,14 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
 
         val car1 = NagelCar(
             velocity = 2,
-            gps = GPS(state.road(2))
+            gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car1.moveToLane(state.getLane(roadId = 0), newPosition = 3)
         car1.distanceLeftToMove = 2
 
         val car2 = NagelCar(
             velocity = 2,
-            gps = GPS(state.road(2))
+            gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car2.moveToLane(state.getLane(roadId = 1), newPosition = 3)
         car2.distanceLeftToMove = 1
@@ -97,14 +98,14 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
 
         val car1 = NagelCar(
             velocity = 2,
-            gps = GPS(state.road(2))
+            gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car1.moveToLane(state.getLane(roadId = 0), newPosition = 3)
         car1.distanceLeftToMove = 2
 
         val car2 = NagelCar(
             velocity = 2,
-            gps = GPS(state.road(2))
+            gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car2.moveToLane(state.getLane(roadId = 1), newPosition = 3)
         car2.distanceLeftToMove = 2
