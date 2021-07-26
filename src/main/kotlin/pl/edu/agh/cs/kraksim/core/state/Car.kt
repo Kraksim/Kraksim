@@ -7,4 +7,8 @@ interface Car {
     var velocity: Int
     var positionRelativeToStart: Int
     val gps: GPS
+
+    companion object {
+        const val AVERAGE_CAR_LENGTH = 5
+    }
 }

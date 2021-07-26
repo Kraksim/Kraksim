@@ -40,7 +40,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         val expectedLane = state.getLane(roadId = 0)
         val car = NagelCar(
             velocity = 2,
-            gps = GPS( type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
         car.moveToLane(state.getLane(), newPosition = 3)
         car.distanceLeftToMove = 0

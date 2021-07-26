@@ -3,7 +3,6 @@ package pl.edu.agh.cs.kraksim.nagelCore.state
 import pl.edu.agh.cs.kraksim.common.addToFront
 import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.core.state.Lane
-import kotlin.math.roundToInt
 
 class NagelLane(
     override val id: Long,
@@ -17,7 +16,7 @@ class NagelLane(
     override val cars: MutableList<NagelCar> = ArrayList()
 
     override val physicalLength: Int = physicalEndingPoint - physicalStartingPoint
-    val cellsCount: Int = (physicalLength / AVERAGE_CAR_LENGTH).roundToInt()
+    val cellsCount: Int = physicalLength / Car.AVERAGE_CAR_LENGTH
 
     override fun addCar(car: Car) {
         require(cars.isEmpty() || car.positionRelativeToStart < cars[0].positionRelativeToStart) { "Added car must be first in lane" }
@@ -37,9 +36,5 @@ class NagelLane(
 
     override fun toString(): String {
         return "NagelLane(id=$id, \n\t\tcars=$cars\n)"
-    }
-
-    companion object {
-        const val AVERAGE_CAR_LENGTH = 4.5
     }
 }

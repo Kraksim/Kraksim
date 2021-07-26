@@ -5,6 +5,7 @@ import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
+import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
@@ -45,6 +46,7 @@ class NagelSimulationStateFactory(
             }
         )
     }
+
     fun from(entity: SimulationEntity): SimulationState {
         val (roads, intersections, gateways) = nagelMapFactory.from(entity.mapEntity)
 
@@ -62,7 +64,7 @@ class NagelSimulationStateFactory(
             .forEach { (_, cars) ->
                 cars
                     .sortedByDescending { it.positionRelativeToStart }
-                    .forEach { putCarOnMap(it, simState.roads) } 
+                    .forEach { putCarOnMap(it, simState.roads) }
             }
         trafficState.trafficLights.forEach { insertTrafficLightState(it, simState.intersections) }
 
@@ -92,9 +94,10 @@ class NagelSimulationStateFactory(
     }
 
     private fun putCarOnMap(it: CarEntity, roads: Map<RoadId, NagelRoad>) {
+        require(it.positionRelativeToStart % Car.AVERAGE_CAR_LENGTH == 0) { "Car id=${it.carId} should have positionRelativeToStart divisible by AVERAGE_CAR_LENGTH=${Car.AVERAGE_CAR_LENGTH}, but has ${it.positionRelativeToStart}" }
         val lanes: Map<LaneId, NagelLane> = roads.values.flatMap { it.lanes }.associateBy { it.id }
         val car = createCar(it, roads)
-        car.moveToLane(lanes[it.currentLaneId], it.positionRelativeToStart)
+        car.moveToLane(lanes[it.currentLaneId], it.positionRelativeToStart / Car.AVERAGE_CAR_LENGTH)
     }
 
     private fun createCar(it: CarEntity, roads: Map<RoadId, NagelRoad>? = null): NagelCar {
@@ -113,7 +116,7 @@ class NagelSimulationStateFactory(
             carId = car.id,
             velocity = car.velocity,
             currentLaneId = car.currentLane?.id,
-            positionRelativeToStart = car.positionRelativeToStart,
+            positionRelativeToStart = car.positionRelativeToStart * Car.AVERAGE_CAR_LENGTH,
             gps = GPSEntity(
                 route = car.gps.route.map { route -> route.id },
                 type = car.gps.type
