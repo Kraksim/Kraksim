@@ -23,7 +23,6 @@ class GpsFactory(
 
     private fun calculateRoadLength(starterGateway: Gateway, target: Gateway, state: SimulationState): GPS =
         roadLengthGPS.calculate(starterGateway, target, state)
-
 }
 
 enum class GPSType {

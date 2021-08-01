@@ -11,7 +11,7 @@ import kotlin.random.Random
 @Component
 class DelayGatewayCarGenerator(
     private val gpsFactory: GpsFactory
-): GatewayCarGenerator {
+) : GatewayCarGenerator {
 
     override fun generate(state: SimulationState) {
         state.gateways.values.forEach { gateway: Gateway ->
@@ -76,4 +76,3 @@ class DelayGatewayCarGenerator(
         )
     }
 }
-

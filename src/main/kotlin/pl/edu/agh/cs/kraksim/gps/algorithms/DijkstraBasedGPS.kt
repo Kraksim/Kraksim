@@ -24,7 +24,6 @@ class DijkstraBasedGPS {
         val route = calculateDijkstra(state, source, target, getRoadWeight)
         if (route.isEmpty()) throw IllegalStateException("Target gateway (id=${target.id}) cannot be reached from source (id=${source.id}")
         return GPS(route, gpsType)
-
     }
 
     private fun calculateDijkstra(
