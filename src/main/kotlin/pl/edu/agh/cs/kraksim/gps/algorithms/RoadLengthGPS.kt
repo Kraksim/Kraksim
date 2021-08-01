@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.core.state.Gateway
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
+import pl.edu.agh.cs.kraksim.gps.GPSType
 
 @Component
 class RoadLengthGPS : DijkstraBasedGPS() {

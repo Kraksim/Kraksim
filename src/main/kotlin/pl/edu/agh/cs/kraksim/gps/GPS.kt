@@ -1,10 +1,9 @@
 package pl.edu.agh.cs.kraksim.gps
 
 import pl.edu.agh.cs.kraksim.core.state.Road
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 class GPS(
-    val route: ArrayList<Road> = ArrayList(),
+    val route: ArrayList<Road>,
     val type: GPSType
 ) {
 

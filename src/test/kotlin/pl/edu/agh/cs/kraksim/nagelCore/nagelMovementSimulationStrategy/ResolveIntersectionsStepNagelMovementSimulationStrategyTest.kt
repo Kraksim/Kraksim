@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
+import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 
 internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
 
@@ -40,7 +40,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         val expectedLane = state.getLane(roadId = 0)
         val car = NagelCar(
             velocity = 2,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), newPosition = 3)
         car.distanceLeftToMove = 0

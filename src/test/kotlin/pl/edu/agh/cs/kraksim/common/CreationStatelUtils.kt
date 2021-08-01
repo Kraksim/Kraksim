@@ -127,7 +127,7 @@ class OneLaneNagelStateBuilder(
     G(0) ---> G(1)
  */
 fun getOneRoadSimulationState(
-    roadLength: Int = 18
+    roadLength: Int = 20
 ): NagelSimulationState {
     return OneLaneNagelStateBuilder(IntRange.EMPTY, 0..1)
         .connect(sourceId = 0, destinationId = 1, length = roadLength, roadId = 0)
@@ -138,8 +138,8 @@ fun getOneRoadSimulationState(
     G(1) ---> I(0) ---> G(2)
  */
 fun getTwoRoadConnectedWithIntersectionSimulationState(
-    firstRoadLength: Int = 18,
-    secondRoadLength: Int = 18,
+    firstRoadLength: Int = 20,
+    secondRoadLength: Int = 20,
     trafficLightColor: LightColor = LightColor.GREEN
 ): NagelSimulationState {
 
@@ -164,9 +164,9 @@ fun getTwoRoadConnectedWithIntersectionSimulationState(
               G(3)
  */
 fun getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState(
-    firstRoadLength: Int = 18,
-    secondRoadLength: Int = 18,
-    destinationRoadLength: Int = 18
+    firstRoadLength: Int = 20,
+    secondRoadLength: Int = 20,
+    destinationRoadLength: Int = 20
 ): NagelSimulationState {
 
     val state = OneLaneNagelStateBuilder(0..0, 1..3)

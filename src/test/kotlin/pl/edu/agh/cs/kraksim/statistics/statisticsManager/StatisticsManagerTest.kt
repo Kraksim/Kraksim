@@ -1,14 +1,9 @@
 package pl.edu.agh.cs.kraksim.statistics.statisticsManager
 
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.MockRandomProvider
-import pl.edu.agh.cs.kraksim.common.getLane
-import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
-import pl.edu.agh.cs.kraksim.common.getTwoRoadConnectedWithIntersectionSimulationState
-import pl.edu.agh.cs.kraksim.gps.GPS
+import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
 
 internal class StatisticsManagerTest {
@@ -19,7 +14,7 @@ internal class StatisticsManagerTest {
         val initialVelocity = 6
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
@@ -49,13 +44,13 @@ internal class StatisticsManagerTest {
         val initialVelocity1 = 3
         val car1 = NagelCar(
             velocity = initialVelocity1,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car1.moveToLane(state.getLane(), 4)
         val initialVelocity2 = 6
         val car2 = NagelCar(
             velocity = initialVelocity2,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car2.moveToLane(state.getLane(), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
@@ -85,13 +80,13 @@ internal class StatisticsManagerTest {
         val initialVelocity1 = 3
         val car1 = NagelCar(
             velocity = initialVelocity1,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car1.moveToLane(state.getLane(), 4)
         val initialVelocity2 = 6
         val car2 = NagelCar(
             velocity = initialVelocity2,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car2.moveToLane(state.getLane(), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
@@ -123,13 +118,13 @@ internal class StatisticsManagerTest {
         val initialVelocity1 = 3
         val car1 = NagelCar(
             velocity = initialVelocity1,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car1.moveToLane(state.getLane(0), 0)
         val initialVelocity2 = 6
         val car2 = NagelCar(
             velocity = initialVelocity2,
-            gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = mockGps()
         )
         car2.moveToLane(state.getLane(1), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())

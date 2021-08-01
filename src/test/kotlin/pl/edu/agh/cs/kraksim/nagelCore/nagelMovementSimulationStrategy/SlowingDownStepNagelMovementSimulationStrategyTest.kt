@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
+import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 
 internal class SlowingDownStepNagelMovementSimulationStrategyTest {
@@ -88,8 +88,8 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val initialVelocity = 6
         val expectedVelocity = 6
         val state = getTwoRoadConnectedWithIntersectionSimulationState(
-            firstRoadLength = 18,
-            secondRoadLength = 72
+            firstRoadLength = 20,
+            secondRoadLength = 80
         )
         val car = NagelCar(
             velocity = initialVelocity,
@@ -111,8 +111,8 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val initialVelocity = 6
         val expectedVelocity = 0
         val state = getTwoRoadConnectedWithIntersectionSimulationState(
-            firstRoadLength = 18,
-            secondRoadLength = 72,
+            firstRoadLength = 20,
+            secondRoadLength = 80,
             trafficLightColor = LightColor.RED
         )
         val car = NagelCar(
@@ -135,8 +135,8 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val initialVelocity = 6
         val expectedVelocity = 2
         val state = getTwoRoadConnectedWithIntersectionSimulationState(
-            firstRoadLength = 18,
-            secondRoadLength = 72,
+            firstRoadLength = 20,
+            secondRoadLength = 80,
             trafficLightColor = LightColor.RED
         )
         val car = NagelCar(
@@ -159,7 +159,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val initialVelocity = 1
         val expectedVelocity = 0
         val state = getTwoRoadConnectedWithIntersectionSimulationState(
-            firstRoadLength = 18,
+            firstRoadLength = 20,
         )
         val car1 = NagelCar(
             velocity = initialVelocity,
@@ -186,7 +186,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val initialVelocity = 2
         val expectedVelocity = 1
         val state = getTwoRoadConnectedWithIntersectionSimulationState(
-            firstRoadLength = 18,
+            firstRoadLength = 20,
         )
         val car1 = NagelCar(
             velocity = initialVelocity,
@@ -213,7 +213,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
         val initialVelocity = 4
         val expectedVelocity = 2
         val state = getTwoRoadConnectedWithIntersectionSimulationState(
-            firstRoadLength = 18,
+            firstRoadLength = 20,
         )
         val car1 = NagelCar(
             velocity = initialVelocity,

@@ -2,11 +2,13 @@ package pl.edu.agh.cs.kraksim.nagelCore.state
 
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.Gateway
+import pl.edu.agh.cs.kraksim.generator.Generator
 
 class NagelGateway(
     override val id: Long,
     override val endingRoads: List<NagelRoad>,
     startingRoads: List<NagelRoad>,
+    override var generators: List<Generator>? = null
 ) : NagelRoadNode, Gateway {
 
     override val finishedCars: ArrayList<NagelCar> = ArrayList()

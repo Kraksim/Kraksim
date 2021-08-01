@@ -5,9 +5,8 @@ import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.createListOfCars
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
-import pl.edu.agh.cs.kraksim.gps.GPS
+import pl.edu.agh.cs.kraksim.common.mockGps
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
 class SOTLLightPhaseStrategyTest {
@@ -72,7 +71,7 @@ class SOTLLightPhaseStrategyTest {
         }
         // then
         assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(18)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(20)
     }
 
     @Test
@@ -97,7 +96,7 @@ class SOTLLightPhaseStrategyTest {
 
         // then
         assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(14)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(16)
     }
 
     @Test
@@ -115,7 +114,7 @@ class SOTLLightPhaseStrategyTest {
             strategy.switchLights(state.intersections.values)
         }
         // when
-        repeat(18) {
+        repeat(20) {
             strategy.switchLights(state.intersections.values)
         }
         // then
@@ -131,7 +130,7 @@ class SOTLLightPhaseStrategyTest {
         val intersection = state.intersections[0]!!
         val lane1 = state.getLane()
         val phases = intersection.phases
-        val lastCar = NagelCar(velocity = 3, gps = GPS(type = GPSType.DIJKSTRA_ROAD_LENGTH))
+        val lastCar = NagelCar(velocity = 3, gps = mockGps())
         lastCar.positionRelativeToStart = 17
         lane1.addCar(lastCar)
         strategy.initializeLights(state.intersections.values)

@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.core.state
 import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.RoadId
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
 
 interface SimulationState {
     val id: Long
@@ -14,4 +15,6 @@ interface SimulationState {
 
     val lanes: List<Lane>
     val cars: List<Car>
+
+    val type: StateType
 }

@@ -3,10 +3,9 @@ package pl.edu.agh.cs.kraksim.api.factory
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.api.factory.nagel.NagelSimulationStateFactory
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEntity
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
 
 @Component
 class StateFactory(
@@ -15,9 +14,8 @@ class StateFactory(
     fun toEntity(
         simulationState: SimulationState,
         simulationEntity: SimulationEntity
-    ): SimulationStateEntity = when (simulationState) {
-        is NagelSimulationState -> nagelSimulationStateFactory.toEntity(simulationState, simulationEntity)
-        else -> throw Error("Expected Nagel simulation state")
+    ): SimulationStateEntity = when (simulationState.type) {
+        StateType.NAGEL_SCHRECKENBERG -> nagelSimulationStateFactory.toEntity(simulationState, simulationEntity)
     }
 
     fun from(

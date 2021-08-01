@@ -1,27 +1,57 @@
-package pl.edu.agh.cs.kraksim
+package pl.edu.agh.cs.kraksim.api
 
-import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Component
-import pl.edu.agh.cs.kraksim.api.Service
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
+import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
+import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
+import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.MapRepository
-import pl.edu.agh.cs.kraksim.repository.RoadRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
 import pl.edu.agh.cs.kraksim.repository.entities.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 
-@Component
-class ApplicationStartup(
-    val roadLengthGPS: RoadLengthGPS,
+@Testcontainers
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+)
+@EnableAutoConfiguration
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+internal class ServiceTest @Autowired constructor(
     val simprep: SimulationRepository,
+    val roadLengthGPS: RoadLengthGPS,
     val service: Service,
     val mapRepository: MapRepository,
-    val roadRepository: RoadRepository
-) : CommandLineRunner {
+    val carRepository: CarRepository
+) {
 
-    override fun run(vararg args: String?) {
-//        service.simulateStep(6, 2)
+    //todo zjebane to jest cos niby przechodzi ale sie nie zatrzymuje ten test, ale basic idea containerów testowych
+    // jest wjebana, pewnie można tro ulepszyc czy coś, moze na stacku zapostuje potem
+    // skurwione te testy troche ugh
 
+    companion object {
+        @Container
+        private val postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:latest")
+
+        @DynamicPropertySource
+        @JvmStatic
+        fun registerDynamicProperties(registry: DynamicPropertyRegistry) {
+            registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl)
+            registry.add("spring.datasource.username", postgreSQLContainer::getUsername)
+            registry.add("spring.datasource.password", postgreSQLContainer::getPassword)
+        }
+    }
+
+    @Test
+    fun integrationTestDemo() {
         var lane = LaneEntity(
             startingPoint = 0,
             endingPoint = 400,
@@ -104,5 +134,10 @@ class ApplicationStartup(
         simulationEntity = simprep.save(simulationEntity)
 
         service.simulateStep(simulationEntity.id, 1)
+
+        val count = carRepository.count()
+        assertThat(count).isEqualTo(4)
+
     }
+
 }

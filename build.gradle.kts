@@ -33,6 +33,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-configuration-processor")
     implementation("de.vandermeer:asciitable:0.3.2")
+    testImplementation("org.testcontainers:postgresql:1.16.0")
+    testImplementation("org.testcontainers:junit-jupiter:1.16.0")
 }
 
 tasks {

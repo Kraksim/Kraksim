@@ -4,6 +4,7 @@ import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
 
 class NagelSimulationState(
     override val id: Long,
@@ -25,4 +26,5 @@ class NagelSimulationState(
     override fun toString(): String {
         return "NagelSimulationState(\n\tgateways=$gateways,\n\troads=$roads,\n\tintersections=$intersections)"
     }
+    override val type: StateType = StateType.NAGEL_SCHRECKENBERG
 }

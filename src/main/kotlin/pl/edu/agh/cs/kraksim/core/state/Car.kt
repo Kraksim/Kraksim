@@ -8,6 +8,8 @@ interface Car {
     var positionRelativeToStart: Int
     val gps: GPS
 
+    fun moveToLane(lane: Lane?, newPosition: Int = 0)
+
     companion object {
         const val AVERAGE_CAR_LENGTH = 5
     }

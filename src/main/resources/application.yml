@@ -5,7 +5,7 @@ spring:
     password: postgres
   jpa:
     properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update
 
 app:
   version: ${version}

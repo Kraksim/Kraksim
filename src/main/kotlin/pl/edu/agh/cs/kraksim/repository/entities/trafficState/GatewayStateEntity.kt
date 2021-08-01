@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.repository.entities.trafficState
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.GatewayId
+import pl.edu.agh.cs.kraksim.gps.GPSType
 import javax.persistence.*
 
 @Entity
@@ -30,8 +31,4 @@ class GeneratorEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
-}
-
-enum class GPSType {
-    DIJKSTRA_ROAD_LENGTH
 }
