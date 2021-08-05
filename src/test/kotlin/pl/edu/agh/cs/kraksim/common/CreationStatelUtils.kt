@@ -16,7 +16,7 @@ class OneLaneNagelStateBuilder(
     private val directionRelations: Map<Long, ArrayList<TurningLaneDirection>>
 
     init {
-        require(intersectionsIds.intersect(gatewaysIds).isNotEmpty()) {
+        require(intersectionsIds.intersect(gatewaysIds).isEmpty()) {
             "For easiness of implementation ids of intersections and gateways should be different"
         }
 
