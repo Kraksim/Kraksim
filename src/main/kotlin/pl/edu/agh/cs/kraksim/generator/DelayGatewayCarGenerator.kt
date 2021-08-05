@@ -33,7 +33,7 @@ class DelayGatewayCarGenerator(
     }
 
     private fun Gateway.getGeneratorsToReleaseNow() =
-        generators?.filter { it.releaseDelay == it.lastCarReleasedTurnsAgo }
+        generators?.filter { it.releaseDelay == it.lastCarReleasedTurnsAgo }?.shuffled()
 
     private fun Gateway.releaseNewCarsIfSpace(
         releaseGenerators: List<Generator>?,

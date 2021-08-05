@@ -25,10 +25,10 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 )
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-internal class ServiceTest @Autowired constructor(
+internal class SimulationServiceTest @Autowired constructor(
     val simprep: SimulationRepository,
     val roadLengthGPS: RoadLengthGPS,
-    val service: Service,
+    val simulationService: SimulationService,
     val mapRepository: MapRepository,
     val carRepository: CarRepository
 ) {
@@ -133,7 +133,7 @@ internal class ServiceTest @Autowired constructor(
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simprep.save(simulationEntity)
 
-        service.simulateStep(simulationEntity.id, 1)
+        simulationService.simulateStep(simulationEntity.id, 1)
 
         val count = carRepository.count()
         assertThat(count).isEqualTo(4)

@@ -8,7 +8,7 @@ import pl.edu.agh.cs.kraksim.api.factory.StateFactory
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
 
 @Service
-class Service(
+class SimulationService(
     val repository: SimulationRepository,
     val stateFactory: StateFactory,
     val movementSimulationStrategyFactory: MovementSimulationStrategyFactory,
