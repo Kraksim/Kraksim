@@ -1,0 +1,64 @@
+{
+  "id": 0,
+  "type": "map/no-map",
+  "roadNodes": [
+    {
+      "id": 0,
+      "type": "gateway",
+      "x": 21,
+      "y": 37,
+      "endingRoadIds": [],
+      "startingRoads": [0]
+    },
+    {
+      "id": 1,
+      "type": "intersection",
+      "x": 31,
+      "y": 37,
+      "endingRoadIds": [0],
+      "startingRoads": [1],
+      "turnDirections": [
+        {
+          "sourceLaneId": 0,
+          "destinationRoadId": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "gateway",
+      "x": 41,
+      "y": 37,
+      "endingRoadIds": [1],
+      "startingRoads": []
+    }
+  ],
+  "roads": [
+    {
+      "id": 0,
+      "length": 10,
+      "lanes": [
+        {
+          //idki dla laneów rózne wszystkie
+          "id": 0,
+          "startingPoint": 0,
+          "endingPoint": 10,
+          "indexFromLeft": 0
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "length": 10,
+      "lanes": [
+        {
+          //idki dla laneów rózne wszystkie
+          "id": 1,
+          "startingPoint": 0,
+          "endingPoint": 10,
+          "indexFromLeft": 0
+        }
+      ]
+    }
+  ]
+}

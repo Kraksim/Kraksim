@@ -1,11 +1,14 @@
 package pl.edu.agh.cs.kraksim.common.random
 
-import org.springframework.stereotype.Component
+class TrueRandomProvider(
+    private val slowDownProbability: Double
+) : RandomProvider {
 
-@Component
-class TrueRandomProvider : RandomProvider {
+    init {
+        require(slowDownProbability in 0.0..1.0) { "slowDownProbability should be between 0-1, but is $slowDownProbability" }
+    }
 
-    override fun getBoolean(trueProbability: Double): Boolean {
-        return Math.random() < trueProbability
+    override fun drawWhetherShouldSlowDown(): Boolean {
+        return Math.random() < slowDownProbability
     }
 }

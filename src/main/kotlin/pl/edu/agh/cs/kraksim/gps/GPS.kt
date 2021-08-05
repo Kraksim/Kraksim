@@ -2,9 +2,17 @@ package pl.edu.agh.cs.kraksim.gps
 
 import pl.edu.agh.cs.kraksim.core.state.Road
 
-interface GPS {
-    val route: ArrayList<Road>
+class GPS(
+    val route: ArrayList<Road>,
+    val type: GPSType
+) {
 
-    fun getNext(): Road
-    fun popNext(): Road
+    constructor(vararg route: Road, type: GPSType) : this(ArrayList(route.map { it }), type)
+    constructor(route: List<Road>, type: GPSType) : this(ArrayList(route), type)
+
+    fun getNext(): Road =
+        route.first()
+
+    fun popNext(): Road =
+        route.removeAt(0)
 }

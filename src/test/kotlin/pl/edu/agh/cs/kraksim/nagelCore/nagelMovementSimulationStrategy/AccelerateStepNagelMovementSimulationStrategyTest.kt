@@ -2,11 +2,10 @@ package pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.MockRandomProvider
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
-import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
-import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
+import pl.edu.agh.cs.kraksim.common.mockGps
+import pl.edu.agh.cs.kraksim.common.testNagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 
 internal class AccelerateStepNagelMovementSimulationStrategyTest {
@@ -19,10 +18,10 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = MockRoadGps()
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), 0)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.acceleration(state)
@@ -38,10 +37,10 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = MockRoadGps()
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), 0)
-        val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
+        val strategy = testNagelMovementSimulationStrategy()
 
         // when
         strategy.acceleration(state)

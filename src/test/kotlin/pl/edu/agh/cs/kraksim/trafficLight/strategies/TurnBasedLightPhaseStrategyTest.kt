@@ -23,10 +23,10 @@ internal class TurnBasedLightPhaseStrategyTest {
         strategy.initializeLights(state.intersections.values)
 
         // then
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(5)
-        assertThat(phases[lane1]?.state).isEqualTo(GREEN)
-        assertThat(phases[lane2]?.phaseTime).isEqualTo(5)
-        assertThat(phases[lane2]?.state).isEqualTo(RED)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(5)
+        assertThat(phases[lane1.id]?.state).isEqualTo(GREEN)
+        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(5)
+        assertThat(phases[lane2.id]?.state).isEqualTo(RED)
     }
 
     @Test
@@ -44,10 +44,10 @@ internal class TurnBasedLightPhaseStrategyTest {
         strategy.switchLights(state.intersections.values)
 
         // then
-        assertThat(phases[lane1]?.phaseTime).isEqualTo(4)
-        assertThat(phases[lane1]?.state).isEqualTo(GREEN)
-        assertThat(phases[lane2]?.phaseTime).isEqualTo(4)
-        assertThat(phases[lane2]?.state).isEqualTo(RED)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(4)
+        assertThat(phases[lane1.id]?.state).isEqualTo(GREEN)
+        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(4)
+        assertThat(phases[lane2.id]?.state).isEqualTo(RED)
     }
 
     @Test
@@ -59,8 +59,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val lane1 = state.getLane()
         val lane2 = state.getLane(roadId = 1)
         val phases = intersection.phases
-        val lane1LightPhase = phases[lane1]
-        val lane2LightPhase = phases[lane2]
+        val lane1LightPhase = phases[lane1.id]
+        val lane2LightPhase = phases[lane2.id]
         lane1LightPhase?.phaseTime = 1
         lane1LightPhase?.state = GREEN
         lane2LightPhase?.phaseTime = 1

@@ -1,0 +1,78 @@
+{
+  "id": 0,
+  "turn": 0,
+  "mapId": 0,
+  "movementSimulationStrategy": {
+    "type": "NaSch",
+    "randomProvider": "true",
+    "slowDownProbability": 0.2137,
+    "maxVelocity": 6
+  },
+  "expectedVelocity": [
+    {
+      "roadId": 0,
+      "velocity": 4
+    }
+  ],
+  "lightPhaseStrategies": [
+    {
+      "algorithm": "turn-based",
+      "turnLength": 5,
+      "intersectionIds": [1]
+    }
+  ],
+  "cars": [
+    {
+      "id": 0,
+      "velocity": 0,
+      "currentLaneId": 0,
+      "positionRelativeToStart": 0,
+      "gps": {
+        "route": [1],
+        "type": "dijkstra-road-length"
+      }
+    }
+  ],
+  "trafficLights": [
+    {
+      "intersectionId": 1,
+      "phases": [
+        {
+          "laneId": 0,
+          "phaseTime": 2,
+          "state": "red"
+        }
+      ]
+    }
+  ],
+  "gatewaysStates": [
+    {
+      "gatewayId": 0,
+      "generators": [ // TODO
+        {
+          "carsToRelease": 20,
+          "releaseDelay": 2,
+          "targetGatewayId": 2,
+          "gpsType": "dijkstra-road-length"
+        }
+      ],
+      "collectedCars": []
+    },
+    {
+      "gatewayId": 2,
+      "generators": [],
+      "collectedCars": [
+        {
+          "id": 21,
+          "velocity": 4,
+          "currentLaneId": null,
+          "positionRelativeToStart": null,
+          "gps": {
+            "route": [],
+            "type": "dijkstra-road-length"
+          }
+        }
+      ]
+    }
+  ]
+}

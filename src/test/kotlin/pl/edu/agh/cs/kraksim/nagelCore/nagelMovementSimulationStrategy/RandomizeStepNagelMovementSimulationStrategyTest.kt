@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.MockRandomProvider
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
-import pl.edu.agh.cs.kraksim.common.gps.MockRoadGps
+import pl.edu.agh.cs.kraksim.common.mockGps
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
 
@@ -19,7 +19,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = MockRoadGps()
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = true))
@@ -39,7 +39,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = MockRoadGps()
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = false))
@@ -59,7 +59,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
         val state = getOneRoadSimulationState()
         val car = NagelCar(
             velocity = initialVelocity,
-            gps = MockRoadGps()
+            gps = mockGps()
         )
         car.moveToLane(state.getLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = true))
