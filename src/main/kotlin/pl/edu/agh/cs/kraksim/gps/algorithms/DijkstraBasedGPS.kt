@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.gps.algorithms
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.addToFront
 import pl.edu.agh.cs.kraksim.common.popMinBy
+import pl.edu.agh.cs.kraksim.common.toArrayList
 import pl.edu.agh.cs.kraksim.core.state.Gateway
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.Road
@@ -32,12 +33,26 @@ class DijkstraBasedGPS {
         target: Gateway,
         getRoadWeight: (Road) -> Double
     ): ArrayList<Road> {
+        val directRouteToTarget = checkIfTargetIsAdjacentToSource(source, target)
+        if (directRouteToTarget.isNotEmpty()) {
+            return directRouteToTarget
+        }
+
         val (notReachedNodes, weightFromSource, pathRecovery) = initialize(state, source, getRoadWeight)
 
         val fastestRoadLeadingToTarget =
             calculateShortestPath(notReachedNodes, weightFromSource, pathRecovery, target, getRoadWeight)
         return parseRecoveryToRoute(fastestRoadLeadingToTarget, pathRecovery)
     }
+
+    /**
+     * Due to modification that Dijkstra is calculated from roads and not nodes
+     * in case of target being directly reachable by one road from source path recovery yields no results
+     */
+    private fun checkIfTargetIsAdjacentToSource(
+        source: Gateway,
+        target: Gateway
+    ) = source.startingRoads.values.filter { it.end == target }.toArrayList()
 
     private fun initialize(
         state: SimulationState,

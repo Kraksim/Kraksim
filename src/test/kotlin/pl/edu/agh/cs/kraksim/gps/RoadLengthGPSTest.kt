@@ -4,9 +4,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
 import pl.edu.agh.cs.kraksim.common.OneLaneNagelStateBuilder
 import pl.edu.agh.cs.kraksim.common.gateway
+import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.road
 import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
 
@@ -16,7 +17,7 @@ import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
  * arrows are directional roads connecting them, next to each one is a pair of numbers `m, o`,
  * m is id and o is length of that road.
  */
-@WebMvcTest(RoadLengthGPS::class)
+@SpringBootTest(classes = [RoadLengthGPS::class])
 class RoadLengthGPSTest @Autowired constructor(
     private val algorithm: RoadLengthGPS
 ) {
@@ -227,5 +228,22 @@ class RoadLengthGPSTest @Autowired constructor(
         // then
         assertThatThrownBy(gpsLambda)
             .hasMessage("GPS route target and source cannot be the same gateway (id=10")
+    }
+
+    /*
+           0,20
+    G(10) -----> G(11)
+ */
+    @Test
+    fun `Given target one road from source, calculate corectly`() {
+        // given
+        val state = getOneRoadSimulationState()
+        val expectedRoute = listOf(state.road(0))
+
+        // when
+        val gps = algorithm.calculate(state.gateway(0), state.gateway(1), state)
+
+        // then
+        assertThat(gps.route).isEqualTo(expectedRoute)
     }
 }

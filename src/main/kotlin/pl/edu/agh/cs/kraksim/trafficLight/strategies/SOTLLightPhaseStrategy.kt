@@ -2,7 +2,9 @@ package pl.edu.agh.cs.kraksim.trafficLight.strategies
 
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.core.state.Intersection
+import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseStrategy
+import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.GREEN
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.RED
 import kotlin.math.max
@@ -45,27 +47,36 @@ class SOTLLightPhaseStrategy(
     }
 
     private fun switchLights(intersection: Intersection) {
-        intersection.phases.forEach { (laneId: LaneId /* = kotlin.Long */, phase) ->
-            when (phase.state) {
-                RED -> {
-                    val lane = intersection.endingRoads.flatMap { it.lanes }.find { it.id == laneId }!! // todo properly fix
-                    val duration = phase.phaseTime
-                    val carsCount = lane.cars.count()
-                    if (duration * carsCount >= phiFactor && minPhaseLength <= duration) {
-                        phase.state = GREEN
-                        // calculate green light length
-                        val lastCarPosition = lane.cars
-                            .minByOrNull { it.positionRelativeToStart }?.positionRelativeToStart ?: 0
-                        val lengthToEnd = lane.physicalLength - lastCarPosition
-                        // all cars should go through this green light, so we can limit this by 1 * length to beat, although this might be too big value, so //TODO think about this
-                        phase.phaseTime = max(minPhaseLength, lengthToEnd)
-                    }
+        val lanes = intersection.endingRoads.flatMap { it.lanes }.associateBy { it.id }
+
+        intersection.phases.forEach { (laneId: LaneId, phase) ->
+            switchLight(phase, lanes[laneId])
+        }
+    }
+
+    private fun switchLight(
+        phase: TrafficLightPhase,
+        lane: Lane?
+    ) {
+        requireNotNull(lane) { "Invalid road setup, expected not null road" }
+        when (phase.state) {
+            RED -> {
+                val duration = phase.phaseTime
+                val carsCount = lane.cars.count()
+                if (duration * carsCount >= phiFactor && minPhaseLength <= duration) {
+                    phase.state = GREEN
+                    // calculate green light length
+                    val lastCarPosition = lane.cars
+                        .minByOrNull { it.positionRelativeToStart }?.positionRelativeToStart ?: 0
+                    val lengthToEnd = lane.physicalLength - lastCarPosition
+                    // all cars should go through this green light, so we can limit this by 1 * length to beat, although this might be too big value, so //TODO think about this
+                    phase.phaseTime = max(minPhaseLength, lengthToEnd)
                 }
-                GREEN -> {
-                    if (phase.phaseTime == 0) {
-                        phase.state = RED
-                        phase.phaseTime = 0
-                    }
+            }
+            GREEN -> {
+                if (phase.phaseTime == 0) {
+                    phase.state = RED
+                    phase.phaseTime = 0
                 }
             }
         }

@@ -13,7 +13,7 @@ class GatewayStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     var collectedCars: List<CarEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
-    var generators: List<GeneratorEntity>
+    var generators: List<GeneratorEntity>?
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,8 +22,9 @@ class GatewayStateEntity(
 
 @Entity
 class GeneratorEntity(
-    var carsToRelease: Int,
+    var lastCarReleasedTurnsAgo: Int,
     var releaseDelay: Int,
+    var carsToRelease: Int,
     var targetGatewayId: GatewayId,
     var gpsType: GPSType
 
