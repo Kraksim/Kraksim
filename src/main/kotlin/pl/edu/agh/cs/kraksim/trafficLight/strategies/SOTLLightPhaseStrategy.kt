@@ -47,7 +47,7 @@ class SOTLLightPhaseStrategy(
     }
 
     private fun switchLights(intersection: Intersection) {
-        val lanes = intersection.endingRoads.flatMap { it.lanes }.associateBy { it.id }
+        val lanes = intersection.endingRoads.entries.flatMap { it.value.lanes }.associateBy { it.id }
 
         intersection.phases.forEach { (laneId: LaneId, phase) ->
             switchLight(phase, lanes[laneId])

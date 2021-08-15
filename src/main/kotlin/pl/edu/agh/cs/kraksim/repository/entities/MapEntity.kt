@@ -30,7 +30,8 @@ class RoadNodeEntity(
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
     var startingRoads: List<RoadEntity>,
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
     var turnDirections: List<TurnDirectionEntity>,
 ) {
     @Id
@@ -62,8 +63,10 @@ class LaneEntity(
 
 @Entity
 class TurnDirectionEntity(
-    var sourceLaneId: Long,
-    var destinationRoadId: Long
+        @ManyToOne
+        var sourceLane: LaneEntity,
+        @ManyToOne
+        var destinationRoad: RoadEntity
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

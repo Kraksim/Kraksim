@@ -8,7 +8,7 @@ import pl.edu.agh.cs.kraksim.repository.entities.RoadEntity
 import pl.edu.agh.cs.kraksim.repository.entities.RoadNodeEntity
 
 class NagelRoadsAssert(
-        val roads: List<NagelRoad>
+        private val roads: List<NagelRoad>
 ) {
     fun assertPhysicalLength(entity: RoadEntity): NagelRoadsAssert{
         val road = roads.find { it.id == entity.id }
@@ -18,8 +18,8 @@ class NagelRoadsAssert(
 
     fun assertEnd(end: RoadNodeEntity, roadId: Long): NagelRoadsAssert{
         val road = roads.find { it.id == roadId }
-        assertThat(road?.end?.id).isEqualTo(end.id)
-        assertThat(road?.end?.id).isIn(end.endingRoads.map { it.id })
+        assertThat(road!!.end.id).isEqualTo(end.id)
+        assertThat(road.id).isIn(end.endingRoads.map { it.id })
         return this
     }
 

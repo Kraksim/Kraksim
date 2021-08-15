@@ -1,9 +1,8 @@
 package pl.edu.agh.cs.kraksim.api.factory.nagel
 
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -14,8 +13,9 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadNodeAssert
+import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelIntersectionsAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadsAssert
-import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.repository.MapRepository
 import pl.edu.agh.cs.kraksim.repository.entities.*
 
@@ -47,45 +47,72 @@ class NagelMapFactoryTest @Autowired constructor(
     fun clearAndCreateMap(){
         try {
             mapRepository.deleteById(1)
-        } catch (e: Error){
+        } catch (e: Exception){
 
         }
-        val lane = LaneEntity(
+        val lanes = (0 until 3).toList().map { LaneEntity(
                 startingPoint = 0,
                 endingPoint = 400,
-                indexFromLeft = 0
-        )
-        val road = RoadEntity(
-                length = 400,
-                lanes = listOf(lane)
-        )
+                indexFromLeft = it
+        ) }
+
+        val roads = (0 until 3).toList().map { RoadEntity(
+                    length = 400,
+                    lanes = listOf(lanes[it])
+            )
+        }
+
         val mapEntity = MapEntity(
                 type = MapType.MAP,
                 roadNodes = listOf(
                         RoadNodeEntity(
                                 type = RoadNodeType.GATEWAY,
-                                position = PositionEntity(1.0, 1.0),
+                                position = PositionEntity(21.0, 21.0),
                                 endingRoads = emptyList(),
-                                startingRoads = listOf(road),
+                                startingRoads = listOf(roads[0]),
+                                turnDirections = emptyList()
+                        ),
+                        RoadNodeEntity(
+                                type = RoadNodeType.INTERSECTION,
+                                position = PositionEntity(41.0, 21.0),
+                                endingRoads = listOf(roads[0]),
+                                startingRoads = listOf(roads[1], roads[2]),
+                                turnDirections = listOf(
+                                        TurnDirectionEntity(
+                                                sourceLane = lanes[0],
+                                                destinationRoad = roads[1]
+                                        ),
+                                        TurnDirectionEntity(
+                                                sourceLane = lanes[0],
+                                                destinationRoad = roads[2]
+                                        )
+                                )
+                        ),
+                        RoadNodeEntity(
+                                type = RoadNodeType.GATEWAY,
+                                position = PositionEntity(41.0, 41.0),
+                                endingRoads = listOf(roads[1]),
+                                startingRoads = emptyList(),
                                 turnDirections = emptyList()
                         ),
                         RoadNodeEntity(
                                 type = RoadNodeType.GATEWAY,
                                 position = PositionEntity(21.0, 1.0),
-                                endingRoads = listOf(road),
+                                endingRoads = listOf(roads[2]),
                                 startingRoads = emptyList(),
                                 turnDirections = emptyList()
-                        )
+                        ),
                 ),
-                roads = listOf(road)
+                roads = roads
         )
         mapRepository.save(mapEntity)
     }
 
     @TestFactory
-    fun `Given MapEntity, the factory parses it correctly to Lists of NagelRoads, NagelIntersections and NagelGateways`(){
+    fun `Given MapEntity, the factory parses it correctly to Lists of NagelRoads, NagelIntersections and NagelGateways`(): List<DynamicTest>{
         val mapEntity = mapRepository.getById(1)
         val ( roads, intersections, gateways ) = mapFactory.from(mapEntity)
+        return listOf(
         dynamicTest("Given list of roads, check if they are parsed correctly"){
             //given
             val roadEntity = mapEntity.roads.first()
@@ -98,9 +125,23 @@ class NagelMapFactoryTest @Autowired constructor(
                     .assertPhysicalLength(roadEntity)
                     .assertLane(laneEntity, roadEntity.id)
                     .assertEnd(endNode, roadEntity.id)
-        }
-        dynamicTest("Given list of intersections, check if they are parsed correctly"){
+        },
+        dynamicTest("Given list of gateways, check if they are parsed correctly"){
+            //given
+            val gatewayEntity = mapEntity.roadNodes.first()
+            //when
 
-        }
+            //then
+            NagelRoadNodeAssert(gateways)
+                    .assertEndingAndStartingRoads(gatewayEntity)
+        },
+        dynamicTest("Given list of intersections, check if they are parsed correctly"){
+            //given
+            val intersectionEntity = mapEntity.roadNodes[1]
+            NagelRoadNodeAssert(intersections)
+                    .assertEndingAndStartingRoads(intersectionEntity)
+            NagelIntersectionsAssert(intersections)
+                    .assertTurningDirections(intersectionEntity.id, intersectionEntity.turnDirections)
+        })
     }
 }
