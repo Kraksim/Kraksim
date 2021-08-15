@@ -4,6 +4,7 @@ import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 
@@ -126,15 +127,18 @@ fun <T : SimulationState> T.putCar(
     initialVelocity: Int,
     roadId: RoadId,
     laneId: LaneId = 0,
-    gps: GPS = mockGps()
+    gps: GPS = mockGps(),
+    type: StateType = StateType.NAGEL_SCHRECKENBERG
 ): T {
     val road = requireNotNull(roads[roadId])
     val lane = requireNotNull(road.lanes.find { it.id == laneId })
 
-    val car = NagelCar(
-        velocity = initialVelocity,
-        gps = gps
-    )
+    val car = when (type) {
+        StateType.NAGEL_SCHRECKENBERG -> NagelCar(
+            velocity = initialVelocity,
+            gps = gps
+        )
+    }
     car.moveToLane(lane, 0)
     return this
 }
