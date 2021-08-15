@@ -13,7 +13,7 @@ class GatewayStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     var collectedCars: List<CarEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
-    var generators: List<GeneratorEntity>?
+    var generators: List<GeneratorEntity>
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

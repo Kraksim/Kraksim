@@ -31,16 +31,16 @@ class DelayGatewayCarGenerator(
     }
 
     private fun Gateway.removeEmptyGenerators() {
-        generators = generators?.filter { it.carsToRelease != 0 }
+        generators = generators.filter { it.carsToRelease != 0 }
     }
 
     private fun Gateway.getGeneratorsToReleaseNow() =
-        generators?.filter { it.releaseDelay <= it.lastCarReleasedTurnsAgo }?.shuffled()
+        generators.filter { it.releaseDelay <= it.lastCarReleasedTurnsAgo }.shuffled()
 
     private fun Gateway.releaseNewCarsIfSpace(
-        releaseGenerators: List<Generator>?,
+        releaseGenerators: List<Generator>,
         state: SimulationState
-    ) = releaseGenerators?.mapNotNull { generator: Generator ->
+    ) = releaseGenerators.mapNotNull { generator: Generator ->
         val gps = gpsFactory.from(this, generator, state)
         val lane = getRandomLaneToStartFrom(gps)
 
@@ -51,10 +51,10 @@ class DelayGatewayCarGenerator(
         } else null
     }
 
-    private fun Gateway.increaseTurnData(generatorsThatReleased: List<Generator>?) {
-        generators?.forEach { it.lastCarReleasedTurnsAgo++ }
+    private fun Gateway.increaseTurnData(generatorsThatReleased: List<Generator>) {
+        generators.forEach { it.lastCarReleasedTurnsAgo++ }
 
-        generatorsThatReleased?.forEach {
+        generatorsThatReleased.forEach {
             it.carsToRelease--
             it.lastCarReleasedTurnsAgo = 0
         }

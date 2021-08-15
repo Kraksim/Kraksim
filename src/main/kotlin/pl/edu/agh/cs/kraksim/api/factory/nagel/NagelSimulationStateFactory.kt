@@ -31,7 +31,7 @@ class NagelSimulationStateFactory(
                 GatewayStateEntity(
                     gatewayId = id,
                     collectedCars = gateway.finishedCars.map { carToCarEntity(it) },
-                    generators = gateway.generators?.map { generator ->
+                    generators = gateway.generators.map { generator ->
                         GeneratorEntity(
                             generator.lastCarReleasedTurnsAgo,
                             generator.releaseDelay,
@@ -90,7 +90,7 @@ class NagelSimulationStateFactory(
         it.collectedCars.map { createCar(it) }
             .forEach { gateway.addFinishedCar(it) }
 
-        gateway.generators = it.generators?.map { generatorEntity ->
+        gateway.generators = it.generators.map { generatorEntity ->
             Generator(
                 generatorEntity.lastCarReleasedTurnsAgo,
                 generatorEntity.releaseDelay,

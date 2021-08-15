@@ -130,8 +130,8 @@ internal class DelayGatewayCarGeneratorTest {
             .assertGpsRouteIsEmpty()
             .assertGpsType(GPSType.DIJKSTRA_ROAD_LENGTH)
 
-        assertThat(gateway.generators?.size).isEqualTo(1)
-        assertThat(gateway.generators!![0]).isEqualTo(
+        assertThat(gateway.generators.size).isEqualTo(1)
+        assertThat(gateway.generators[0]).isEqualTo(
             Generator(
                 lastCarReleasedTurnsAgo = 1,
                 releaseDelay = 0,
