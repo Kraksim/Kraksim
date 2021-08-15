@@ -45,3 +45,7 @@ inline fun <reified FIRST : T, reified SECOND : T, T> Iterable<T>.partitionByTyp
     }
     return Triple(first, second, rest)
 }
+
+fun <T> Collection<T>.toArrayList(): ArrayList<T> {
+    return ArrayList(this)
+}

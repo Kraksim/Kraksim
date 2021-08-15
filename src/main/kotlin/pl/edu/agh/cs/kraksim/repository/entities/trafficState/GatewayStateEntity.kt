@@ -22,8 +22,9 @@ class GatewayStateEntity(
 
 @Entity
 class GeneratorEntity(
-    var carsToRelease: Int,
+    var lastCarReleasedTurnsAgo: Int,
     var releaseDelay: Int,
+    var carsToRelease: Int,
     var targetGatewayId: GatewayId,
     var gpsType: GPSType
 

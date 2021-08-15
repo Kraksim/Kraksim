@@ -1,6 +1,7 @@
 package pl.edu.agh.cs.kraksim.generator
 
 import org.springframework.stereotype.Component
+import pl.edu.agh.cs.kraksim.common.nextPositiveLong
 import pl.edu.agh.cs.kraksim.core.state.*
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.gps.GpsFactory
@@ -20,39 +21,40 @@ class DelayGatewayCarGenerator(
     }
 
     private fun Gateway.generateCars(state: SimulationState) {
-        removeEmptyGenerators()
+        removeEmptyGenerators() // to be sure that e.g. inserted by user data doesnt contain 0
 
         val releaseGenerators = getGeneratorsToReleaseNow()
         val generatorsThatReleased = releaseNewCarsIfSpace(releaseGenerators, state)
 
         increaseTurnData(generatorsThatReleased)
+        removeEmptyGenerators()
     }
 
     private fun Gateway.removeEmptyGenerators() {
-        generators = generators?.filter { it.carsToRelease != 0 }
+        generators = generators.filter { it.carsToRelease != 0 }
     }
 
     private fun Gateway.getGeneratorsToReleaseNow() =
-        generators?.filter { it.releaseDelay == it.lastCarReleasedTurnsAgo }?.shuffled()
+        generators.filter { it.releaseDelay <= it.lastCarReleasedTurnsAgo }.shuffled()
 
     private fun Gateway.releaseNewCarsIfSpace(
-        releaseGenerators: List<Generator>?,
+        releaseGenerators: List<Generator>,
         state: SimulationState
-    ) = releaseGenerators?.mapNotNull { generator: Generator ->
+    ) = releaseGenerators.mapNotNull { generator: Generator ->
         val gps = gpsFactory.from(this, generator, state)
-        val car: Car = generateCar(state.type, gps)
         val lane = getRandomLaneToStartFrom(gps)
 
         return@mapNotNull if (lane != null) {
+            val car: Car = generateCar(state.type, gps)
             car.moveToLane(lane)
             generator
         } else null
     }
 
-    private fun Gateway.increaseTurnData(generatorsThatReleased: List<Generator>?) {
-        generators?.forEach { it.lastCarReleasedTurnsAgo++ }
+    private fun Gateway.increaseTurnData(generatorsThatReleased: List<Generator>) {
+        generators.forEach { it.lastCarReleasedTurnsAgo++ }
 
-        generatorsThatReleased?.forEach {
+        generatorsThatReleased.forEach {
             it.carsToRelease--
             it.lastCarReleasedTurnsAgo = 0
         }
@@ -69,10 +71,9 @@ class DelayGatewayCarGenerator(
 
     private fun generateNagelCar(gps: GPS): NagelCar {
         return NagelCar(
-            id = Random.nextLong(),
+            id = Random.nextPositiveLong(),
             velocity = 0, // todo moze jakies losowanko z jaka predkoscia wjezdza?
             gps = gps
-
         )
     }
 }

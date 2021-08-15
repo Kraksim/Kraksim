@@ -7,6 +7,7 @@ import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.generator.Generator
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
 import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
@@ -30,7 +31,15 @@ class NagelSimulationStateFactory(
                 GatewayStateEntity(
                     gatewayId = id,
                     collectedCars = gateway.finishedCars.map { carToCarEntity(it) },
-                    generators = emptyList() // todo generatory
+                    generators = gateway.generators.map { generator ->
+                        GeneratorEntity(
+                            generator.lastCarReleasedTurnsAgo,
+                            generator.releaseDelay,
+                            generator.carsToRelease,
+                            generator.targetGatewayId,
+                            generator.gpsType
+                        )
+                    }
                 )
             },
             trafficLights = state.intersections.map { (intersectionId, intersection) ->
@@ -80,6 +89,17 @@ class NagelSimulationStateFactory(
 
         it.collectedCars.map { createCar(it) }
             .forEach { gateway.addFinishedCar(it) }
+
+        gateway.generators = it.generators.map { generatorEntity ->
+            Generator(
+                generatorEntity.lastCarReleasedTurnsAgo,
+                generatorEntity.releaseDelay,
+                generatorEntity.carsToRelease,
+                generatorEntity.targetGatewayId,
+                generatorEntity.gpsType
+
+            )
+        }
     }
 
     private fun insertTrafficLightState(it: TrafficLightEntity, intersections: Map<IntersectionId, NagelIntersection>) {

@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.generator
 import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.gps.GPSType
 
-class Generator(
+data class Generator(
     /**
      * Value how many turns ago car was released
      */
