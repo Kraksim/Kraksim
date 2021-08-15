@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
 import pl.edu.agh.cs.kraksim.common.OneLaneNagelStateBuilder
 import pl.edu.agh.cs.kraksim.common.gateway
 import pl.edu.agh.cs.kraksim.common.road
@@ -16,7 +17,7 @@ import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
  * arrows are directional roads connecting them, next to each one is a pair of numbers `m, o`,
  * m is id and o is length of that road.
  */
-@WebMvcTest(RoadLengthGPS::class)
+@SpringBootTest(classes = [RoadLengthGPS::class])
 class RoadLengthGPSTest @Autowired constructor(
     private val algorithm: RoadLengthGPS
 ) {
