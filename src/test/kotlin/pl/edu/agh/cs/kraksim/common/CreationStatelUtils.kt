@@ -1,10 +1,10 @@
 package pl.edu.agh.cs.kraksim.common
 
 import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelIntersection
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelRoad
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
+import pl.edu.agh.cs.kraksim.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.gps.GPS
+import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
 
@@ -121,6 +121,26 @@ class OneLaneNagelStateBuilder(
         val sourceRoadId: Long,
         val destinationRoadId: Long
     )
+}
+
+fun <T : SimulationState> T.putCar(
+    initialVelocity: Int,
+    roadId: RoadId,
+    laneId: LaneId = 0,
+    gps: GPS = mockGps(),
+    type: StateType = StateType.NAGEL_SCHRECKENBERG
+): T {
+    val road = requireNotNull(roads[roadId])
+    val lane = requireNotNull(road.lanes.find { it.id == laneId })
+
+    val car = when (type) {
+        StateType.NAGEL_SCHRECKENBERG -> NagelCar(
+            velocity = initialVelocity,
+            gps = gps
+        )
+    }
+    car.moveToLane(lane, 0)
+    return this
 }
 
 /*
