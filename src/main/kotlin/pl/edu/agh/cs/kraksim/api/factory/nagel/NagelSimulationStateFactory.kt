@@ -18,10 +18,9 @@ class NagelSimulationStateFactory(
     val nagelMapFactory: NagelMapFactory
 ) {
     fun toEntity(
-        state: SimulationState,
+        state: NagelSimulationState,
         simulationEntity: SimulationEntity,
     ): SimulationStateEntity {
-        require(state is NagelSimulationState) { "Error creating NagelSimulation - simulation state expected to be NagelSimulationState, but was ${state.javaClass}" }
         return SimulationStateEntity(
             turn = state.turn,
             simulation = simulationEntity,
@@ -57,7 +56,7 @@ class NagelSimulationStateFactory(
         )
     }
 
-    fun from(entity: SimulationEntity): SimulationState {
+    fun from(entity: SimulationEntity): NagelSimulationState {
         val (roads, intersections, gateways) = nagelMapFactory.from(entity.mapEntity)
 
         val trafficState = entity.latestTrafficStateEntity

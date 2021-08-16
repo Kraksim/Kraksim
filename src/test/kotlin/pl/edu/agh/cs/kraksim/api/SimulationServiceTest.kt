@@ -26,7 +26,6 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class SimulationServiceTest @Autowired constructor(
         val simulationRepository: SimulationRepository,
-        val roadLengthGPS: RoadLengthGPS,
         val simulationService: SimulationService,
         val mapRepository: MapRepository,
         val carRepository: CarRepository,
