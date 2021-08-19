@@ -15,6 +15,7 @@ import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.MapRepository
+import pl.edu.agh.cs.kraksim.repository.RoadNodeRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
 import pl.edu.agh.cs.kraksim.repository.entities.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
