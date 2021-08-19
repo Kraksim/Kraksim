@@ -22,7 +22,7 @@ internal class StatisticsManagerTest {
 
         // when
         manager.createStatistics(state)
-        val result =  manager.latestState
+        val result = manager.latestState
         println(result)
 
         // then
@@ -59,7 +59,7 @@ internal class StatisticsManagerTest {
 
         // when
         manager.createStatistics(state)
-        val result =  manager.latestState
+        val result = manager.latestState
         println(result)
 
         // then
@@ -99,7 +99,7 @@ internal class StatisticsManagerTest {
         manager.createStatistics(state)
         strategy.step(state)
         manager.createStatistics(state)
-        val result =  manager.latestState
+        val result = manager.latestState
 
         // then
         val assertObject = StateStatisticsAssert(result)
@@ -136,7 +136,7 @@ internal class StatisticsManagerTest {
 
         // when
         manager.createStatistics(state)
-        val result =  manager.latestState
+        val result = manager.latestState
 
         // then
         val assertObject = StateStatisticsAssert(result)

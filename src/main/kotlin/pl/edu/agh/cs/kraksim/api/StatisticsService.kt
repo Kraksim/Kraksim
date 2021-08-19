@@ -52,25 +52,24 @@ class StatisticsService {
 
     fun createStatisticsEntity(statisticsEntity: StateStatistics, simulationEntity: SimulationEntity): StatisticsEntity {
         return StatisticsEntity(
-                simulationEntity = simulationEntity,
-                turn = statisticsEntity.turn,
-                currentStatisticsValues = StatisticsValuesEntity(
-                    speedStatistics = SpeedStatisticsEntity(
-                        wholeMapAverageSpeed = statisticsEntity.currentStatisticsValues.speedStatistics.wholeMapAverageSpeed,
-                        roadAverageSpeed = statisticsEntity.currentStatisticsValues.speedStatistics.roadAverageSpeed
-                    ),
-                    density = statisticsEntity.currentStatisticsValues.density,
-                    roadFlowRatio = statisticsEntity.currentStatisticsValues.roadFlowRatio
+            simulationEntity = simulationEntity,
+            turn = statisticsEntity.turn,
+            currentStatisticsValues = StatisticsValuesEntity(
+                speedStatistics = SpeedStatisticsEntity(
+                    wholeMapAverageSpeed = statisticsEntity.currentStatisticsValues.speedStatistics.wholeMapAverageSpeed,
+                    roadAverageSpeed = statisticsEntity.currentStatisticsValues.speedStatistics.roadAverageSpeed
                 ),
-                totalStatisticsValues = StatisticsValuesEntity(
-                    speedStatistics = SpeedStatisticsEntity(
-                        wholeMapAverageSpeed = statisticsEntity.totalStatisticsValues.speedStatistics.wholeMapAverageSpeed,
-                        roadAverageSpeed = statisticsEntity.totalStatisticsValues.speedStatistics.roadAverageSpeed
-                    ),
-                    density = statisticsEntity.totalStatisticsValues.density,
-                    roadFlowRatio = statisticsEntity.totalStatisticsValues.roadFlowRatio
+                density = statisticsEntity.currentStatisticsValues.density,
+                roadFlowRatio = statisticsEntity.currentStatisticsValues.roadFlowRatio
+            ),
+            totalStatisticsValues = StatisticsValuesEntity(
+                speedStatistics = SpeedStatisticsEntity(
+                    wholeMapAverageSpeed = statisticsEntity.totalStatisticsValues.speedStatistics.wholeMapAverageSpeed,
+                    roadAverageSpeed = statisticsEntity.totalStatisticsValues.speedStatistics.roadAverageSpeed
                 ),
-            )
-        
+                density = statisticsEntity.totalStatisticsValues.density,
+                roadFlowRatio = statisticsEntity.totalStatisticsValues.roadFlowRatio
+            ),
+        )
     }
 }

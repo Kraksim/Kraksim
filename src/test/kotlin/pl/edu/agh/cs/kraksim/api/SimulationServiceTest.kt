@@ -106,9 +106,14 @@ internal class SimulationServiceTest @Autowired constructor(
             trafficLights = emptyList(),
             simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
-            gatewaysStates = listOf(GatewayStateEntity(roadNodeRepository.findByStartingRoadsIsNotNull().id, emptyList(), generators = listOf(
-                GeneratorEntity(0, 2, 10, roadNodeRepository.findByStartingRoadsIsNull().id, GPSType.DIJKSTRA_ROAD_LENGTH ),
-            ))),
+            gatewaysStates = listOf(
+                GatewayStateEntity(
+                    roadNodeRepository.findByStartingRoadsIsNotNull().id, emptyList(),
+                    generators = listOf(
+                        GeneratorEntity(0, 2, 10, roadNodeRepository.findByStartingRoadsIsNull().id, GPSType.DIJKSTRA_ROAD_LENGTH),
+                    )
+                )
+            ),
             carsOnMap = listOf(
                 CarEntity(
                     carId = 1,
