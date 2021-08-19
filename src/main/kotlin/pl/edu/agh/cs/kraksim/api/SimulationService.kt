@@ -1,6 +1,7 @@
 package pl.edu.agh.cs.kraksim.api
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
 import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.api.factory.SimulationFactory
@@ -17,6 +18,7 @@ class SimulationService(
     val simulationFactory: SimulationFactory
 ) {
 
+    @Transactional // todo remove after figuring out eager fetching whole entity
     fun simulateStep(simulationId: Long = 0L, times: Int = 1) {
 
         var simulationEntity = repository.getById(simulationId)
@@ -26,7 +28,7 @@ class SimulationService(
         val lightPhaseManager =
             lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
         val statisticsManager = statisticsService.createStatisticsManager(
-            simulationId,
+            simulationEntity.statisticsEntities,
             simulationEntity.expectedVelocity
         )
 
@@ -42,6 +44,10 @@ class SimulationService(
             simulation.step()
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
             simulationEntity.simulationStateEntities.add(stateEntity)
+            simulationEntity.statisticsEntities += (statisticsService.createStatisticsEntity(
+                statisticsManager.latestState,
+                simulationEntity
+            ))
             simulationEntity = repository.save(simulationEntity)
         }
     }

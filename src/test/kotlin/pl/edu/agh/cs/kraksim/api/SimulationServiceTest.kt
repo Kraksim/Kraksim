@@ -28,7 +28,8 @@ internal class SimulationServiceTest @Autowired constructor(
     val roadLengthGPS: RoadLengthGPS,
     val simulationService: SimulationService,
     val mapRepository: MapRepository,
-    val carRepository: CarRepository
+    val carRepository: CarRepository,
+    val roadNodeRepository: RoadNodeRepository
 ) {
 
     // todo zjebane to jest cos niby przechodzi ale sie nie zatrzymuje ten test, ale basic idea containerów testowych
@@ -96,7 +97,8 @@ internal class SimulationServiceTest @Autowired constructor(
             ),
             simulationType = SimulationType.NAGEL_CORE,
             expectedVelocity = emptyMap(),
-            lightPhaseStrategies = emptyList()
+            lightPhaseStrategies = emptyList(),
+            statisticsEntities = ArrayList()
         )
 
         val simulationStateEntity = SimulationStateEntity(
@@ -104,7 +106,9 @@ internal class SimulationServiceTest @Autowired constructor(
             trafficLights = emptyList(),
             simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
-            gatewaysStates = emptyList(),
+            gatewaysStates = listOf(GatewayStateEntity(roadNodeRepository.findByStartingRoadsIsNotNull().id, emptyList(), generators = listOf(
+                GeneratorEntity(0, 2, 10, roadNodeRepository.findByStartingRoadsIsNull().id, GPSType.DIJKSTRA_ROAD_LENGTH ),
+            ))),
             carsOnMap = listOf(
                 CarEntity(
                     carId = 1,
@@ -131,9 +135,9 @@ internal class SimulationServiceTest @Autowired constructor(
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simprep.save(simulationEntity)
 
-        simulationService.simulateStep(simulationEntity.id, 1)
+        simulationService.simulateStep(simulationEntity.id, 4)
 
         val count = carRepository.count()
-        assertThat(count).isEqualTo(4)
+        assertThat(count).isEqualTo(12)
     }
 }

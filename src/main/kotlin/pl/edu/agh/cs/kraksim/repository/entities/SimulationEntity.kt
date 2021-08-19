@@ -4,6 +4,7 @@ import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
+import pl.edu.agh.cs.kraksim.repository.entities.statistics.StatisticsEntity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.LightPhaseStrategyEntity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.MovementSimulationStrategyEntity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEntity
@@ -24,7 +25,9 @@ class SimulationEntity(
     var expectedVelocity: Map<RoadId, Velocity>,
     @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    var lightPhaseStrategies: List<LightPhaseStrategyEntity>
+    var lightPhaseStrategies: List<LightPhaseStrategyEntity>,
+    @OneToMany(cascade = [CascadeType.ALL])
+    var statisticsEntities: List<StatisticsEntity>
 ) {
     val latestTrafficStateEntity
         get() = simulationStateEntities.maxByOrNull { it.turn }!!
