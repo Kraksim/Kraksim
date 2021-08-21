@@ -63,10 +63,10 @@ class LaneEntity(
 
 @Entity
 class TurnDirectionEntity(
-        @ManyToOne
-        var sourceLane: LaneEntity,
-        @ManyToOne
-        var destinationRoad: RoadEntity
+    @ManyToOne
+    var sourceLane: LaneEntity,
+    @ManyToOne
+    var destinationRoad: RoadEntity
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

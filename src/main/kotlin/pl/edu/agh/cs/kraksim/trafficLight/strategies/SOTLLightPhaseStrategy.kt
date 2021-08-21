@@ -10,12 +10,12 @@ import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.RED
 import kotlin.math.max
 
 class SOTLLightPhaseStrategy(
-        private val phiFactor: Double = 10.0,
-        private val minPhaseLength: Int = 2,
+    private val phiFactor: Double = 10.0,
+    private val minPhaseLength: Int = 2,
     // TODO("Rename those")
-        private val omegaMin: Int = 10,
-        private val ni: Int = 5,
-        override val id: Long = 0
+    private val omegaMin: Int = 10,
+    private val ni: Int = 5,
+    override val id: Long = 0
 ) : LightPhaseStrategy {
 
     /*

@@ -9,11 +9,11 @@ import pl.edu.agh.cs.kraksim.core.state.Road
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
 class NagelIntersection(
-        override val id: Long,
-        val directions: List<IntersectionTurningLaneDirection>,
-        endingRoads: List<NagelRoad>,
-        startingRoads: List<NagelRoad>,
-        override val phases: Map<LaneId, TrafficLightPhase>
+    override val id: Long,
+    val directions: List<IntersectionTurningLaneDirection>,
+    endingRoads: List<NagelRoad>,
+    startingRoads: List<NagelRoad>,
+    override val phases: Map<LaneId, TrafficLightPhase>
 //    val position: Position
 ) : NagelRoadNode, Intersection {
 

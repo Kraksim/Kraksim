@@ -1,9 +1,7 @@
 package pl.edu.agh.cs.kraksim.api.factory.nagel
 
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
@@ -13,7 +11,6 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import pl.edu.agh.cs.kraksim.api.SimulationService
 import pl.edu.agh.cs.kraksim.api.StatisticsService
 import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
 import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
@@ -22,28 +19,26 @@ import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationAsser
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationStateAssert
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
-import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.MapRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
 import pl.edu.agh.cs.kraksim.repository.entities.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
-
 @Testcontainers
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 )
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class NagelSimulationStateFactoryTest @Autowired constructor(
-        val simulationRepository: SimulationRepository,
-        val mapRepository: MapRepository,
-        val simulationFactory: SimulationFactory,
-        val stateFactory: NagelSimulationStateFactory,
-        val movementSimulationStrategyFactory: MovementSimulationStrategyFactory,
-        val lightPhaseManagerFactory: LightPhaseManagerFactory,
-        val statisticsService: StatisticsService
+    val simulationRepository: SimulationRepository,
+    val mapRepository: MapRepository,
+    val simulationFactory: SimulationFactory,
+    val stateFactory: NagelSimulationStateFactory,
+    val movementSimulationStrategyFactory: MovementSimulationStrategyFactory,
+    val lightPhaseManagerFactory: LightPhaseManagerFactory,
+    val statisticsService: StatisticsService
 ) {
 
     companion object {
@@ -60,183 +55,184 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
     }
 
     @BeforeEach
-    fun createTestSimulation(){
+    fun createTestSimulation() {
         try {
             simulationRepository.deleteById(1)
-        } catch (e: Exception){
-
+        } catch (e: Exception) {
         }
-        val lanes = (0 until 3).toList().map { LaneEntity(
+        val lanes = (0 until 3).toList().map {
+            LaneEntity(
                 startingPoint = 0,
                 endingPoint = 400,
                 indexFromLeft = it
-        ) }
+            )
+        }
 
-        val roads = (0 until 3).toList().map { RoadEntity(
+        val roads = (0 until 3).toList().map {
+            RoadEntity(
                 length = 400,
                 lanes = listOf(lanes[it])
-        )
+            )
         }
 
         var mapEntity = MapEntity(
-                type = MapType.MAP,
-                roadNodes = listOf(
-                        RoadNodeEntity(
-                                type = RoadNodeType.GATEWAY,
-                                position = PositionEntity(21.0, 21.0),
-                                endingRoads = emptyList(),
-                                startingRoads = listOf(roads[0]),
-                                turnDirections = emptyList()
-                        ),
-                        RoadNodeEntity(
-                                type = RoadNodeType.INTERSECTION,
-                                position = PositionEntity(41.0, 21.0),
-                                endingRoads = listOf(roads[0]),
-                                startingRoads = listOf(roads[1], roads[2]),
-                                turnDirections = listOf(
-                                        TurnDirectionEntity(
-                                                sourceLane = lanes[0],
-                                                destinationRoad = roads[1]
-                                        ),
-                                        TurnDirectionEntity(
-                                                sourceLane = lanes[0],
-                                                destinationRoad = roads[2]
-                                        )
-                                )
-                        ),
-                        RoadNodeEntity(
-                                type = RoadNodeType.GATEWAY,
-                                position = PositionEntity(41.0, 41.0),
-                                endingRoads = listOf(roads[1]),
-                                startingRoads = emptyList(),
-                                turnDirections = emptyList()
-                        ),
-                        RoadNodeEntity(
-                                type = RoadNodeType.GATEWAY,
-                                position = PositionEntity(21.0, 1.0),
-                                endingRoads = listOf(roads[2]),
-                                startingRoads = emptyList(),
-                                turnDirections = emptyList()
-                        ),
+            type = MapType.MAP,
+            roadNodes = listOf(
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(21.0, 21.0),
+                    endingRoads = emptyList(),
+                    startingRoads = listOf(roads[0]),
+                    turnDirections = emptyList()
                 ),
-                roads = roads
+                RoadNodeEntity(
+                    type = RoadNodeType.INTERSECTION,
+                    position = PositionEntity(41.0, 21.0),
+                    endingRoads = listOf(roads[0]),
+                    startingRoads = listOf(roads[1], roads[2]),
+                    turnDirections = listOf(
+                        TurnDirectionEntity(
+                            sourceLane = lanes[0],
+                            destinationRoad = roads[1]
+                        ),
+                        TurnDirectionEntity(
+                            sourceLane = lanes[0],
+                            destinationRoad = roads[2]
+                        )
+                    )
+                ),
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(41.0, 41.0),
+                    endingRoads = listOf(roads[1]),
+                    startingRoads = emptyList(),
+                    turnDirections = emptyList()
+                ),
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(21.0, 1.0),
+                    endingRoads = listOf(roads[2]),
+                    startingRoads = emptyList(),
+                    turnDirections = emptyList()
+                ),
+            ),
+            roads = roads
         )
         mapRepository.save(mapEntity)
         mapEntity = mapRepository.getById(1)
         val firstLane = mapEntity.roads.first()
 
         val simulationEntity = SimulationEntity(
-                mapEntity = mapEntity,
-                simulationStateEntities = ArrayList(),
-                movementSimulationStrategy = MovementSimulationStrategyEntity(
-                        type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
-                        randomProvider = RandomProviderType.TRUE,
-                        slowDownProbability = 0.3,
-                        maxVelocity = 6
-                ),
-                simulationType = SimulationType.NAGEL_CORE,
-                expectedVelocity = emptyMap(),
-                lightPhaseStrategies = listOf(
-                        LightPhaseStrategyEntity(
-                                algorithm = AlgorithmType.TURN_BASED,
-                                turnLength = 5,
-                                intersections = listOf(mapEntity.roadNodes[1].id)
-                        )
+            mapEntity = mapEntity,
+            simulationStateEntities = ArrayList(),
+            movementSimulationStrategy = MovementSimulationStrategyEntity(
+                type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
+                randomProvider = RandomProviderType.TRUE,
+                slowDownProbability = 0.3,
+                maxVelocity = 6
+            ),
+            simulationType = SimulationType.NAGEL_CORE,
+            expectedVelocity = emptyMap(),
+            lightPhaseStrategies = listOf(
+                LightPhaseStrategyEntity(
+                    algorithm = AlgorithmType.TURN_BASED,
+                    turnLength = 5,
+                    intersections = listOf(mapEntity.roadNodes[1].id)
                 )
+            )
         )
 
         val simulationStateEntity = SimulationStateEntity(
-                turn = 0,
-                trafficLights = listOf(
-                        TrafficLightEntity(
-                                intersectionId = mapEntity.roadNodes[1].id,
-                                phases = listOf(
-                                        PhaseEntity(
-                                                laneId = mapEntity.roads[0].lanes.first().id,
-                                                state = TrafficLightPhase.LightColor.GREEN,
-                                                phaseTime = 5
-                                        )
-                                )
+            turn = 0,
+            trafficLights = listOf(
+                TrafficLightEntity(
+                    intersectionId = mapEntity.roadNodes[1].id,
+                    phases = listOf(
+                        PhaseEntity(
+                            laneId = mapEntity.roads[0].lanes.first().id,
+                            state = TrafficLightPhase.LightColor.GREEN,
+                            phaseTime = 5
                         )
-                ),
-                simulation = simulationEntity,
-                stateType = StateType.NAGEL_SCHRECKENBERG,
-                gatewaysStates = listOf(
-                        GatewayStateEntity(
-                                gatewayId = mapEntity.roadNodes.first().id,
-                                collectedCars = emptyList(),
-                                generators = listOf(
-                                        GeneratorEntity(
-                                                lastCarReleasedTurnsAgo = 0,
-                                                releaseDelay = 4,
-                                                carsToRelease = 15,
-                                                targetGatewayId = mapEntity.roadNodes.last().id,
-                                                gpsType = GPSType.DIJKSTRA_ROAD_LENGTH
-                                        )
-                                )
-                        )
-                ),
-                carsOnMap = listOf(
-                        CarEntity(
-                                carId = 1,
-                                velocity = 2,
-                                currentLaneId = firstLane.id,
-                                positionRelativeToStart = 30,
-                                gps = GPSEntity(
-                                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                                        route = emptyList()
-                                )
-                        ),
-                        CarEntity(
-                                carId = 2,
-                                velocity = 6,
-                                currentLaneId = firstLane.id,
-                                positionRelativeToStart = 50,
-                                gps = GPSEntity(
-                                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                                        route = emptyList()
-                                )
-                        )
+                    )
                 )
+            ),
+            simulation = simulationEntity,
+            stateType = StateType.NAGEL_SCHRECKENBERG,
+            gatewaysStates = listOf(
+                GatewayStateEntity(
+                    gatewayId = mapEntity.roadNodes.first().id,
+                    collectedCars = emptyList(),
+                    generators = listOf(
+                        GeneratorEntity(
+                            lastCarReleasedTurnsAgo = 0,
+                            releaseDelay = 4,
+                            carsToRelease = 15,
+                            targetGatewayId = mapEntity.roadNodes.last().id,
+                            gpsType = GPSType.DIJKSTRA_ROAD_LENGTH
+                        )
+                    )
+                )
+            ),
+            carsOnMap = listOf(
+                CarEntity(
+                    carId = 1,
+                    velocity = 2,
+                    currentLaneId = firstLane.id,
+                    positionRelativeToStart = 30,
+                    gps = GPSEntity(
+                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
+                        route = emptyList()
+                    )
+                ),
+                CarEntity(
+                    carId = 2,
+                    velocity = 6,
+                    currentLaneId = firstLane.id,
+                    positionRelativeToStart = 50,
+                    gps = GPSEntity(
+                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
+                        route = emptyList()
+                    )
+                )
+            )
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationRepository.save(simulationEntity)
     }
 
     @Test
-    fun `Given SimulationEntity, the factory parses it correctly to Simulation`(){
-        //given
+    fun `Given SimulationEntity, the factory parses it correctly to Simulation`() {
+        // given
         val simulationEntity = simulationRepository.findAll().first()
-        //when
+        // when
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =
-                movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
+            movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
         val lightPhaseManager =
-                lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
+            lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
         val statisticsManager = statisticsService.createStatisticsManager(
-                simulationEntity.id,
-                simulationEntity.expectedVelocity
+            simulationEntity.id,
+            simulationEntity.expectedVelocity
         )
 
         val simulation = simulationFactory.from(
-                simulationType = simulationEntity.simulationType,
-                simulationState = simulationState,
-                movementStrategy = movementStrategy,
-                lightPhaseManager = lightPhaseManager,
-                statisticsManager = statisticsManager
+            simulationType = simulationEntity.simulationType,
+            simulationState = simulationState,
+            movementStrategy = movementStrategy,
+            lightPhaseManager = lightPhaseManager,
+            statisticsManager = statisticsManager
         )
 
-        //then
+        // then
         NagelSimulationAssert(simulation = simulation as NagelSimulation)
-                .assertExpectedVelocities(simulationEntity)
-                .assertGateways(simulationEntity.latestTrafficStateEntity)
-                .assertLightPhaseStrategies(simulationEntity)
-                .assertMovementSimulationStrategy(simulationEntity.movementSimulationStrategy)
+            .assertExpectedVelocities(simulationEntity)
+            .assertGateways(simulationEntity.latestTrafficStateEntity)
+            .assertLightPhaseStrategies(simulationEntity)
+            .assertMovementSimulationStrategy(simulationEntity.movementSimulationStrategy)
 
         NagelSimulationStateAssert(simulation.state)
-                .assertCarsState(simulationEntity.latestTrafficStateEntity)
-                .assertTurn(simulationEntity.latestTrafficStateEntity)
-                .assertTrafficLightPhases(simulationEntity.latestTrafficStateEntity)
-
+            .assertCarsState(simulationEntity.latestTrafficStateEntity)
+            .assertTurn(simulationEntity.latestTrafficStateEntity)
+            .assertTrafficLightPhases(simulationEntity.latestTrafficStateEntity)
     }
 }

@@ -13,7 +13,6 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import pl.edu.agh.cs.kraksim.gps.GPSType
-import pl.edu.agh.cs.kraksim.gps.algorithms.RoadLengthGPS
 import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.MapRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
@@ -25,10 +24,10 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class SimulationServiceTest @Autowired constructor(
-        val simulationRepository: SimulationRepository,
-        val simulationService: SimulationService,
-        val mapRepository: MapRepository,
-        val carRepository: CarRepository,
+    val simulationRepository: SimulationRepository,
+    val simulationService: SimulationService,
+    val mapRepository: MapRepository,
+    val carRepository: CarRepository,
 ) {
 
     // todo zjebane to jest cos niby przechodzi ale sie nie zatrzymuje ten test, ale basic idea containerów testowych
@@ -53,37 +52,36 @@ internal class SimulationServiceTest @Autowired constructor(
         try {
             simulationRepository.deleteById(1)
         } catch (e: Exception) {
-
         }
         var lane = LaneEntity(
-                startingPoint = 0,
-                endingPoint = 400,
-                indexFromLeft = 0
+            startingPoint = 0,
+            endingPoint = 400,
+            indexFromLeft = 0
         )
         val road = RoadEntity(
-                length = 400,
-                lanes = listOf(lane)
+            length = 400,
+            lanes = listOf(lane)
         )
 
         var mapEntity = MapEntity(
-                type = MapType.MAP,
-                roadNodes = listOf(
-                        RoadNodeEntity(
-                                type = RoadNodeType.GATEWAY,
-                                position = PositionEntity(1.0, 1.0),
-                                endingRoads = emptyList(),
-                                startingRoads = listOf(road),
-                                turnDirections = emptyList()
-                        ),
-                        RoadNodeEntity(
-                                type = RoadNodeType.GATEWAY,
-                                position = PositionEntity(21.0, 1.0),
-                                endingRoads = listOf(road),
-                                startingRoads = emptyList(),
-                                turnDirections = emptyList()
-                        )
+            type = MapType.MAP,
+            roadNodes = listOf(
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(1.0, 1.0),
+                    endingRoads = emptyList(),
+                    startingRoads = listOf(road),
+                    turnDirections = emptyList()
                 ),
-                roads = listOf(road)
+                RoadNodeEntity(
+                    type = RoadNodeType.GATEWAY,
+                    position = PositionEntity(21.0, 1.0),
+                    endingRoads = listOf(road),
+                    startingRoads = emptyList(),
+                    turnDirections = emptyList()
+                )
+            ),
+            roads = listOf(road)
         )
         mapRepository.save(mapEntity)
 
@@ -91,47 +89,47 @@ internal class SimulationServiceTest @Autowired constructor(
         lane = road.lanes.first()
 
         var simulationEntity = SimulationEntity(
-                mapEntity = mapEntity,
-                simulationStateEntities = ArrayList(),
-                movementSimulationStrategy = MovementSimulationStrategyEntity(
-                        type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
-                        randomProvider = RandomProviderType.TRUE,
-                        slowDownProbability = 0.3,
-                        maxVelocity = 6
-                ),
-                simulationType = SimulationType.NAGEL_CORE,
-                expectedVelocity = emptyMap(),
-                lightPhaseStrategies = emptyList()
+            mapEntity = mapEntity,
+            simulationStateEntities = ArrayList(),
+            movementSimulationStrategy = MovementSimulationStrategyEntity(
+                type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
+                randomProvider = RandomProviderType.TRUE,
+                slowDownProbability = 0.3,
+                maxVelocity = 6
+            ),
+            simulationType = SimulationType.NAGEL_CORE,
+            expectedVelocity = emptyMap(),
+            lightPhaseStrategies = emptyList()
         )
 
         val simulationStateEntity = SimulationStateEntity(
-                turn = 0,
-                trafficLights = emptyList(),
-                simulation = simulationEntity,
-                stateType = StateType.NAGEL_SCHRECKENBERG,
-                gatewaysStates = emptyList(),
-                carsOnMap = listOf(
-                        CarEntity(
-                                carId = 1,
-                                velocity = 2,
-                                currentLaneId = lane.id,
-                                positionRelativeToStart = 30,
-                                gps = GPSEntity(
-                                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                                        route = emptyList()
-                                )
-                        ),
-                        CarEntity(
-                                carId = 2,
-                                velocity = 6,
-                                currentLaneId = lane.id,
-                                positionRelativeToStart = 50,
-                                gps = GPSEntity(
-                                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                                        route = emptyList()
-                                )
-                        )
+            turn = 0,
+            trafficLights = emptyList(),
+            simulation = simulationEntity,
+            stateType = StateType.NAGEL_SCHRECKENBERG,
+            gatewaysStates = emptyList(),
+            carsOnMap = listOf(
+                CarEntity(
+                    carId = 1,
+                    velocity = 2,
+                    currentLaneId = lane.id,
+                    positionRelativeToStart = 30,
+                    gps = GPSEntity(
+                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
+                        route = emptyList()
+                    )
+                ),
+                CarEntity(
+                    carId = 2,
+                    velocity = 6,
+                    currentLaneId = lane.id,
+                    positionRelativeToStart = 50,
+                    gps = GPSEntity(
+                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
+                        route = emptyList()
+                    )
                 )
+            )
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simulationRepository.save(simulationEntity)
@@ -141,36 +139,35 @@ internal class SimulationServiceTest @Autowired constructor(
 
     @Test
     fun `Given amount of turns in a simulation, check if amount of CarEntities representing one car is equal to it`() {
-        //given
+        // given
         val carId = 1
-        //when
+        // when
 
-        //then
-        val count = carRepository.findCarEntitiesByCarId(1).count();
+        // then
+        val count = carRepository.findCarEntitiesByCarId(1).count()
         assertThat(count).isEqualTo(2)
     }
 
     @Test
     fun `Given amount of turns in a simulation, check if amount of SimulationEntities match amount of turn`() {
-        //given
+        // given
 
-        //when
+        // when
 
-        //then
+        // then
         val count = simulationRepository.findAll().first().simulationStateEntities.count()
         assertThat(count).isEqualTo(2)
     }
 
     @Test
-    fun `Given simulation entity, check if turns are assigned correctly`(){
-        //given
+    fun `Given simulation entity, check if turns are assigned correctly`() {
+        // given
         val simulation = simulationRepository.findAll().first()
 
-        //when
+        // when
 
-        //then
+        // then
         simulation.simulationStateEntities
-                .forEachIndexed{ index, simulationState ->  assertThat(simulationState.turn).isEqualTo(index.toLong())}
+            .forEachIndexed { index, simulationState -> assertThat(simulationState.turn).isEqualTo(index.toLong()) }
     }
-
 }

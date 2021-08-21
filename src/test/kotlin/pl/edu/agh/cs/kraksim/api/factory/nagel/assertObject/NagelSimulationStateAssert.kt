@@ -6,16 +6,16 @@ import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEntity
 
 class NagelSimulationStateAssert(
-        private val state: NagelSimulationState
+    private val state: NagelSimulationState
 ) {
-    fun assertTurn(stateEntity: SimulationStateEntity): NagelSimulationStateAssert{
+    fun assertTurn(stateEntity: SimulationStateEntity): NagelSimulationStateAssert {
         assertThat(state.turn).isEqualTo(stateEntity.turn)
         return this
     }
 
-    fun assertCarsState(stateEntity: SimulationStateEntity): NagelSimulationStateAssert{
+    fun assertCarsState(stateEntity: SimulationStateEntity): NagelSimulationStateAssert {
         stateEntity.trafficLights
-        state.cars.forEach{ car ->
+        state.cars.forEach { car ->
             val carEntity = stateEntity.carsOnMap.find { it.carId == car.id }
             assertThat(carEntity).isNotNull
             assertThat(car.currentLane?.id).isEqualTo(carEntity!!.currentLaneId)
@@ -23,18 +23,18 @@ class NagelSimulationStateAssert(
             val parsedRouteIds = car.gps.route.map { it.id }
             val entityRouteIds = carEntity.gps.route
             assertThat(parsedRouteIds.size).isEqualTo(entityRouteIds.size)
-            parsedRouteIds.indices.forEach{index -> assertThat(parsedRouteIds[index]).isEqualTo(entityRouteIds[index])}
+            parsedRouteIds.indices.forEach { index -> assertThat(parsedRouteIds[index]).isEqualTo(entityRouteIds[index]) }
             assertThat(car.positionRelativeToStart * Car.AVERAGE_CAR_LENGTH).isEqualTo(carEntity.positionRelativeToStart)
             assertThat(car.velocity).isEqualTo(carEntity.velocity)
         }
         return this
     }
 
-    fun assertTrafficLightPhases(stateEntity: SimulationStateEntity): NagelSimulationStateAssert{
-        stateEntity.trafficLights.forEach{ trafficLightsEntity ->
+    fun assertTrafficLightPhases(stateEntity: SimulationStateEntity): NagelSimulationStateAssert {
+        stateEntity.trafficLights.forEach { trafficLightsEntity ->
             val intersection = state.intersections[trafficLightsEntity.intersectionId]
             assertThat(intersection).isNotNull
-            trafficLightsEntity.phases.forEach {phaseEntity ->
+            trafficLightsEntity.phases.forEach { phaseEntity ->
                 val parsedPhase = intersection!!.phases[phaseEntity.laneId]
                 assertThat(parsedPhase).isNotNull
                 assertThat(parsedPhase!!.phaseTime).isEqualTo(phaseEntity.phaseTime)
