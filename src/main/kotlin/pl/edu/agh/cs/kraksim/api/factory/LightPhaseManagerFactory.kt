@@ -27,5 +27,5 @@ class LightPhaseManagerFactory {
         AlgorithmType.TURN_BASED -> createTurnBasedStrategy(it)
     }
 
-    private fun createTurnBasedStrategy(it: LightPhaseStrategyEntity) = TurnBasedLightPhaseStrategy(it.turnLength)
+    private fun createTurnBasedStrategy(it: LightPhaseStrategyEntity) = TurnBasedLightPhaseStrategy(it.turnLength, it.id)
 }

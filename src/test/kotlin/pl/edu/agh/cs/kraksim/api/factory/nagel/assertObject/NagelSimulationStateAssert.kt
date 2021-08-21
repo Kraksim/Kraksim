@@ -8,11 +8,12 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEnt
 class NagelSimulationStateAssert(
         private val state: NagelSimulationState
 ) {
-    fun assertTurn(stateEntity: SimulationStateEntity){
+    fun assertTurn(stateEntity: SimulationStateEntity): NagelSimulationStateAssert{
         assertThat(state.turn).isEqualTo(stateEntity.turn)
+        return this
     }
 
-    fun assertCarsState(stateEntity: SimulationStateEntity){
+    fun assertCarsState(stateEntity: SimulationStateEntity): NagelSimulationStateAssert{
         stateEntity.trafficLights
         state.cars.forEach{ car ->
             val carEntity = stateEntity.carsOnMap.find { it.carId == car.id }
@@ -26,9 +27,10 @@ class NagelSimulationStateAssert(
             assertThat(car.positionRelativeToStart * Car.AVERAGE_CAR_LENGTH).isEqualTo(carEntity.positionRelativeToStart)
             assertThat(car.velocity).isEqualTo(carEntity.velocity)
         }
+        return this
     }
 
-    fun assertTrafficLightPhases(stateEntity: SimulationStateEntity){
+    fun assertTrafficLightPhases(stateEntity: SimulationStateEntity): NagelSimulationStateAssert{
         stateEntity.trafficLights.forEach{ trafficLightsEntity ->
             val intersection = state.intersections[trafficLightsEntity.intersectionId]
             assertThat(intersection).isNotNull
@@ -39,5 +41,6 @@ class NagelSimulationStateAssert(
                 assertThat(parsedPhase.state).isEqualTo(parsedPhase.state)
             }
         }
+        return this
     }
 }

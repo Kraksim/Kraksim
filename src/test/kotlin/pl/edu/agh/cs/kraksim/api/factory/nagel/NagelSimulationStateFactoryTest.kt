@@ -1,6 +1,10 @@
 package pl.edu.agh.cs.kraksim.api.factory.nagel
 
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,7 +14,14 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import pl.edu.agh.cs.kraksim.api.SimulationService
+import pl.edu.agh.cs.kraksim.api.StatisticsService
+import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
+import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
+import pl.edu.agh.cs.kraksim.api.factory.SimulationFactory
+import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationAssert
+import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationStateAssert
 import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
 import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.MapRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
@@ -25,10 +36,14 @@ import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 )
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class NagelSimulationStateFactoryTest(
+class NagelSimulationStateFactoryTest @Autowired constructor(
         val simulationRepository: SimulationRepository,
         val mapRepository: MapRepository,
-        val carRepository: CarRepository,
+        val simulationFactory: SimulationFactory,
+        val stateFactory: NagelSimulationStateFactory,
+        val movementSimulationStrategyFactory: MovementSimulationStrategyFactory,
+        val lightPhaseManagerFactory: LightPhaseManagerFactory,
+        val statisticsService: StatisticsService
 ) {
 
     companion object {
@@ -108,9 +123,9 @@ class NagelSimulationStateFactoryTest(
         )
         mapRepository.save(mapEntity)
         mapEntity = mapRepository.getById(1)
-        var firstLane = mapEntity.roads.first()
+        val firstLane = mapEntity.roads.first()
 
-        var simulationEntity = SimulationEntity(
+        val simulationEntity = SimulationEntity(
                 mapEntity = mapEntity,
                 simulationStateEntities = ArrayList(),
                 movementSimulationStrategy = MovementSimulationStrategyEntity(
@@ -186,5 +201,42 @@ class NagelSimulationStateFactoryTest(
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationRepository.save(simulationEntity)
+    }
+
+    @Test
+    fun `Given SimulationEntity, the factory parses it correctly to Simulation`(){
+        //given
+        val simulationEntity = simulationRepository.findAll().first()
+        //when
+        val simulationState = stateFactory.from(simulationEntity)
+        val movementStrategy =
+                movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
+        val lightPhaseManager =
+                lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
+        val statisticsManager = statisticsService.createStatisticsManager(
+                simulationEntity.id,
+                simulationEntity.expectedVelocity
+        )
+
+        val simulation = simulationFactory.from(
+                simulationType = simulationEntity.simulationType,
+                simulationState = simulationState,
+                movementStrategy = movementStrategy,
+                lightPhaseManager = lightPhaseManager,
+                statisticsManager = statisticsManager
+        )
+
+        //then
+        NagelSimulationAssert(simulation = simulation as NagelSimulation)
+                .assertExpectedVelocities(simulationEntity)
+                .assertGateways(simulationEntity.latestTrafficStateEntity)
+                .assertLightPhaseStrategies(simulationEntity)
+                .assertMovementSimulationStrategy(simulationEntity.movementSimulationStrategy)
+
+        NagelSimulationStateAssert(simulation.state)
+                .assertCarsState(simulationEntity.latestTrafficStateEntity)
+                .assertTurn(simulationEntity.latestTrafficStateEntity)
+                .assertTrafficLightPhases(simulationEntity.latestTrafficStateEntity)
+
     }
 }

@@ -95,8 +95,8 @@ class NagelSimulationStateFactory(
                 generatorEntity.releaseDelay,
                 generatorEntity.carsToRelease,
                 generatorEntity.targetGatewayId,
-                generatorEntity.gpsType
-
+                generatorEntity.gpsType,
+                generatorEntity.id
             )
         }
     }
