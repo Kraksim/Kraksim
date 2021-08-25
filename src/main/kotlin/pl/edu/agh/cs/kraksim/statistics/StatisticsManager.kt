@@ -10,7 +10,9 @@ class StatisticsManager(
     var expectedVelocity: Map<RoadId, Velocity> = HashMap()
 ) {
 
-    fun createStatistics(state: SimulationState): StateStatistics {
+    lateinit var latestState: StateStatistics
+
+    fun createStatistics(state: SimulationState) {
         val roadsSpeed = getRoadsSpeed(state)
         val roadData = getRoadData(state)
 
@@ -30,7 +32,7 @@ class StatisticsManager(
         val totalStatisticsValues = createTotalStatisticsValues(currentStatisticsValues)
         val currentState = StateStatistics(state.id, state.turn, currentStatisticsValues, totalStatisticsValues)
         states += currentState
-        return currentState
+        latestState = currentState
     }
 
     private fun getRoadsSpeed(state: SimulationState): Map<RoadId, List<CarSpeed>> {

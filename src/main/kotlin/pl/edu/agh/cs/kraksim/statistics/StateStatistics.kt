@@ -9,6 +9,7 @@ data class StateStatistics(
 
     val currentStatisticsValues: StatisticsValues,
     val totalStatisticsValues: StatisticsValues,
+    val entityId: Long? = null,
 ) {
     override fun toString(): String {
 
