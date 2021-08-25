@@ -27,6 +27,7 @@ class SimulationEntity(
     @LazyCollection(LazyCollectionOption.FALSE)
     var lightPhaseStrategies: List<LightPhaseStrategyEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
     var statisticsEntities: List<StatisticsEntity>
 ) {
     val latestTrafficStateEntity

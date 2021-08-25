@@ -134,7 +134,8 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                     turnLength = 5,
                     intersections = listOf(mapEntity.roadNodes[1].id)
                 )
-            )
+            ),
+            statisticsEntities = ArrayList()
         )
 
         val simulationStateEntity = SimulationStateEntity(
@@ -206,7 +207,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
         val lightPhaseManager =
             lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
         val statisticsManager = statisticsService.createStatisticsManager(
-            simulationEntity.id,
+            simulationEntity.statisticsEntities,
             simulationEntity.expectedVelocity
         )
 

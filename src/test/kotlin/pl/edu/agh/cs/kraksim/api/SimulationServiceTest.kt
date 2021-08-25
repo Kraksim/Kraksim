@@ -96,7 +96,8 @@ internal class SimulationServiceTest @Autowired constructor(
             ),
             simulationType = SimulationType.NAGEL_CORE,
             expectedVelocity = emptyMap(),
-            lightPhaseStrategies = ArrayList()
+            lightPhaseStrategies = ArrayList(),
+            statisticsEntities = ArrayList()
         )
 
         val simulationStateEntity = SimulationStateEntity(
