@@ -28,6 +28,7 @@ class StatisticsService {
     private fun createStateStatistics(statisticsEntities: List<StatisticsEntity>): List<StateStatistics> {
         return statisticsEntities.map {
             StateStatistics(
+                entityId = it.id,
                 simulationId = it.simulationEntity.id,
                 turn = it.turn,
                 currentStatisticsValues = StatisticsValues(
@@ -50,7 +51,10 @@ class StatisticsService {
         }
     }
 
-    fun createStatisticsEntity(statisticsEntity: StateStatistics, simulationEntity: SimulationEntity): StatisticsEntity {
+    fun createStatisticsEntity(
+        statisticsEntity: StateStatistics,
+        simulationEntity: SimulationEntity
+    ): StatisticsEntity {
         return StatisticsEntity(
             simulationEntity = simulationEntity,
             turn = statisticsEntity.turn,
