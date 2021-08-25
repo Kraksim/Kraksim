@@ -21,7 +21,8 @@ internal class StatisticsManagerTest {
         val roadId = state.getLane().id
 
         // when
-        val result = manager.createStatistics(state)
+        manager.createStatistics(state)
+        val result = manager.latestState
         println(result)
 
         // then
@@ -57,7 +58,8 @@ internal class StatisticsManagerTest {
         val roadId = state.getLane().id
 
         // when
-        val result = manager.createStatistics(state)
+        manager.createStatistics(state)
+        val result = manager.latestState
         println(result)
 
         // then
@@ -96,7 +98,8 @@ internal class StatisticsManagerTest {
         // when
         manager.createStatistics(state)
         strategy.step(state)
-        val result = manager.createStatistics(state)
+        manager.createStatistics(state)
+        val result = manager.latestState
 
         // then
         val assertObject = StateStatisticsAssert(result)
@@ -132,7 +135,8 @@ internal class StatisticsManagerTest {
         val roadId2 = 1.toLong()
 
         // when
-        val result = manager.createStatistics(state)
+        manager.createStatistics(state)
+        val result = manager.latestState
 
         // then
         val assertObject = StateStatisticsAssert(result)
