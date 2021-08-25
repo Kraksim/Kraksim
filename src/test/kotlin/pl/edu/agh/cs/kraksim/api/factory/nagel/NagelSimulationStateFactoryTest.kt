@@ -56,10 +56,6 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
 
     @BeforeEach
     fun createTestSimulation() {
-        try {
-            simulationRepository.deleteById(1)
-        } catch (e: Exception) {
-        }
         val lanes = (0 until 3).toList().map {
             LaneEntity(
                 startingPoint = 0,
@@ -118,8 +114,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
             ),
             roads = roads
         )
-        mapRepository.save(mapEntity)
-        mapEntity = mapRepository.getById(1)
+        mapEntity = mapRepository.save(mapEntity)
         val firstLane = mapEntity.roads.first()
 
         val simulationEntity = SimulationEntity(

@@ -137,7 +137,7 @@ internal class SimulationServiceTest @Autowired constructor(
     @Test
     fun `Given amount of turns in a simulation, check if amount of CarEntities representing one car is equal to it`() {
         // given
-        val carId = 1
+
         // when
 
         // then
