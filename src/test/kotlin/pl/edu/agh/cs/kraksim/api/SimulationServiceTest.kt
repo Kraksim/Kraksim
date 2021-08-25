@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
+import org.springframework.transaction.annotation.Transactional
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
@@ -21,6 +22,7 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 
 @Testcontainers
 @SpringBootTest
+@Transactional
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class SimulationServiceTest @Autowired constructor(
@@ -49,10 +51,6 @@ internal class SimulationServiceTest @Autowired constructor(
 
     @BeforeEach
     fun createTestSimulationAndSimulateStep() {
-        try {
-            simulationRepository.deleteById(1)
-        } catch (e: Exception) {
-        }
         var lane = LaneEntity(
             startingPoint = 0,
             endingPoint = 400,
@@ -60,32 +58,31 @@ internal class SimulationServiceTest @Autowired constructor(
         )
         val road = RoadEntity(
             length = 400,
-            lanes = listOf(lane)
+            lanes = arrayListOf(lane)
         )
 
         var mapEntity = MapEntity(
             type = MapType.MAP,
-            roadNodes = listOf(
+            roadNodes = arrayListOf(
                 RoadNodeEntity(
                     type = RoadNodeType.GATEWAY,
                     position = PositionEntity(1.0, 1.0),
-                    endingRoads = emptyList(),
-                    startingRoads = listOf(road),
-                    turnDirections = emptyList()
+                    endingRoads = ArrayList(),
+                    startingRoads = arrayListOf(road),
+                    turnDirections = ArrayList()
                 ),
                 RoadNodeEntity(
                     type = RoadNodeType.GATEWAY,
                     position = PositionEntity(21.0, 1.0),
-                    endingRoads = listOf(road),
-                    startingRoads = emptyList(),
-                    turnDirections = emptyList()
+                    endingRoads = arrayListOf(road),
+                    startingRoads = ArrayList(),
+                    turnDirections = ArrayList()
                 )
             ),
-            roads = listOf(road)
+            roads = arrayListOf(road)
         )
-        mapRepository.save(mapEntity)
 
-        mapEntity = mapRepository.getById(1)
+        mapEntity = mapRepository.save(mapEntity)
         lane = road.lanes.first()
 
         var simulationEntity = SimulationEntity(
@@ -99,16 +96,16 @@ internal class SimulationServiceTest @Autowired constructor(
             ),
             simulationType = SimulationType.NAGEL_CORE,
             expectedVelocity = emptyMap(),
-            lightPhaseStrategies = emptyList()
+            lightPhaseStrategies = ArrayList()
         )
 
         val simulationStateEntity = SimulationStateEntity(
             turn = 0,
-            trafficLights = emptyList(),
+            trafficLights = ArrayList(),
             simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
-            gatewaysStates = emptyList(),
-            carsOnMap = listOf(
+            gatewaysStates = ArrayList(),
+            carsOnMap = arrayListOf(
                 CarEntity(
                     carId = 1,
                     velocity = 2,
@@ -116,7 +113,7 @@ internal class SimulationServiceTest @Autowired constructor(
                     positionRelativeToStart = 30,
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                        route = emptyList()
+                        route = ArrayList()
                     )
                 ),
                 CarEntity(
@@ -126,7 +123,7 @@ internal class SimulationServiceTest @Autowired constructor(
                     positionRelativeToStart = 50,
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                        route = emptyList()
+                        route = ArrayList()
                     )
                 )
             )
