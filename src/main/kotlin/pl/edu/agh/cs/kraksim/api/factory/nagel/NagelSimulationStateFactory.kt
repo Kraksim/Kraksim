@@ -22,7 +22,7 @@ class NagelSimulationStateFactory(
     ): SimulationStateEntity {
         return SimulationStateEntity(
             turn = state.turn,
-            simulation = simulationEntity,
+//            simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
             carsOnMap = state.cars.map { carToCarEntity(it) },
             gatewaysStates = state.gateways.entries.map { (id, gateway) ->

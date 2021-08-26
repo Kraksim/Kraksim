@@ -17,11 +17,11 @@ class SimulationStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
     var gatewaysStates: List<GatewayStateEntity>,
-    @ManyToOne
-    var simulation: SimulationEntity,
+
     var stateType: StateType
 ) {
-
+    @ManyToOne
+    lateinit var simulation: SimulationEntity
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0

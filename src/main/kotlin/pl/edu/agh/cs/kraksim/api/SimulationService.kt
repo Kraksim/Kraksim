@@ -7,6 +7,7 @@ import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.api.factory.SimulationFactory
 import pl.edu.agh.cs.kraksim.api.factory.StateFactory
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
+import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 
 @Service
 class SimulationService(
@@ -52,5 +53,9 @@ class SimulationService(
                 )
             simulationEntity = repository.save(simulationEntity)
         }
+    }
+
+    fun getSimulation(id: Long): SimulationEntity {
+        return repository.getById(id)
     }
 }
