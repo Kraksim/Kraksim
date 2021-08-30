@@ -45,6 +45,7 @@ kapt {
     arguments {
          arg("mapstruct.defaultComponentModel", "spring")
     }
+    useBuildCache = false
 }
 
 tasks {
