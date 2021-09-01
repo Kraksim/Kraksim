@@ -1,6 +1,5 @@
 package pl.edu.agh.cs.kraksim.api.factory.nagel
 
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory

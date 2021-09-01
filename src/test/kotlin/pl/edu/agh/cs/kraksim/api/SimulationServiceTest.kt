@@ -1,7 +1,6 @@
 package pl.edu.agh.cs.kraksim.api
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -130,7 +129,7 @@ internal class SimulationServiceTest @Autowired constructor(
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simulationRepository.save(simulationEntity)
-        return simulationEntity.id;
+        return simulationEntity.id
     }
 
     @Test
