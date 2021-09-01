@@ -49,8 +49,7 @@ internal class SimulationServiceTest @Autowired constructor(
         }
     }
 
-    @BeforeEach
-    fun createTestSimulationAndSimulateStep() {
+    fun createTestSimulation(): Long {
         var lane = LaneEntity(
             startingPoint = 0,
             endingPoint = 400,
@@ -131,16 +130,15 @@ internal class SimulationServiceTest @Autowired constructor(
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simulationRepository.save(simulationEntity)
-
-        simulationService.simulateStep(simulationEntity.id, 1)
+        return simulationEntity.id;
     }
 
     @Test
     fun `Given amount of turns in a simulation, check if amount of CarEntities representing one car is equal to it`() {
         // given
-
+        val simulationId = createTestSimulation()
         // when
-
+        simulationService.simulateStep(simulationId)
         // then
         val count = carRepository.findCarEntitiesByCarId(1).count()
         assertThat(count).isEqualTo(2)
@@ -149,23 +147,22 @@ internal class SimulationServiceTest @Autowired constructor(
     @Test
     fun `Given amount of turns in a simulation, check if amount of SimulationEntities match amount of turn`() {
         // given
-
+        val simulationId = createTestSimulation()
         // when
-
+        simulationService.simulateStep(simulationId)
         // then
-        val count = simulationRepository.findAll().first().simulationStateEntities.count()
+        val count = simulationRepository.findById(simulationId).get().simulationStateEntities.count()
         assertThat(count).isEqualTo(2)
     }
 
     @Test
     fun `Given simulation entity, check if turns are assigned correctly`() {
         // given
-        val simulation = simulationRepository.findAll().first()
-
+        val simulationId = createTestSimulation()
         // when
-
+        simulationService.simulateStep(simulationId)
         // then
-        simulation.simulationStateEntities
+        simulationRepository.findById(simulationId).get().simulationStateEntities
             .forEachIndexed { index, simulationState -> assertThat(simulationState.turn).isEqualTo(index.toLong()) }
     }
 }

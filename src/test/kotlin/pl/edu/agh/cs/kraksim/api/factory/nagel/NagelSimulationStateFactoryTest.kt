@@ -54,8 +54,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
         }
     }
 
-    @BeforeEach
-    fun createTestSimulation() {
+    fun createTestSimulation(): Long {
         val lanes = (0 until 3).toList().map {
             LaneEntity(
                 startingPoint = 0,
@@ -193,13 +192,14 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
             )
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
-        simulationRepository.save(simulationEntity)
+        return simulationRepository.save(simulationEntity).id
     }
 
     @Test
     fun `Given SimulationEntity, the factory parses it correctly to Simulation`() {
         // given
-        val simulationEntity = simulationRepository.findAll().first()
+        val simulationId = createTestSimulation()
+        val simulationEntity = simulationRepository.findById(simulationId).get()
         // when
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =

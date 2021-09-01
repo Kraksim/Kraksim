@@ -43,8 +43,7 @@ class NagelMapFactoryTest @Autowired constructor(
         }
     }
 
-    @BeforeEach
-    fun clearAndCreateMap() {
+    fun createTestMap(): Long {
         val lanes = (0 until 3).toList().map {
             LaneEntity(
                 startingPoint = 0,
@@ -103,12 +102,13 @@ class NagelMapFactoryTest @Autowired constructor(
             ),
             roads = roads
         )
-        mapRepository.save(mapEntity)
+        return mapRepository.save(mapEntity).id
     }
 
     @TestFactory
     fun `Given MapEntity, the factory parses it correctly to Lists of NagelRoads, NagelIntersections and NagelGateways`(): List<DynamicTest> {
-        val mapEntity = mapRepository.findAll().first()
+        val mapId = createTestMap()
+        val mapEntity = mapRepository.findById(mapId).get()
         val (roads, intersections, gateways) = mapFactory.from(mapEntity)
         return listOf(
             dynamicTest("Given list of roads, check if they are parsed correctly") {
