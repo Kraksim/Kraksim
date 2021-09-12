@@ -15,5 +15,6 @@ data class Generator(
     val releaseDelay: Int,
     var carsToRelease: Int,
     val targetGatewayId: GatewayId,
-    val gpsType: GPSType
+    val gpsType: GPSType,
+    val id: Long = 0
 )

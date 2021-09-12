@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.CarEntity
 
 @Repository
-interface CarRepository : JpaRepository<CarEntity, Long>
+interface CarRepository : JpaRepository<CarEntity, Long> {
+    fun findCarEntitiesByCarId(carId: Long): List<CarEntity>
+}

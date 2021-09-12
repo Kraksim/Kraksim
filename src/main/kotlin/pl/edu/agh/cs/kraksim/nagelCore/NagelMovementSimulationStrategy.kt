@@ -10,8 +10,8 @@ import pl.edu.agh.cs.kraksim.nagelCore.state.*
 import kotlin.math.min
 
 class NagelMovementSimulationStrategy(
-    private val random: RandomProvider,
-    private val maxVelocity: Int = 6
+    val random: RandomProvider,
+    val maxVelocity: Int = 6
 ) : MovementSimulationStrategy {
 
     init {

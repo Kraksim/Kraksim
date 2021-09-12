@@ -13,6 +13,7 @@ class GatewayStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     var collectedCars: List<CarEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(value = LazyCollectionOption.FALSE)
     var generators: List<GeneratorEntity>
 ) {
     @Id

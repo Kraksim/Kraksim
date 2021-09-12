@@ -11,7 +11,7 @@ class SimulationStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
     var carsOnMap: List<CarEntity>,
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
     var trafficLights: List<TrafficLightEntity>,
     @OneToMany(cascade = [CascadeType.ALL])

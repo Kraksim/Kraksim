@@ -67,7 +67,7 @@ class NagelMapFactory {
 
     private fun createTurnDirectionFrom(node: TurnDirectionEntity) =
         IntersectionTurningLaneDirection(
-            from = node.sourceLaneId,
-            to = node.destinationRoadId
+            from = node.sourceLane.id,
+            to = node.destinationRoad.id
         )
 }

@@ -14,7 +14,8 @@ class SOTLLightPhaseStrategy(
     private val minPhaseLength: Int = 2,
     // TODO("Rename those")
     private val omegaMin: Int = 10,
-    private val ni: Int = 5
+    private val ni: Int = 5,
+    override val id: Long = 0
 ) : LightPhaseStrategy {
 
     /*
@@ -47,7 +48,7 @@ class SOTLLightPhaseStrategy(
     }
 
     private fun switchLights(intersection: Intersection) {
-        val lanes = intersection.endingRoads.flatMap { it.lanes }.associateBy { it.id }
+        val lanes = intersection.endingRoads.entries.flatMap { it.value.lanes }.associateBy { it.id }
 
         intersection.phases.forEach { (laneId: LaneId, phase) ->
             switchLight(phase, lanes[laneId])

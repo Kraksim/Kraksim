@@ -6,7 +6,6 @@ import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.Car
-import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.generator.Generator
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
@@ -18,10 +17,9 @@ class NagelSimulationStateFactory(
     val nagelMapFactory: NagelMapFactory
 ) {
     fun toEntity(
-        state: SimulationState,
+        state: NagelSimulationState,
         simulationEntity: SimulationEntity,
     ): SimulationStateEntity {
-        require(state is NagelSimulationState) { "Error creating NagelSimulation - simulation state expected to be NagelSimulationState, but was ${state.javaClass}" }
         return SimulationStateEntity(
             turn = state.turn,
             simulation = simulationEntity,
@@ -57,7 +55,7 @@ class NagelSimulationStateFactory(
         )
     }
 
-    fun from(entity: SimulationEntity): SimulationState {
+    fun from(entity: SimulationEntity): NagelSimulationState {
         val (roads, intersections, gateways) = nagelMapFactory.from(entity.mapEntity)
 
         val trafficState = entity.latestTrafficStateEntity
@@ -96,8 +94,8 @@ class NagelSimulationStateFactory(
                 generatorEntity.releaseDelay,
                 generatorEntity.carsToRelease,
                 generatorEntity.targetGatewayId,
-                generatorEntity.gpsType
-
+                generatorEntity.gpsType,
+                generatorEntity.id
             )
         }
     }

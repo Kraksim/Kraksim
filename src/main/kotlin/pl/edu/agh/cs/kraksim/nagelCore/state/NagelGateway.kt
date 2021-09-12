@@ -6,16 +6,17 @@ import pl.edu.agh.cs.kraksim.generator.Generator
 
 class NagelGateway(
     override val id: Long,
-    override val endingRoads: List<NagelRoad>,
+    endingRoads: List<NagelRoad>,
     startingRoads: List<NagelRoad>,
     override var generators: List<Generator> = emptyList()
 ) : NagelRoadNode, Gateway {
 
     override val finishedCars: ArrayList<NagelCar> = ArrayList()
     override val startingRoads: Map<RoadId, NagelRoad> = startingRoads.associateBy { it.id }
+    override val endingRoads: Map<RoadId, NagelRoad> = endingRoads.associateBy { it.id }
 
     init {
-        endingRoads.forEach { it.end = this }
+        this.endingRoads.values.forEach { it.end = this }
     }
 
     fun addFinishedCar(car: NagelCar) {

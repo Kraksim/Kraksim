@@ -23,10 +23,11 @@ class SimulationEntity(
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     var expectedVelocity: Map<RoadId, Velocity>,
-    @OneToMany
+    @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
     var lightPhaseStrategies: List<LightPhaseStrategyEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
     var statisticsEntities: List<StatisticsEntity>
 ) {
     val latestTrafficStateEntity

@@ -11,7 +11,8 @@ import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor.RED
  * every green light lasts [turnLength]
  */
 class TurnBasedLightPhaseStrategy(
-    private val turnLength: Int = 5
+    private val turnLength: Int = 5,
+    override val id: Long = 0
 ) : LightPhaseStrategy {
 
     override fun initializeLights(intersections: Collection<Intersection>) {
