@@ -150,7 +150,6 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                     )
                 )
             ),
-            simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
             gatewaysStates = listOf(
                 GatewayStateEntity(
@@ -189,7 +188,9 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                     )
                 )
             )
-        )
+        ).apply {
+            simulation = simulationEntity
+        }
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         return simulationRepository.save(simulationEntity).id
     }

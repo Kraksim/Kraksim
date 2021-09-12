@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pl.edu.agh.cs.kraksim.api.Service
+import pl.edu.agh.cs.kraksim.api.SimulationService
 import pl.edu.agh.cs.kraksim.controller.dto.SimulationDTO
 import pl.edu.agh.cs.kraksim.controller.mappers.SimulationMapper
 
 @RequestMapping("/simulation")
 @RestController
 class Controller(
-    val service: Service,
+    val service: SimulationService,
     val simulationMapper: SimulationMapper
 ) {
 

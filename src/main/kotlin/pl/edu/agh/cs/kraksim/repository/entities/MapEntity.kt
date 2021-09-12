@@ -81,5 +81,5 @@ enum class RoadNodeType {
     INTERSECTION, GATEWAY
 }
 
-//@Embeddable
+@Embeddable
 class PositionEntity(var x: Double, var y: Double)
