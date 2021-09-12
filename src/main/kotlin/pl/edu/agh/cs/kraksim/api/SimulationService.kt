@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.api
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
@@ -55,7 +56,7 @@ class SimulationService(
         }
     }
 
-    fun getSimulation(id: Long): SimulationEntity {
-        return repository.getById(id)
+    fun getSimulation(id: Long): SimulationEntity? {
+        return repository.findByIdOrNull(id)
     }
 }

@@ -15,7 +15,8 @@ class GeneratorDTO(
     var carsToRelease: Int,
     var releaseDelay: Int,
     var targetGatewayId: GatewayId,
-    var gpsType: GPSType
+    var gpsType: GPSType,
+    var lastCarReleasedTurnsAgo: Int
 
 ) {
     var id: Long = 0

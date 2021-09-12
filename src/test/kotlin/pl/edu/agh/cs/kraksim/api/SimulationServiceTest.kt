@@ -125,7 +125,8 @@ internal class SimulationServiceTest @Autowired constructor(
                         route = ArrayList()
                     )
                 )
-            )
+            ),
+            simulation = simulationEntity
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         simulationEntity = simulationRepository.save(simulationEntity)

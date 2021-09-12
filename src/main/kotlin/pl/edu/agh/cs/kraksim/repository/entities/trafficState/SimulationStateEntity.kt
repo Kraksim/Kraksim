@@ -17,11 +17,23 @@ class SimulationStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
     var gatewaysStates: List<GatewayStateEntity>,
-
     var stateType: StateType
 ) {
+    constructor(
+        turn: Long = 0,
+        carsOnMap: List<CarEntity>,
+        trafficLights: List<TrafficLightEntity>,
+        gatewaysStates: List<GatewayStateEntity>,
+        stateType: StateType,
+        simulation: SimulationEntity
+    ) : this(turn, carsOnMap, trafficLights, gatewaysStates, stateType) {
+        this.simulation = simulation
+    }
+
+    @Suppress("JoinDeclarationAndAssignment")
     @ManyToOne
     lateinit var simulation: SimulationEntity
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0

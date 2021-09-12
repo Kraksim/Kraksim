@@ -10,7 +10,7 @@ class CycleAvoidingMappingContext {
 
     @Suppress("UNCHECKED_CAST", "UNUSED_PARAMETER")
     @BeforeMapping
-    fun <T> getMappedInstance(source: Any, @TargetType targetType: Class<T>?): T? {
+    fun <T> getMappedInstance(source: Any?, @TargetType targetType: Class<T>?): T? {
         return knownInstances[source] as T?
     }
 

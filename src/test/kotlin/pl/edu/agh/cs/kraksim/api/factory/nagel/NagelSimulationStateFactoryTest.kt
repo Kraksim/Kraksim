@@ -187,10 +187,9 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                         route = emptyList()
                     )
                 )
-            )
-        ).apply {
+            ),
             simulation = simulationEntity
-        }
+        )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         return simulationRepository.save(simulationEntity).id
     }
