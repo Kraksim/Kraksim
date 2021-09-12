@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -10,7 +11,10 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
+import pl.edu.agh.cs.kraksim.controller.dto.PositionDTO
+import pl.edu.agh.cs.kraksim.controller.mappers.CycleAvoidingMappingContext
 import pl.edu.agh.cs.kraksim.controller.mappers.MapMapper
+import pl.edu.agh.cs.kraksim.controller.mappers.SimulationMapper
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.repository.entities.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
@@ -21,7 +25,8 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 @EnableAutoConfiguration
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MapstructTest @Autowired constructor(
-    val converter: MapMapper
+    val simulationMapper: SimulationMapper,
+    val mapMapper: MapMapper
 ) {
 
     companion object {
@@ -99,17 +104,18 @@ class MapstructTest @Autowired constructor(
 
         simulationStateEntity.simulation = simulationEntity
 
-//        val simulationDTO = converter.convertToDTO(simulationEntity)
-
-//        assertThat(simulationDTO.expectedVelocity).isEqualTo(mapOf(0L to 1))
-
         val mapEntity = MapEntity(
             type = MapType.MAP,
             roadNodes = listOf(roadNodeEntity),
             roads = listOf()
         )
 
-        val mapDTO = converter.convertToDto(mapEntity)
+        val mapDTO = mapMapper.convertToDto(mapEntity, CycleAvoidingMappingContext())
+        assertThat(mapDTO.roadNodes[0].position).isEqualTo(PositionDTO(0.0, 0.0))
+
+        val simulationDTO = simulationMapper.convertToDTO(simulationEntity)
+
+        assertThat(simulationDTO.expectedVelocity).isEqualTo(mapOf(0L to 1))
     }
 }
 

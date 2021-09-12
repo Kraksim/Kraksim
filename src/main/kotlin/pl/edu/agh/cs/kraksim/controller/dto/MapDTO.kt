@@ -48,4 +48,4 @@ class TurnDirectionDTO(
     var id: Long = 0
 }
 
-class PositionDTO(var x: Double, var y: Double)
+data class PositionDTO(var x: Double, var y: Double)
