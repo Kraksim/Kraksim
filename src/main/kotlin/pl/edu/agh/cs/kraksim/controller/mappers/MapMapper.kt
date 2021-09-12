@@ -64,4 +64,3 @@ interface RoadMapper {
     fun convertLaneToDtos(laneEntity: List<LaneEntity>, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): List<LaneDTO>
     fun convertLaneToEntities(laneDTO: List<LaneDTO>, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): List<LaneEntity>
 }
-

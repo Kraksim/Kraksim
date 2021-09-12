@@ -5,7 +5,6 @@ import org.mapstruct.MappingTarget
 import org.mapstruct.TargetType
 import java.util.*
 
-
 class CycleAvoidingMappingContext {
     private val knownInstances: MutableMap<Any, Any> = IdentityHashMap()
 

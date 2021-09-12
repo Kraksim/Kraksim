@@ -3,7 +3,6 @@ package pl.edu.agh.cs.kraksim.controller.dto
 import pl.edu.agh.cs.kraksim.repository.entities.MapType
 import pl.edu.agh.cs.kraksim.repository.entities.RoadNodeType
 
-
 class MapDTO(
     var type: MapType,
     var roadNodes: List<RoadNodeDTO>,
@@ -11,7 +10,6 @@ class MapDTO(
 ) {
     var id: Long = 0
 }
-
 
 class RoadNodeDTO(
     var type: RoadNodeType,
@@ -23,14 +21,12 @@ class RoadNodeDTO(
     var id: Long = 0
 }
 
-
 class RoadDTO(
     var length: Int,
     var lanes: List<LaneDTO>,
 ) {
     var id: Long = 0
 }
-
 
 class LaneDTO(
     var startingPoint: Int,
@@ -39,7 +35,6 @@ class LaneDTO(
 ) {
     var id: Long = 0
 }
-
 
 class TurnDirectionDTO(
     var sourceLaneId: Long,

@@ -19,11 +19,8 @@ class Controller(
     @GetMapping("/{id}")
     fun getSimulation(
         @PathVariable id: Long
-    ): ResponseEntity<SimulationDTO>{
+    ): ResponseEntity<SimulationDTO> {
 
-        
-
-    TODO()
+        TODO()
     }
 }
-

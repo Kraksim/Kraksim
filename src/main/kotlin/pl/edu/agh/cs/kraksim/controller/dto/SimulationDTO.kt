@@ -7,7 +7,6 @@ import pl.edu.agh.cs.kraksim.controller.dto.trafficState.MovementSimulationStrat
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.SimulationStateDTO
 import pl.edu.agh.cs.kraksim.repository.entities.SimulationType
 
-
 class SimulationDTO(
     var mapDTO: MapDTO,
     var simulationStateEntities: MutableList<SimulationStateDTO>,
@@ -18,4 +17,3 @@ class SimulationDTO(
 ) {
     var id: Long = 0
 }
-

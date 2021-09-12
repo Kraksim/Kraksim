@@ -43,7 +43,7 @@ dependencies {
 
 kapt {
     arguments {
-         arg("mapstruct.defaultComponentModel", "spring")
+        arg("mapstruct.defaultComponentModel", "spring")
     }
     useBuildCache = false
 }

@@ -9,7 +9,7 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.CarEntity
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GPSEntity
 
 @Mapper
-interface CarMapper{
+interface CarMapper {
     fun convertToDto(carEntity: CarEntity, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): CarDTO
     fun convertToEntity(carDTO: CarDTO, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): CarEntity
 

@@ -30,4 +30,3 @@ interface LightStateMapper {
     fun convertLightPhaseStrategyToDtos(lightPhaseStrategyEntity: List<LightPhaseStrategyEntity>, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): List<LightPhaseStrategyDTO>
     fun convertLightPhaseStrategyToEntities(lightPhaseStrategyDTO: List<LightPhaseStrategyDTO>, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): List<LightPhaseStrategyEntity>
 }
-

@@ -19,7 +19,6 @@ import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.repository.entities.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 
-
 @Testcontainers
 @SpringBootTest
 @EnableAutoConfiguration
@@ -41,7 +40,6 @@ class MapstructTest @Autowired constructor(
             registry.add("spring.datasource.password", postgreSQLContainer::getPassword)
         }
     }
-
 
     @Test
     fun `entity to dto conversion`() {
@@ -68,7 +66,8 @@ class MapstructTest @Autowired constructor(
             trafficLights = listOf(trafficLightEntity),
             gatewaysStates = listOf(
                 GatewayStateEntity(
-                    gatewayId = 0, collectedCars = listOf(carEntity), generators = listOf(
+                    gatewayId = 0, collectedCars = listOf(carEntity),
+                    generators = listOf(
                         GeneratorEntity(
                             carsToRelease = 0,
                             releaseDelay = 0,
@@ -81,7 +80,6 @@ class MapstructTest @Autowired constructor(
             ),
             stateType = StateType.NAGEL_SCHRECKENBERG
         )
-
 
         val simulationEntity = SimulationEntity(
             simulationStateEntities = listOf(simulationStateEntity) as MutableList<SimulationStateEntity>,
@@ -118,5 +116,3 @@ class MapstructTest @Autowired constructor(
         assertThat(simulationDTO.expectedVelocity).isEqualTo(mapOf(0L to 1))
     }
 }
-
-
