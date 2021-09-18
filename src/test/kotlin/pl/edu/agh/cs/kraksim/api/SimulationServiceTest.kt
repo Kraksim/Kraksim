@@ -101,7 +101,6 @@ internal class SimulationServiceTest @Autowired constructor(
         val simulationStateEntity = SimulationStateEntity(
             turn = 0,
             trafficLights = ArrayList(),
-            simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
             gatewaysStates = ArrayList(),
             carsOnMap = arrayListOf(

@@ -82,4 +82,4 @@ enum class RoadNodeType {
 }
 
 @Embeddable
-class PositionEntity(x: Double, y: Double)
+class PositionEntity(var x: Double, var y: Double)

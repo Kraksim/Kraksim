@@ -1,12 +1,10 @@
 package pl.edu.agh.cs.kraksim.api
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
-import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
-import pl.edu.agh.cs.kraksim.api.factory.SimulationFactory
-import pl.edu.agh.cs.kraksim.api.factory.StateFactory
+import pl.edu.agh.cs.kraksim.api.factory.*
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository
+import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 
 @Service
 class SimulationService(
@@ -14,12 +12,11 @@ class SimulationService(
     val stateFactory: StateFactory,
     val movementSimulationStrategyFactory: MovementSimulationStrategyFactory,
     val lightPhaseManagerFactory: LightPhaseManagerFactory,
-    val statisticsService: StatisticsService,
+    val statisticsFactory: StatisticsFactory,
     val simulationFactory: SimulationFactory
 ) {
 
-    @Transactional // todo remove after figuring out eager fetching whole entity
-    fun simulateStep(simulationId: Long = 0L, times: Int = 1) {
+    fun simulateStep(simulationId: Long = 0L, times: Int = 1): SimulationEntity {
 
         var simulationEntity = repository.getById(simulationId)
         val simulationState = stateFactory.from(simulationEntity)
@@ -27,7 +24,7 @@ class SimulationService(
             movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
         val lightPhaseManager =
             lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
-        val statisticsManager = statisticsService.createStatisticsManager(
+        val statisticsManager = statisticsFactory.createStatisticsManager(
             simulationEntity.statisticsEntities,
             simulationEntity.expectedVelocity
         )
@@ -45,12 +42,22 @@ class SimulationService(
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
             simulationEntity.simulationStateEntities.add(stateEntity)
             simulationEntity.statisticsEntities += (
-                statisticsService.createStatisticsEntity(
+                statisticsFactory.createStatisticsEntity(
                     statisticsManager.latestState,
                     simulationEntity
                 )
                 )
             simulationEntity = repository.save(simulationEntity)
         }
+
+        return simulationEntity
+    }
+
+    fun getSimulation(id: Long): SimulationEntity? {
+        return repository.findByIdOrNull(id)
+    }
+
+    fun getAllSimulations(): List<SimulationEntity> {
+        return repository.findAll()
     }
 }

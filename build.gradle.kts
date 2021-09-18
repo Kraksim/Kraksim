@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.spring") version "1.5.0"
     id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
     kotlin("plugin.jpa") version "1.5.0"
+    kotlin("kapt") version "1.5.10"
 }
 
 group = "pl.edu.agh.cs"
@@ -35,6 +36,16 @@ dependencies {
     implementation("de.vandermeer:asciitable:0.3.2")
     testImplementation("org.testcontainers:postgresql:1.16.0")
     testImplementation("org.testcontainers:junit-jupiter:1.16.0")
+    implementation("org.mapstruct:mapstruct:1.4.2.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
+    implementation("com.google.code.findbugs:jsr305:3.0.2")
+}
+
+kapt {
+    arguments {
+        arg("mapstruct.defaultComponentModel", "spring")
+    }
+    useBuildCache = false
 }
 
 tasks {

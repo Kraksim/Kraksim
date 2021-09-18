@@ -2,7 +2,6 @@ package pl.edu.agh.cs.kraksim.repository.entities.trafficState
 
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 import javax.persistence.*
 
 @Entity
@@ -17,8 +16,6 @@ class SimulationStateEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
     var gatewaysStates: List<GatewayStateEntity>,
-    @ManyToOne
-    var simulation: SimulationEntity,
     var stateType: StateType
 ) {
 
