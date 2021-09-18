@@ -2,7 +2,6 @@ package pl.edu.agh.cs.kraksim.repository.entities.trafficState
 
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
 import javax.persistence.*
 
 @Entity
@@ -19,20 +18,6 @@ class SimulationStateEntity(
     var gatewaysStates: List<GatewayStateEntity>,
     var stateType: StateType
 ) {
-    constructor(
-        turn: Long = 0,
-        carsOnMap: List<CarEntity>,
-        trafficLights: List<TrafficLightEntity>,
-        gatewaysStates: List<GatewayStateEntity>,
-        stateType: StateType,
-        simulation: SimulationEntity
-    ) : this(turn, carsOnMap, trafficLights, gatewaysStates, stateType) {
-        this.simulation = simulation
-    }
-
-    @Suppress("JoinDeclarationAndAssignment")
-    @ManyToOne
-    lateinit var simulation: SimulationEntity
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

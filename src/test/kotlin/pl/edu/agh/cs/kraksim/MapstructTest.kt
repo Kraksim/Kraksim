@@ -100,8 +100,6 @@ class MapstructTest @Autowired constructor(
             statisticsEntities = listOf()
         )
 
-        simulationStateEntity.simulation = simulationEntity
-
         val mapEntity = MapEntity(
             type = MapType.MAP,
             roadNodes = listOf(roadNodeEntity),

@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.api
+package pl.edu.agh.cs.kraksim.api.factory
 
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.common.RoadId
@@ -13,7 +13,7 @@ import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
 import pl.edu.agh.cs.kraksim.statistics.StatisticsValues
 
 @Service
-class StatisticsService {
+class StatisticsFactory {
 
     fun createStatisticsManager(
         statisticsEntities: List<StatisticsEntity>,

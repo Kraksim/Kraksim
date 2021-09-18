@@ -10,10 +10,10 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import pl.edu.agh.cs.kraksim.api.StatisticsService
 import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
 import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.api.factory.SimulationFactory
+import pl.edu.agh.cs.kraksim.api.factory.StatisticsFactory
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationStateAssert
 import pl.edu.agh.cs.kraksim.gps.GPSType
@@ -37,7 +37,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
     val stateFactory: NagelSimulationStateFactory,
     val movementSimulationStrategyFactory: MovementSimulationStrategyFactory,
     val lightPhaseManagerFactory: LightPhaseManagerFactory,
-    val statisticsService: StatisticsService
+    val statisticsFactory: StatisticsFactory
 ) {
 
     companion object {
@@ -187,8 +187,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                         route = emptyList()
                     )
                 )
-            ),
-            simulation = simulationEntity
+            )
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         return simulationRepository.save(simulationEntity).id
@@ -205,7 +204,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
             movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
         val lightPhaseManager =
             lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
-        val statisticsManager = statisticsService.createStatisticsManager(
+        val statisticsManager = statisticsFactory.createStatisticsManager(
             simulationEntity.statisticsEntities,
             simulationEntity.expectedVelocity
         )

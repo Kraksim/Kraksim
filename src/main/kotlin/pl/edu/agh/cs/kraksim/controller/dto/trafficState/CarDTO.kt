@@ -8,7 +8,7 @@ import pl.edu.agh.cs.kraksim.gps.GPSType
 
 class CarDTO(
     var carId: CarId,
-    var velocity: Velocity,
+    var velocity: Velocity, // todo x5
     var currentLaneId: LaneId?,
     var positionRelativeToStart: Int,
     var gps: GPSDTO

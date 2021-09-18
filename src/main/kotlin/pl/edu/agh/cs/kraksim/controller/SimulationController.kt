@@ -1,10 +1,7 @@
 package pl.edu.agh.cs.kraksim.controller
 
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.api.SimulationService
 import pl.edu.agh.cs.kraksim.controller.dto.SimulationDTO
 import pl.edu.agh.cs.kraksim.controller.mappers.SimulationMapper
@@ -16,7 +13,7 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 
 @RequestMapping("/simulation")
 @RestController
-class Controller(
+class SimulationController(
     val service: SimulationService,
     val simulationMapper: SimulationMapper,
     val mapRepository: MapRepository,
@@ -28,6 +25,23 @@ class Controller(
         @PathVariable id: Long
     ): ResponseEntity<SimulationDTO> {
         val simulation = service.getSimulation(id) ?: return ResponseEntity.notFound().build()
+        val dto = simulationMapper.convertToDTO(simulation)
+        return ResponseEntity.ok(dto)
+    }
+
+    @GetMapping("/all")
+    fun getSimulations(): ResponseEntity<List<SimulationDTO>> {
+        val simulations = service.getAllSimulations()
+        val dtos = simulations.map { simulationMapper.convertToDTO(it) } // todo fix only getting id and name
+        return ResponseEntity.ok(dtos)
+    }
+
+    @PostMapping("/simulate")
+    fun simulateStep(
+        @RequestParam("id") simulationId: Long,
+        @RequestParam("times") times: Int
+    ): ResponseEntity<SimulationDTO> {
+        val simulation = service.simulateStep(simulationId, times)
         val dto = simulationMapper.convertToDTO(simulation)
         return ResponseEntity.ok(dto)
     }
@@ -86,7 +100,6 @@ class Controller(
         val simulationStateEntity = SimulationStateEntity(
             turn = 0,
             trafficLights = ArrayList(),
-            simulation = simulationEntity,
             stateType = StateType.NAGEL_SCHRECKENBERG,
             gatewaysStates = ArrayList(),
             carsOnMap = arrayListOf(

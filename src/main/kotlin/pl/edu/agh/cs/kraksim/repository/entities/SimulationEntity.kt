@@ -15,7 +15,8 @@ class SimulationEntity(
     @OneToOne
     var mapEntity: MapEntity,
     // todo maybe we can somehow eager load only the last one?
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(cascade = [CascadeType.ALL])
+    @LazyCollection(LazyCollectionOption.FALSE)
     var simulationStateEntities: MutableList<SimulationStateEntity>,
     @OneToOne(cascade = [CascadeType.ALL])
     var movementSimulationStrategy: MovementSimulationStrategyEntity,
