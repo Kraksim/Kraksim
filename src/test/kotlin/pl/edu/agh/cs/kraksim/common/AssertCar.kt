@@ -1,9 +1,9 @@
 package pl.edu.agh.cs.kraksim.common
 
 import org.assertj.core.api.Assertions
-import pl.edu.agh.cs.kraksim.core.state.Car
-import pl.edu.agh.cs.kraksim.core.state.Road
-import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.model.movementSimulation.core.state.Car
+import pl.edu.agh.cs.kraksim.model.movementSimulation.core.state.Road
+import pl.edu.agh.cs.kraksim.model.gps.GPSType
 
 fun Car.assertVelocity(velocity: Velocity): Car {
     Assertions.assertThat(this.velocity).isEqualTo(velocity)

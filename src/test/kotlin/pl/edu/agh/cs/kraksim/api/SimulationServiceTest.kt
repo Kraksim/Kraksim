@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.api.service.SimulationService
+import pl.edu.agh.cs.kraksim.model.gps.GPSType
 import pl.edu.agh.cs.kraksim.repository.CarRepository
 import pl.edu.agh.cs.kraksim.repository.MapRepository
 import pl.edu.agh.cs.kraksim.repository.SimulationRepository

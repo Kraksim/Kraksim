@@ -5,7 +5,7 @@ import pl.edu.agh.cs.kraksim.common.CarId
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
-import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.model.gps.GPSType
 import pl.edu.agh.cs.kraksim.repository.LongArrayToStringConverter
 import javax.persistence.*
 import kotlin.random.Random

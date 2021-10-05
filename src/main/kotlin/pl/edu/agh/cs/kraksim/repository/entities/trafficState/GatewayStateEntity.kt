@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.repository.entities.trafficState
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.GatewayId
-import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.model.gps.GPSType
 import javax.persistence.*
 
 @Entity

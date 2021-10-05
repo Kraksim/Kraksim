@@ -5,7 +5,7 @@ import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.repository.LongArrayToStringConverter
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.model.trafficLight.TrafficLightPhase
 import javax.persistence.*
 
 @Entity

@@ -1,9 +1,9 @@
 package pl.edu.agh.cs.kraksim.common
 
-import pl.edu.agh.cs.kraksim.core.state.Car
-import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.gps.GPSType
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
+import pl.edu.agh.cs.kraksim.model.movementSimulation.core.state.Car
+import pl.edu.agh.cs.kraksim.model.gps.GPS
+import pl.edu.agh.cs.kraksim.model.gps.GPSType
+import pl.edu.agh.cs.kraksim.model.movementSimulation.nagel.state.NagelCar
 
 fun createListOfCars(amount: Int, velocity: Int, spaces: Int): List<Car> {
     return (0 until amount)

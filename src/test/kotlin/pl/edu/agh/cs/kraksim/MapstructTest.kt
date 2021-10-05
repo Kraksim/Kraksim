@@ -11,11 +11,11 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import pl.edu.agh.cs.kraksim.controller.dto.PositionDTO
-import pl.edu.agh.cs.kraksim.controller.mappers.CycleAvoidingMappingContext
-import pl.edu.agh.cs.kraksim.controller.mappers.MapMapper
-import pl.edu.agh.cs.kraksim.controller.mappers.SimulationMapper
-import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.api.controller.dto.PositionDTO
+import pl.edu.agh.cs.kraksim.api.controller.mappers.CycleAvoidingMappingContext
+import pl.edu.agh.cs.kraksim.api.controller.mappers.MapMapper
+import pl.edu.agh.cs.kraksim.api.controller.mappers.SimulationMapper
+import pl.edu.agh.cs.kraksim.model.gps.GPSType
 import pl.edu.agh.cs.kraksim.repository.entities.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
 

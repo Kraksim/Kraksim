@@ -1,9 +1,9 @@
 package pl.edu.agh.cs.kraksim.common
 
-import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelLane
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelRoad
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
+import pl.edu.agh.cs.kraksim.model.movementSimulation.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.model.movementSimulation.nagel.state.NagelLane
+import pl.edu.agh.cs.kraksim.model.movementSimulation.nagel.state.NagelRoad
+import pl.edu.agh.cs.kraksim.model.movementSimulation.nagel.state.NagelSimulationState
 
 fun NagelSimulationState.getLane(roadId: Long = 0, lane: Int = 0): NagelLane = (road(roadId) as NagelRoad).lanes[lane]
 

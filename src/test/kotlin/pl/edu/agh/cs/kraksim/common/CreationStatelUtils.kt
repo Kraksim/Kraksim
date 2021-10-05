@@ -1,12 +1,12 @@
 package pl.edu.agh.cs.kraksim.common
 
-import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
-import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.model.movementSimulation.core.state.IntersectionTurningLaneDirection
+import pl.edu.agh.cs.kraksim.model.movementSimulation.core.state.SimulationState
+import pl.edu.agh.cs.kraksim.model.gps.GPS
+import pl.edu.agh.cs.kraksim.model.movementSimulation.nagel.state.*
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
+import pl.edu.agh.cs.kraksim.model.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.model.trafficLight.TrafficLightPhase.LightColor
 
 class OneLaneNagelStateBuilder(
     private val intersectionsIds: IntRange,
