@@ -18,7 +18,4 @@ interface SimulationMapper {
      */
     @Mapping(source = "mapEntity", target = "mapDTO")
     fun convertToDTO(simulationEntity: SimulationEntity, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): SimulationDTO
-
-    @Mapping(source = "mapDTO", target = "mapEntity")
-    fun convertToEntity(simulationDTO: SimulationDTO, @Context context: CycleAvoidingMappingContext = CycleAvoidingMappingContext()): SimulationEntity
 }

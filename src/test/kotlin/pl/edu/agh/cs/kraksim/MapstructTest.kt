@@ -82,6 +82,7 @@ class MapstructTest @Autowired constructor(
         )
 
         val simulationEntity = SimulationEntity(
+            name = "TEST",
             simulationStateEntities = listOf(simulationStateEntity) as MutableList<SimulationStateEntity>,
             movementSimulationStrategy = MovementSimulationStrategyEntity(
                 type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
