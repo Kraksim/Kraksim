@@ -39,8 +39,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
     kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("io.springfox:springfox-swagger2:3.0.0")
-    implementation("io.springfox:springfox-swagger-ui:2.9.2")
+    implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
 }
 
 kapt {
