@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject
 import org.assertj.core.api.Assertions.assertThat
 import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.SimulationStateEntity
 
 class NagelSimulationStateAssert(
     private val state: NagelSimulationState

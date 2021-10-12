@@ -18,11 +18,11 @@ import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationAsser
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationStateAssert
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
-import pl.edu.agh.cs.kraksim.repository.MapRepository
-import pl.edu.agh.cs.kraksim.repository.SimulationRepository
-import pl.edu.agh.cs.kraksim.repository.entities.*
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
+import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
+import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
+import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.trafficState.domain.*
 
 @Testcontainers
 @SpringBootTest(

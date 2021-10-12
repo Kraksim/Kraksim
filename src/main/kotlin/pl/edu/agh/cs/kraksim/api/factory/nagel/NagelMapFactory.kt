@@ -9,7 +9,7 @@ import pl.edu.agh.cs.kraksim.core.state.RoadNode
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelIntersection
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelRoad
-import pl.edu.agh.cs.kraksim.repository.entities.*
+import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
 
 @Component

@@ -2,8 +2,8 @@ package pl.edu.agh.cs.kraksim.controller.dto.trafficState
 
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.LaneId
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.AlgorithmType
 import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.trafficState.domain.AlgorithmType
 
 class TrafficLightDTO(
     var intersectionId: IntersectionId,

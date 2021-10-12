@@ -9,8 +9,8 @@ import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.generator.Generator
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.nagelCore.state.*
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.*
 
 @Component
 class NagelSimulationStateFactory(

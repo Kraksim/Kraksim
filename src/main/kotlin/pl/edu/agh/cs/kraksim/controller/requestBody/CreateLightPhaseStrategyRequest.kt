@@ -1,7 +1,7 @@
 package pl.edu.agh.cs.kraksim.controller.requestBody
 
 import pl.edu.agh.cs.kraksim.common.IntersectionId
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.AlgorithmType
+import pl.edu.agh.cs.kraksim.trafficState.domain.AlgorithmType
 
 class CreateLightPhaseStrategyRequest {
     lateinit var algorithm: AlgorithmType

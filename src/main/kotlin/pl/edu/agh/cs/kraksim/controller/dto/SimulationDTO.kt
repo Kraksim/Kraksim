@@ -5,7 +5,7 @@ import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.LightPhaseStrategyDTO
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.MovementSimulationStrategyDTO
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.SimulationStateDTO
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationType
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
 
 class SimulationDTO(
     var mapDTO: MapDTO,

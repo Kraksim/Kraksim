@@ -3,11 +3,11 @@ package pl.edu.agh.cs.kraksim.api.factory
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.AlgorithmType
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.LightPhaseStrategyEntity
 import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseManager
 import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseStrategy
-import pl.edu.agh.cs.kraksim.trafficLight.strategies.TurnBasedLightPhaseStrategy
+import pl.edu.agh.cs.kraksim.trafficLight.strategy.TurnBasedLightPhaseStrategy
+import pl.edu.agh.cs.kraksim.trafficState.domain.AlgorithmType
+import pl.edu.agh.cs.kraksim.trafficState.domain.LightPhaseStrategyEntity
 
 @Component
 class LightPhaseManagerFactory {

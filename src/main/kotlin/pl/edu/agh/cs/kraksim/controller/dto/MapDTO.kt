@@ -1,7 +1,7 @@
 package pl.edu.agh.cs.kraksim.controller.dto
 
-import pl.edu.agh.cs.kraksim.repository.entities.MapType
-import pl.edu.agh.cs.kraksim.repository.entities.RoadNodeType
+import pl.edu.agh.cs.kraksim.simulation.domain.MapType
+import pl.edu.agh.cs.kraksim.simulation.domain.RoadNodeType
 
 class MapDTO(
     var type: MapType,

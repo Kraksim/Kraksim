@@ -1,6 +1,6 @@
 package pl.edu.agh.cs.kraksim.controller.dto.trafficState
 
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
+import pl.edu.agh.cs.kraksim.trafficState.domain.StateType
 
 class SimulationStateDTO(
     var turn: Long = 0,

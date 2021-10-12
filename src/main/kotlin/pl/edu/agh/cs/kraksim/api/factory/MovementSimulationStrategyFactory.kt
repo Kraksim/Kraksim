@@ -3,9 +3,9 @@ package pl.edu.agh.cs.kraksim.api.factory
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
 import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.MovementSimulationStrategyEntity
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.MovementSimulationStrategyType
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.RandomProviderType
+import pl.edu.agh.cs.kraksim.trafficState.domain.MovementSimulationStrategyEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.MovementSimulationStrategyType
+import pl.edu.agh.cs.kraksim.trafficState.domain.RandomProviderType
 
 @Component
 class MovementSimulationStrategyFactory {

@@ -1,6 +1,6 @@
 package pl.edu.agh.cs.kraksim.controller.dto.basicInfo
 
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationType
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
 
 class BasicSimulationInfoDTO(
     val id: Long,

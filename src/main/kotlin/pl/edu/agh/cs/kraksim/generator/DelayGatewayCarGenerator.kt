@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.core.state.*
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.gps.GpsFactory
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
+import pl.edu.agh.cs.kraksim.trafficState.domain.StateType
 import kotlin.random.Random
 
 @Component

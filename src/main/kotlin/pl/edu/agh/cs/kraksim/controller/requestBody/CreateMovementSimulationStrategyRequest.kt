@@ -1,7 +1,7 @@
 package pl.edu.agh.cs.kraksim.controller.requestBody
 
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.MovementSimulationStrategyType
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.RandomProviderType
+import pl.edu.agh.cs.kraksim.trafficState.domain.MovementSimulationStrategyType
+import pl.edu.agh.cs.kraksim.trafficState.domain.RandomProviderType
 
 class CreateMovementSimulationStrategyRequest {
     lateinit var type: MovementSimulationStrategyType

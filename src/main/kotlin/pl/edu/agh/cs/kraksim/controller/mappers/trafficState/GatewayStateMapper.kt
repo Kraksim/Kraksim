@@ -2,11 +2,11 @@ package pl.edu.agh.cs.kraksim.controller.mappers.trafficState
 
 import org.mapstruct.Context
 import org.mapstruct.Mapper
+import pl.edu.agh.cs.kraksim.common.CycleAvoidingMappingContext
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.GatewayStateDTO
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.GeneratorDTO
-import pl.edu.agh.cs.kraksim.controller.mappers.CycleAvoidingMappingContext
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GatewayStateEntity
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.GeneratorEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.GatewayStateEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.GeneratorEntity
 
 @Mapper
 interface GatewayStateMapper {

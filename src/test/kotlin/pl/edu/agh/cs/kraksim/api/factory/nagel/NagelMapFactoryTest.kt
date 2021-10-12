@@ -12,11 +12,11 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadNodeAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelIntersectionsAssert
+import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadNodeAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadsAssert
-import pl.edu.agh.cs.kraksim.repository.MapRepository
-import pl.edu.agh.cs.kraksim.repository.entities.*
+import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
+import pl.edu.agh.cs.kraksim.simulation.domain.*
 
 @Testcontainers
 @SpringBootTest(

@@ -3,14 +3,9 @@ package pl.edu.agh.cs.kraksim.api.factory
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
-import pl.edu.agh.cs.kraksim.repository.entities.SimulationEntity
-import pl.edu.agh.cs.kraksim.repository.entities.statistics.SpeedStatisticsEntity
-import pl.edu.agh.cs.kraksim.repository.entities.statistics.StatisticsEntity
-import pl.edu.agh.cs.kraksim.repository.entities.statistics.StatisticsValuesEntity
-import pl.edu.agh.cs.kraksim.statistics.SpeedStatistics
-import pl.edu.agh.cs.kraksim.statistics.StateStatistics
-import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
-import pl.edu.agh.cs.kraksim.statistics.StatisticsValues
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
+import pl.edu.agh.cs.kraksim.statistics.application.StatisticsManager
+import pl.edu.agh.cs.kraksim.statistics.domain.*
 
 @Service
 class StatisticsFactory {

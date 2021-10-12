@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.repository
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import pl.edu.agh.cs.kraksim.common.converter.LongArrayToStringConverter
 
 internal class LongArrayToStringConverterTest {
 

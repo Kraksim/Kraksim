@@ -2,10 +2,10 @@ package pl.edu.agh.cs.kraksim.controller.mappers.trafficState
 
 import org.mapstruct.Context
 import org.mapstruct.Mapper
+import pl.edu.agh.cs.kraksim.common.CycleAvoidingMappingContext
 import pl.edu.agh.cs.kraksim.controller.dto.trafficState.SimulationStateDTO
-import pl.edu.agh.cs.kraksim.controller.mappers.CycleAvoidingMappingContext
-import pl.edu.agh.cs.kraksim.controller.mappers.SimulationMapper
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.SimulationStateEntity
+import pl.edu.agh.cs.kraksim.simulation.application.SimulationMapper
+import pl.edu.agh.cs.kraksim.trafficState.domain.SimulationStateEntity
 
 @Mapper(uses = [CarMapper::class, GatewayStateMapper::class, LightStateMapper::class, SimulationMapper::class])
 interface SimulationStateMapper {
