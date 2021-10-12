@@ -4,11 +4,11 @@ import org.mapstruct.Context
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import pl.edu.agh.cs.kraksim.common.CycleAvoidingMappingContext
-import pl.edu.agh.cs.kraksim.controller.dto.SimulationDTO
-import pl.edu.agh.cs.kraksim.controller.mappers.trafficState.LightStateMapper
-import pl.edu.agh.cs.kraksim.controller.mappers.trafficState.MovementSimulationStrategyMapper
-import pl.edu.agh.cs.kraksim.controller.mappers.trafficState.SimulationStateMapper
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationDTO
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
+import pl.edu.agh.cs.kraksim.trafficState.application.mapper.LightStateMapper
+import pl.edu.agh.cs.kraksim.trafficState.application.mapper.MovementSimulationStrategyMapper
+import pl.edu.agh.cs.kraksim.trafficState.application.mapper.SimulationStateMapper
 
 @Mapper(uses = [SimulationStateMapper::class, MapMapper::class, MovementSimulationStrategyMapper::class, LightStateMapper::class])
 interface SimulationMapper {

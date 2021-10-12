@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.common.*
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase.LightColor
+import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor
 
 internal class SlowingDownStepNagelMovementSimulationStrategyTest {
 

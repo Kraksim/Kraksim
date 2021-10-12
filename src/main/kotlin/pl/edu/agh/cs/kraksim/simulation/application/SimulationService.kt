@@ -2,16 +2,19 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import pl.edu.agh.cs.kraksim.api.factory.*
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
-import pl.edu.agh.cs.kraksim.controller.requestBody.CreateLightPhaseStrategyRequest
-import pl.edu.agh.cs.kraksim.controller.requestBody.CreateMovementSimulationStrategyRequest
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMovementSimulationStrategyRequest
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
-import pl.edu.agh.cs.kraksim.trafficState.domain.*
+import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
+import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
+import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
+import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
+import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 
 @Service
 class SimulationService(

@@ -3,11 +3,11 @@ package pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject
 import org.assertj.core.api.Assertions.assertThat
 import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
-import pl.edu.agh.cs.kraksim.trafficLight.strategy.TurnBasedLightPhaseStrategy
-import pl.edu.agh.cs.kraksim.trafficState.domain.AlgorithmType
-import pl.edu.agh.cs.kraksim.trafficState.domain.MovementSimulationStrategyEntity
-import pl.edu.agh.cs.kraksim.trafficState.domain.MovementSimulationStrategyType
-import pl.edu.agh.cs.kraksim.trafficState.domain.SimulationStateEntity
+import pl.edu.agh.cs.kraksim.trafficLight.application.strategy.TurnBasedLightPhaseStrategy
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.AlgorithmType
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.SimulationStateEntity
 
 class NagelSimulationAssert(
     private val simulation: NagelSimulation

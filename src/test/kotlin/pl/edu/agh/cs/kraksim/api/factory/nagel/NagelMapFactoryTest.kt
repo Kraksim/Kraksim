@@ -15,6 +15,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelIntersectionsAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadNodeAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadsAssert
+import pl.edu.agh.cs.kraksim.nagelCore.factory.NagelMapFactory
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 

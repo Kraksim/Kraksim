@@ -12,12 +12,11 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import pl.edu.agh.cs.kraksim.common.CycleAvoidingMappingContext
-import pl.edu.agh.cs.kraksim.controller.dto.PositionDTO
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.simulation.application.MapMapper
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationMapper
 import pl.edu.agh.cs.kraksim.simulation.domain.*
-import pl.edu.agh.cs.kraksim.trafficState.domain.*
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 
 @Testcontainers
 @SpringBootTest

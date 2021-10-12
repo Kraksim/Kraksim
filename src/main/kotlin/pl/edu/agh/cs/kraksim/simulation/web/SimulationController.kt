@@ -2,10 +2,10 @@ package pl.edu.agh.cs.kraksim.simulation.web
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pl.edu.agh.cs.kraksim.controller.dto.SimulationDTO
-import pl.edu.agh.cs.kraksim.controller.dto.basicInfo.BasicSimulationInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationMapper
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationService
+import pl.edu.agh.cs.kraksim.simulation.domain.BasicSimulationInfoDTO
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationDTO
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
 
 @RequestMapping("/simulation")

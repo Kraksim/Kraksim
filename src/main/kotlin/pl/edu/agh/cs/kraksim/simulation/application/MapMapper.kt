@@ -3,7 +3,6 @@ package pl.edu.agh.cs.kraksim.simulation.application
 import org.mapstruct.Context
 import org.mapstruct.Mapper
 import pl.edu.agh.cs.kraksim.common.CycleAvoidingMappingContext
-import pl.edu.agh.cs.kraksim.controller.dto.*
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 
 @Mapper(uses = [RoadMapper::class, RoadNodeMapper::class])

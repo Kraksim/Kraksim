@@ -4,7 +4,7 @@ import pl.edu.agh.cs.kraksim.core.Simulation
 import pl.edu.agh.cs.kraksim.generator.GatewayCarGenerator
 import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.statistics.application.StatisticsManager
-import pl.edu.agh.cs.kraksim.trafficLight.LightPhaseManager
+import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManager
 
 class NagelSimulation(
     override val state: NagelSimulationState,

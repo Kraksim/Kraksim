@@ -4,7 +4,7 @@ import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.trafficState.domain.StateType
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.StateType
 
 class NagelSimulationState(
     override val id: Long,

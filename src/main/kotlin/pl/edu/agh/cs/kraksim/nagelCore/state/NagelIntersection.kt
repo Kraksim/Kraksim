@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
 import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.core.state.Road
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 
 class NagelIntersection(
     override val id: Long,

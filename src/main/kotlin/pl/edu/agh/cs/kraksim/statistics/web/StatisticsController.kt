@@ -2,9 +2,9 @@ package pl.edu.agh.cs.kraksim.statistics.web
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pl.edu.agh.cs.kraksim.controller.dto.statistics.StatisticsDTO
-import pl.edu.agh.cs.kraksim.controller.mappers.statistics.StatisticsMapper
 import pl.edu.agh.cs.kraksim.statistics.application.StatisticsService
+import pl.edu.agh.cs.kraksim.statistics.application.mapper.StatisticsMapper
+import pl.edu.agh.cs.kraksim.statistics.domain.StatisticsDTO
 
 @RequestMapping("/statistics")
 @RestController

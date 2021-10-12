@@ -18,7 +18,7 @@ import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.trafficState.db.CarRepository
-import pl.edu.agh.cs.kraksim.trafficState.domain.*
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 
 @Testcontainers
 @SpringBootTest

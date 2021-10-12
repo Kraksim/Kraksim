@@ -5,9 +5,9 @@ import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.statistics.domain.StatisticsEntity
-import pl.edu.agh.cs.kraksim.trafficState.domain.LightPhaseStrategyEntity
-import pl.edu.agh.cs.kraksim.trafficState.domain.MovementSimulationStrategyEntity
-import pl.edu.agh.cs.kraksim.trafficState.domain.SimulationStateEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.LightPhaseStrategyEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.SimulationStateEntity
 import javax.persistence.*
 
 @Entity
