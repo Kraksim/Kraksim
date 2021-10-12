@@ -38,7 +38,7 @@ class LaneDTO(
 
 class TurnDirectionDTO(
     var sourceLane: LaneDTO,
-    var destinationRoad: LaneDTO
+    var destinationRoad: RoadDTO
 ) {
     var id: Long = 0
 }

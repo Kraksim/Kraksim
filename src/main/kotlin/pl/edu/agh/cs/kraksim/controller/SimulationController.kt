@@ -4,20 +4,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.api.SimulationService
 import pl.edu.agh.cs.kraksim.controller.dto.SimulationDTO
+import pl.edu.agh.cs.kraksim.controller.dto.basicInfo.BasicSimulationInfoDTO
 import pl.edu.agh.cs.kraksim.controller.mappers.SimulationMapper
-import pl.edu.agh.cs.kraksim.gps.GPSType
-import pl.edu.agh.cs.kraksim.repository.MapRepository
-import pl.edu.agh.cs.kraksim.repository.SimulationRepository
-import pl.edu.agh.cs.kraksim.repository.entities.*
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
+import pl.edu.agh.cs.kraksim.controller.requestBody.CreateSimulationRequest
 
 @RequestMapping("/simulation")
 @RestController
 class SimulationController(
     val service: SimulationService,
     val simulationMapper: SimulationMapper,
-    val mapRepository: MapRepository,
-    val simulationRepository: SimulationRepository
 ) {
 
     @GetMapping("/{id}")
@@ -30,102 +25,47 @@ class SimulationController(
     }
 
     @GetMapping("/all")
-    fun getSimulations(): ResponseEntity<List<SimulationDTO>> {
+    fun getSimulations(): ResponseEntity<List<BasicSimulationInfoDTO>> {
         val simulations = service.getAllSimulations()
-        val dtos = simulations.map { simulationMapper.convertToDTO(it) } // todo fix only getting id and name
+        val dtos = simulations.map {
+            BasicSimulationInfoDTO(
+                id = it.id,
+                name = it.name,
+                type = it.simulationType,
+                mapId = it.mapEntity.id
+            )
+        }
         return ResponseEntity.ok(dtos)
     }
 
     @PostMapping("/simulate")
     fun simulateStep(
         @RequestParam("id") simulationId: Long,
-        @RequestParam("times") times: Int
+        @RequestParam("times") times: Int,
     ): ResponseEntity<SimulationDTO> {
         val simulation = service.simulateStep(simulationId, times)
         val dto = simulationMapper.convertToDTO(simulation)
         return ResponseEntity.ok(dto)
     }
 
-    @GetMapping("/populate")
-    fun populate() {
-        var lane = LaneEntity(
-            startingPoint = 0,
-            endingPoint = 400,
-            indexFromLeft = 0
-        )
-        val road = RoadEntity(
-            length = 400,
-            lanes = arrayListOf(lane)
-        )
+    @PostMapping("/create")
+    @ResponseBody
+    fun createSimulation(
+        @RequestBody request: CreateSimulationRequest
+    ): ResponseEntity<SimulationDTO> {
+        val dto = simulationMapper.convertToDTO(service.createSimulation(request))
 
-        var mapEntity = MapEntity(
-            type = MapType.MAP,
-            roadNodes = arrayListOf(
-                RoadNodeEntity(
-                    type = RoadNodeType.GATEWAY,
-                    position = PositionEntity(1.0, 1.0),
-                    endingRoads = ArrayList(),
-                    startingRoads = arrayListOf(road),
-                    turnDirections = ArrayList()
-                ),
-                RoadNodeEntity(
-                    type = RoadNodeType.GATEWAY,
-                    position = PositionEntity(21.0, 1.0),
-                    endingRoads = arrayListOf(road),
-                    startingRoads = ArrayList(),
-                    turnDirections = ArrayList()
-                )
-            ),
-            roads = arrayListOf(road)
-        )
+        return ResponseEntity.ok(dto)
+    }
 
-        mapEntity = mapRepository.save(mapEntity)
-        lane = road.lanes.first()
+    @PostMapping("/populate")
+    fun populate(): ResponseEntity<SimulationDTO> {
+        val dto = simulationMapper.convertToDTO(service.populate())
+        return ResponseEntity.ok(dto)
+    }
 
-        val simulationEntity = SimulationEntity(
-            mapEntity = mapEntity,
-            simulationStateEntities = ArrayList(),
-            movementSimulationStrategy = MovementSimulationStrategyEntity(
-                type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
-                randomProvider = RandomProviderType.TRUE,
-                slowDownProbability = 0.3,
-                maxVelocity = 6
-            ),
-            simulationType = SimulationType.NAGEL_CORE,
-            expectedVelocity = emptyMap(),
-            lightPhaseStrategies = ArrayList(),
-            statisticsEntities = ArrayList()
-        )
-
-        val simulationStateEntity = SimulationStateEntity(
-            turn = 0,
-            trafficLights = ArrayList(),
-            stateType = StateType.NAGEL_SCHRECKENBERG,
-            gatewaysStates = ArrayList(),
-            carsOnMap = arrayListOf(
-                CarEntity(
-                    carId = 1,
-                    velocity = 2,
-                    currentLaneId = lane.id,
-                    positionRelativeToStart = 30,
-                    gps = GPSEntity(
-                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                        route = ArrayList()
-                    )
-                ),
-                CarEntity(
-                    carId = 2,
-                    velocity = 6,
-                    currentLaneId = lane.id,
-                    positionRelativeToStart = 50,
-                    gps = GPSEntity(
-                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                        route = ArrayList()
-                    )
-                )
-            )
-        )
-        simulationEntity.simulationStateEntities.add(simulationStateEntity)
-        simulationRepository.save(simulationEntity)
+    @DeleteMapping("/delete")
+    fun deleteSimulation(@RequestParam("simulationId") id: Long) {
+        service.deleteSimulation(id)
     }
 }

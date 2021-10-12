@@ -84,6 +84,7 @@ internal class SimulationServiceTest @Autowired constructor(
         lane = road.lanes.first()
 
         var simulationEntity = SimulationEntity(
+            name = "TEST",
             mapEntity = mapEntity,
             simulationStateEntities = ArrayList(),
             movementSimulationStrategy = MovementSimulationStrategyEntity(

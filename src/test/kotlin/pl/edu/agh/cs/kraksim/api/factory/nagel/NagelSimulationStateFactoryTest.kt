@@ -116,6 +116,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
         val firstLane = mapEntity.roads.first()
 
         val simulationEntity = SimulationEntity(
+            name = "TEST",
             mapEntity = mapEntity,
             simulationStateEntities = ArrayList(),
             movementSimulationStrategy = MovementSimulationStrategyEntity(

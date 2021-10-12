@@ -29,7 +29,8 @@ class SimulationEntity(
     var lightPhaseStrategies: List<LightPhaseStrategyEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
     @LazyCollection(LazyCollectionOption.FALSE)
-    var statisticsEntities: List<StatisticsEntity>
+    var statisticsEntities: List<StatisticsEntity>,
+    var name: String
 ) {
     val latestTrafficStateEntity
         get() = simulationStateEntities.maxByOrNull { it.turn }!!
