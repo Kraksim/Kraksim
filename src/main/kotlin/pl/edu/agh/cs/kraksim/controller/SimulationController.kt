@@ -48,7 +48,7 @@ class SimulationController(
         return ResponseEntity.ok(dto)
     }
 
-    @PutMapping("/create")
+    @PostMapping("/create")
     @ResponseBody
     fun createSimulation(
         @RequestBody request: CreateSimulationRequest
@@ -58,7 +58,7 @@ class SimulationController(
         return ResponseEntity.ok(dto)
     }
 
-    @GetMapping("/populate")
+    @PostMapping("/populate")
     fun populate(): ResponseEntity<SimulationDTO> {
         val dto = simulationMapper.convertToDTO(service.populate())
         return ResponseEntity.ok(dto)
