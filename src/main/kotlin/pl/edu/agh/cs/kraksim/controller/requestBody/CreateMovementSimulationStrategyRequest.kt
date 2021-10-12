@@ -4,8 +4,8 @@ import pl.edu.agh.cs.kraksim.repository.entities.trafficState.MovementSimulation
 import pl.edu.agh.cs.kraksim.repository.entities.trafficState.RandomProviderType
 
 class CreateMovementSimulationStrategyRequest {
-    public lateinit var type: MovementSimulationStrategyType
-    public lateinit var randomProvider: RandomProviderType
-    public var slowDownProbability: Double = 0.0
-    public var maxVelocity: Int = 0
+    lateinit var type: MovementSimulationStrategyType
+    lateinit var randomProvider: RandomProviderType
+    var slowDownProbability: Double = 0.0
+    var maxVelocity: Int = 0
 }
