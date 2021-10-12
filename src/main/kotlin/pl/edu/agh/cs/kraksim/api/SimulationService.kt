@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.api
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import pl.edu.agh.cs.kraksim.api.exception.MapNotFoundException
+import pl.edu.agh.cs.kraksim.api.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.api.factory.*
 import pl.edu.agh.cs.kraksim.controller.requestBody.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.controller.requestBody.CreateMovementSimulationStrategyRequest
@@ -74,7 +74,7 @@ class SimulationService(
         val movementSimulationStrategyEntity = createMovementSimulationStrategy(request.movementSimulationStrategy)
         val lightPhaseStrategyEntities = createLightPhaseStrategies(request.lightPhaseStrategies)
 
-        if (mapEntity.isEmpty) throw MapNotFoundException()
+        if (mapEntity.isEmpty) throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
 
         val simulation = SimulationEntity(
             name = request.name,
