@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.controller
 
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pl.edu.agh.cs.kraksim.api.exception.MapNotFoundException
+import pl.edu.agh.cs.kraksim.api.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.api.SimulationService
 import pl.edu.agh.cs.kraksim.controller.dto.SimulationDTO
 import pl.edu.agh.cs.kraksim.controller.dto.basicInfo.BasicSimulationInfoDTO
@@ -58,7 +58,7 @@ class SimulationController(
         val response = try {
             val dto = simulationMapper.convertToDTO(service.createSimulation(request))
             ResponseEntity.ok(dto)
-        } catch (mapException: MapNotFoundException) {
+        } catch (mapException: ObjectNotFoundException) {
             ResponseEntity.badRequest().build()
         }
 
