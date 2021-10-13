@@ -28,6 +28,7 @@ class SimulationService(
     val statisticsFactory: StatisticsFactory,
     val simulationFactory: SimulationFactory,
     val mapRepository: MapRepository,
+    val requestMapper: RequestToEntityMapper
 ) {
 
     fun simulateStep(simulationId: Long = 0L, times: Int = 1): SimulationEntity {
@@ -77,23 +78,8 @@ class SimulationService(
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
         val mapEntity = mapRepository.findById(request.mapId)
-        val movementSimulationStrategyEntity = createMovementSimulationStrategy(request.movementSimulationStrategy)
-        val lightPhaseStrategyEntities = createLightPhaseStrategies(request.lightPhaseStrategies)
-        val stateType = when (request.simulationType) {
-            SimulationType.NAGEL_CORE -> StateType.NAGEL_SCHRECKENBERG
-        }
         if (mapEntity.isEmpty) throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
-
-        val simulation = SimulationEntity(
-            name = request.name,
-            mapEntity = mapEntity.get(),
-            simulationStateEntities = arrayListOf(createInitialSimulationState(request.initialState, stateType)),
-            movementSimulationStrategy = movementSimulationStrategyEntity,
-            simulationType = request.simulationType,
-            expectedVelocity = request.expectedVelocity,
-            lightPhaseStrategies = lightPhaseStrategyEntities,
-            statisticsEntities = ArrayList()
-        )
+        val simulation = requestMapper.createSimulation(request, mapEntity.get())
 
         return repository.save(simulation)
     }
@@ -179,68 +165,6 @@ class SimulationService(
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         return repository.save(simulationEntity)
-    }
-
-    private fun createMovementSimulationStrategy(request: CreateMovementSimulationStrategyRequest): MovementSimulationStrategyEntity {
-        return MovementSimulationStrategyEntity(
-            type = request.type,
-            randomProvider = request.randomProvider,
-            slowDownProbability = request.slowDownProbability,
-            maxVelocity = request.maxVelocity
-        )
-    }
-
-    private fun createLightPhaseStrategies(requests: List<CreateLightPhaseStrategyRequest>): List<LightPhaseStrategyEntity> {
-        return requests.map { request ->
-            LightPhaseStrategyEntity(
-                algorithm = request.algorithm,
-                intersections = request.intersections,
-                turnLength = request.turnLength,
-            )
-        }
-    }
-
-    private fun createInitialSimulationState(request: CreateInitialSimulationStateRequest, stateType: StateType): SimulationStateEntity {
-        return SimulationStateEntity(
-            turn = 0,
-            carsOnMap = ArrayList(),
-            stateType = stateType,
-            gatewaysStates = createGatewayStates(request.gatewaysStates),
-            trafficLights = createTrafficLights(request.trafficLights)
-        )
-    }
-
-    private fun createGatewayStates(requests: List<CreateGatewayStateRequest>): List<GatewayStateEntity> {
-        return requests.map {
-            GatewayStateEntity(
-                gatewayId = it.gatewayId,
-                collectedCars = ArrayList(),
-                generators = it.generators.map { generator ->
-                    GeneratorEntity(
-                        lastCarReleasedTurnsAgo = 0,
-                        releaseDelay = generator.releaseDelay,
-                        carsToRelease = generator.carsToRelease,
-                        targetGatewayId = generator.targetGatewayId,
-                        gpsType = generator.gpsType
-                    )
-                }
-            )
-        }
-    }
-
-    private fun createTrafficLights(requests: List<CreateTrafficLightRequest>): List<TrafficLightEntity> {
-        return requests.map {
-            TrafficLightEntity(
-                intersectionId = it.intersectionId,
-                phases = it.phases.map { phase ->
-                    PhaseEntity(
-                        phaseTime = 0,
-                        laneId = phase.laneId,
-                        state = phase.state
-                    )
-                }
-            )
-        }
     }
 
     fun deleteSimulation(id: Long) {
