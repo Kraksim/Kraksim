@@ -5,7 +5,7 @@ import pl.edu.agh.cs.kraksim.common.AverageSpeed
 import pl.edu.agh.cs.kraksim.common.Density
 import pl.edu.agh.cs.kraksim.common.FlowRatio
 import pl.edu.agh.cs.kraksim.common.RoadId
-import pl.edu.agh.cs.kraksim.statistics.StateStatistics
+import pl.edu.agh.cs.kraksim.statistics.domain.StateStatistics
 
 class StateStatisticsAssert(private val stateStatistics: StateStatistics) {
     fun assertCurrentDensity(roadId: RoadId, density: Density): StateStatisticsAssert {

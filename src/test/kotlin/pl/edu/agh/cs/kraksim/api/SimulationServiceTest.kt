@@ -13,11 +13,12 @@ import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import pl.edu.agh.cs.kraksim.gps.GPSType
-import pl.edu.agh.cs.kraksim.repository.CarRepository
-import pl.edu.agh.cs.kraksim.repository.MapRepository
-import pl.edu.agh.cs.kraksim.repository.SimulationRepository
-import pl.edu.agh.cs.kraksim.repository.entities.*
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
+import pl.edu.agh.cs.kraksim.simulation.application.SimulationService
+import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
+import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
+import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.trafficState.db.CarRepository
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 
 @Testcontainers
 @SpringBootTest

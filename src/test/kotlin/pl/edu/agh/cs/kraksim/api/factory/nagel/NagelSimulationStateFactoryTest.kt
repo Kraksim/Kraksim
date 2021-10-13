@@ -10,19 +10,20 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import pl.edu.agh.cs.kraksim.api.factory.LightPhaseManagerFactory
-import pl.edu.agh.cs.kraksim.api.factory.MovementSimulationStrategyFactory
-import pl.edu.agh.cs.kraksim.api.factory.SimulationFactory
-import pl.edu.agh.cs.kraksim.api.factory.StatisticsFactory
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationStateAssert
 import pl.edu.agh.cs.kraksim.gps.GPSType
-import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
-import pl.edu.agh.cs.kraksim.repository.MapRepository
-import pl.edu.agh.cs.kraksim.repository.SimulationRepository
-import pl.edu.agh.cs.kraksim.repository.entities.*
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.*
-import pl.edu.agh.cs.kraksim.trafficLight.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelSimulation
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.factory.NagelSimulationStateFactory
+import pl.edu.agh.cs.kraksim.simulation.application.SimulationFactory
+import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
+import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
+import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
+import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
+import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 
 @Testcontainers
 @SpringBootTest(

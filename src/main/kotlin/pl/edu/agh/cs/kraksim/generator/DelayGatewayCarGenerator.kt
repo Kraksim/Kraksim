@@ -5,8 +5,8 @@ import pl.edu.agh.cs.kraksim.common.nextPositiveLong
 import pl.edu.agh.cs.kraksim.core.state.*
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.gps.GpsFactory
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.repository.entities.trafficState.StateType
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.StateType
 import kotlin.random.Random
 
 @Component

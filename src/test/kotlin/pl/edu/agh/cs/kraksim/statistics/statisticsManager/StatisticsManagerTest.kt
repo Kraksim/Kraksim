@@ -2,9 +2,9 @@ package pl.edu.agh.cs.kraksim.statistics.statisticsManager
 
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
-import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.statistics.StatisticsManager
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSimulationStrategy
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
+import pl.edu.agh.cs.kraksim.statistics.application.StatisticsManager
 
 internal class StatisticsManagerTest {
     @Test
