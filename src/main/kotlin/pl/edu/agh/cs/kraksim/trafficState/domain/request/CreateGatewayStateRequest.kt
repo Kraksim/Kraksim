@@ -1,0 +1,9 @@
+package pl.edu.agh.cs.kraksim.trafficState.domain.request
+
+import pl.edu.agh.cs.kraksim.common.GatewayId
+import pl.edu.agh.cs.kraksim.generator.request.CreateGeneratorRequest
+
+class CreateGatewayStateRequest {
+    var gatewayId: GatewayId = 0
+    lateinit var generators: List<CreateGeneratorRequest>
+}

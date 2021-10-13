@@ -15,6 +15,9 @@ import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRe
 import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
+import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateRequest
+import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
+import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateTrafficLightRequest
 
 @Service
 class SimulationService(
@@ -76,13 +79,15 @@ class SimulationService(
         val mapEntity = mapRepository.findById(request.mapId)
         val movementSimulationStrategyEntity = createMovementSimulationStrategy(request.movementSimulationStrategy)
         val lightPhaseStrategyEntities = createLightPhaseStrategies(request.lightPhaseStrategies)
-
+        val stateType = when (request.simulationType) {
+            SimulationType.NAGEL_CORE -> StateType.NAGEL_SCHRECKENBERG
+        }
         if (mapEntity.isEmpty) throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
 
         val simulation = SimulationEntity(
             name = request.name,
             mapEntity = mapEntity.get(),
-            simulationStateEntities = ArrayList(),
+            simulationStateEntities = arrayListOf(createInitialSimulationState(request.initialState, stateType)),
             movementSimulationStrategy = movementSimulationStrategyEntity,
             simulationType = request.simulationType,
             expectedVelocity = request.expectedVelocity,
@@ -191,6 +196,49 @@ class SimulationService(
                 algorithm = request.algorithm,
                 intersections = request.intersections,
                 turnLength = request.turnLength,
+            )
+        }
+    }
+
+    private fun createInitialSimulationState(request: CreateInitialSimulationStateRequest, stateType: StateType): SimulationStateEntity {
+        return SimulationStateEntity(
+            turn = 0,
+            carsOnMap = ArrayList(),
+            stateType = stateType,
+            gatewaysStates = createGatewayStates(request.gatewaysStates),
+            trafficLights = createTrafficLights(request.trafficLights)
+        )
+    }
+
+    private fun createGatewayStates(requests: List<CreateGatewayStateRequest>): List<GatewayStateEntity> {
+        return requests.map {
+            GatewayStateEntity(
+                gatewayId = it.gatewayId,
+                collectedCars = ArrayList(),
+                generators = it.generators.map { generator ->
+                    GeneratorEntity(
+                        lastCarReleasedTurnsAgo = 0,
+                        releaseDelay = generator.releaseDelay,
+                        carsToRelease = generator.carsToRelease,
+                        targetGatewayId = generator.targetGatewayId,
+                        gpsType = generator.gpsType
+                    )
+                }
+            )
+        }
+    }
+
+    private fun createTrafficLights(requests: List<CreateTrafficLightRequest>): List<TrafficLightEntity> {
+        return requests.map {
+            TrafficLightEntity(
+                intersectionId = it.intersectionId,
+                phases = it.phases.map { phase ->
+                    PhaseEntity(
+                        phaseTime = 0,
+                        laneId = phase.laneId,
+                        state = phase.state
+                    )
+                }
             )
         }
     }
