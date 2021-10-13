@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.nagelCore.factory
+package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.factory
 
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.partitionByType
@@ -6,9 +6,9 @@ import pl.edu.agh.cs.kraksim.core.state.Gateway
 import pl.edu.agh.cs.kraksim.core.state.Intersection
 import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
 import pl.edu.agh.cs.kraksim.core.state.RoadNode
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelIntersection
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelRoad
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelGateway
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelIntersection
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelRoad
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 

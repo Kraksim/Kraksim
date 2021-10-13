@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.nagelCore
+package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel
 
 import pl.edu.agh.cs.kraksim.common.adjacentPairs
 import pl.edu.agh.cs.kraksim.common.random.RandomProvider
@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.common.takeEachWhile
 import pl.edu.agh.cs.kraksim.common.withoutLast
 import pl.edu.agh.cs.kraksim.core.MovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
 import kotlin.math.min
 
 class NagelMovementSimulationStrategy(

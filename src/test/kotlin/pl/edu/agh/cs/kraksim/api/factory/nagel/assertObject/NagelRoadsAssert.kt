@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject
 
 import org.assertj.core.api.Assertions.assertThat
 import pl.edu.agh.cs.kraksim.core.state.Car
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelRoad
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelRoad
 import pl.edu.agh.cs.kraksim.simulation.domain.LaneEntity
 import pl.edu.agh.cs.kraksim.simulation.domain.RoadEntity
 import pl.edu.agh.cs.kraksim.simulation.domain.RoadNodeEntity

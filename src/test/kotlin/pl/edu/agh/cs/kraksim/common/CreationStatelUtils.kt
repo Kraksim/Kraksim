@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.common
 import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.StateType

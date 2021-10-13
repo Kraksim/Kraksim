@@ -1,10 +1,10 @@
-package pl.edu.agh.cs.kraksim.nagelCore.nagelMovementSimulationStrategy
+package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.nagelMovementSimulationStrategy
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.*
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelGateway
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelGateway
 
 internal class MotionStepNagelMovementSimulationStrategyTest {
 

@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.nagelCore.state
+package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state
 
 import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.common.IntersectionId

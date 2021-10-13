@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.common.createListOfCars
 import pl.edu.agh.cs.kraksim.common.getLane
 import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.mockGps
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelCar
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 
 class SOTLLightPhaseStrategyTest {

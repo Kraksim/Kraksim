@@ -13,8 +13,8 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationAssert
 import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelSimulationStateAssert
 import pl.edu.agh.cs.kraksim.gps.GPSType
-import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
-import pl.edu.agh.cs.kraksim.nagelCore.factory.NagelSimulationStateFactory
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelSimulation
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.factory.NagelSimulationStateFactory
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationFactory
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository

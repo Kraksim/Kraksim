@@ -1,7 +1,7 @@
 package pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject
 
 import org.assertj.core.api.Assertions.assertThat
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelIntersection
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelIntersection
 import pl.edu.agh.cs.kraksim.simulation.domain.TurnDirectionEntity
 
 class NagelIntersectionsAssert(

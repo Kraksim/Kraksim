@@ -2,8 +2,8 @@ package pl.edu.agh.cs.kraksim.trafficState.application
 
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.nagelCore.factory.NagelSimulationStateFactory
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.factory.NagelSimulationStateFactory
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.SimulationStateEntity
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.StateType

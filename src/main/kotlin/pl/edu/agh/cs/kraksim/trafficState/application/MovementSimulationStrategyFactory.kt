@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.trafficState.application
 
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.random.TrueRandomProvider
-import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyEntity
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.RandomProviderType

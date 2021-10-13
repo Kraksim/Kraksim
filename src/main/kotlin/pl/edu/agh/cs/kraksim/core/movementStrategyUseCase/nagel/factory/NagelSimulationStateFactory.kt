@@ -1,4 +1,4 @@
-package pl.edu.agh.cs.kraksim.nagelCore.factory
+package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.factory
 
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.common.GatewayId
@@ -8,7 +8,7 @@ import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.generator.Generator
 import pl.edu.agh.cs.kraksim.gps.GPS
-import pl.edu.agh.cs.kraksim.nagelCore.state.*
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 

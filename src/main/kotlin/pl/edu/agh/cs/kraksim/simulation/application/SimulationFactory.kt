@@ -5,9 +5,9 @@ import pl.edu.agh.cs.kraksim.core.MovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.core.Simulation
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.generator.GatewayCarGenerator
-import pl.edu.agh.cs.kraksim.nagelCore.NagelMovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.nagelCore.NagelSimulation
-import pl.edu.agh.cs.kraksim.nagelCore.state.NagelSimulationState
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSimulationStrategy
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelSimulation
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
 import pl.edu.agh.cs.kraksim.statistics.application.StatisticsManager
 import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManager
