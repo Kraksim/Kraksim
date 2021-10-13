@@ -7,17 +7,12 @@ import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
-import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMovementSimulationStrategyRequest
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
 import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
 import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
-import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
-import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateRequest
-import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
-import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateTrafficLightRequest
 
 @Service
 class SimulationService(
