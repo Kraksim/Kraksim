@@ -4,6 +4,7 @@ import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
 import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
+import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
 
 class CreateSimulationRequest {
     lateinit var name: String
@@ -12,4 +13,5 @@ class CreateSimulationRequest {
     lateinit var expectedVelocity: Map<RoadId, Velocity>
     lateinit var movementSimulationStrategy: CreateMovementSimulationStrategyRequest
     lateinit var lightPhaseStrategies: List<CreateLightPhaseStrategyRequest>
+    lateinit var initialState: CreateInitialSimulationStateRequest
 }

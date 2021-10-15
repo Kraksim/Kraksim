@@ -7,11 +7,9 @@ import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
-import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMovementSimulationStrategyRequest
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
 import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
 import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
-import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
@@ -25,6 +23,7 @@ class SimulationService(
     val statisticsFactory: StatisticsFactory,
     val simulationFactory: SimulationFactory,
     val mapRepository: MapRepository,
+    val requestMapper: RequestToEntityMapper
 ) {
 
     fun simulateStep(simulationId: Long = 0L, times: Int = 1): SimulationEntity {
@@ -74,21 +73,8 @@ class SimulationService(
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
         val mapEntity = mapRepository.findById(request.mapId)
-        val movementSimulationStrategyEntity = createMovementSimulationStrategy(request.movementSimulationStrategy)
-        val lightPhaseStrategyEntities = createLightPhaseStrategies(request.lightPhaseStrategies)
-
         if (mapEntity.isEmpty) throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
-
-        val simulation = SimulationEntity(
-            name = request.name,
-            mapEntity = mapEntity.get(),
-            simulationStateEntities = ArrayList(),
-            movementSimulationStrategy = movementSimulationStrategyEntity,
-            simulationType = request.simulationType,
-            expectedVelocity = request.expectedVelocity,
-            lightPhaseStrategies = lightPhaseStrategyEntities,
-            statisticsEntities = ArrayList()
-        )
+        val simulation = requestMapper.createSimulation(request, mapEntity.get())
 
         return repository.save(simulation)
     }
@@ -174,25 +160,6 @@ class SimulationService(
         )
         simulationEntity.simulationStateEntities.add(simulationStateEntity)
         return repository.save(simulationEntity)
-    }
-
-    private fun createMovementSimulationStrategy(request: CreateMovementSimulationStrategyRequest): MovementSimulationStrategyEntity {
-        return MovementSimulationStrategyEntity(
-            type = request.type,
-            randomProvider = request.randomProvider,
-            slowDownProbability = request.slowDownProbability,
-            maxVelocity = request.maxVelocity
-        )
-    }
-
-    private fun createLightPhaseStrategies(requests: List<CreateLightPhaseStrategyRequest>): List<LightPhaseStrategyEntity> {
-        return requests.map { request ->
-            LightPhaseStrategyEntity(
-                algorithm = request.algorithm,
-                intersections = request.intersections,
-                turnLength = request.turnLength,
-            )
-        }
     }
 
     fun deleteSimulation(id: Long) {
