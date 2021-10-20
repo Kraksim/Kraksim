@@ -22,7 +22,7 @@ class MapController(
 
     @GetMapping
     fun getMap(@RequestParam id: Long): ResponseEntity<MapDTO> {
-       return ResponseEntity.ok(mapper.convertToDto(mapRepository.getById(id)))
+        return ResponseEntity.ok(mapper.convertToDto(mapRepository.getById(id)))
     }
 
     @GetMapping("/ids")

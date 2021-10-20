@@ -29,18 +29,20 @@ class MapService {
         roadDTO.length,
         roadDTO.lanes.map { laneDTO ->
             lanes[laneDTO.id]!!
-        })
-    
-    fun createRoadNode(roadNodeDTO: RoadNodeDTO, roads: Map<Long, RoadEntity>, lanes: Map<Long, LaneEntity>) = RoadNodeEntity(
-        type = roadNodeDTO.type,
-        position = PositionEntity(x = roadNodeDTO.position.x, y = roadNodeDTO.position.y),
-        endingRoads = roadNodeDTO.endingRoads.map { roadDTO -> roads[roadDTO.id]!! },
-        startingRoads = roadNodeDTO.startingRoads.map { roadDTO -> roads[roadDTO.id]!! },
-        turnDirections = roadNodeDTO.turnDirections.map { turnDirectionDTO ->
-            TurnDirectionEntity(
-                sourceLane = lanes[turnDirectionDTO.sourceLane.id]!!,
-                destinationRoad = roads[turnDirectionDTO.destinationRoad.id]!!
-            )
         }
     )
+
+    fun createRoadNode(roadNodeDTO: RoadNodeDTO, roads: Map<Long, RoadEntity>, lanes: Map<Long, LaneEntity>) =
+        RoadNodeEntity(
+            type = roadNodeDTO.type,
+            position = PositionEntity(x = roadNodeDTO.position.x, y = roadNodeDTO.position.y),
+            endingRoads = roadNodeDTO.endingRoads.map { roadDTO -> roads[roadDTO.id]!! },
+            startingRoads = roadNodeDTO.startingRoads.map { roadDTO -> roads[roadDTO.id]!! },
+            turnDirections = roadNodeDTO.turnDirections.map { turnDirectionDTO ->
+                TurnDirectionEntity(
+                    sourceLane = lanes[turnDirectionDTO.sourceLane.id]!!,
+                    destinationRoad = roads[turnDirectionDTO.destinationRoad.id]!!
+                )
+            }
+        )
 }
