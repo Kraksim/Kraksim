@@ -7,5 +7,4 @@ import pl.edu.agh.cs.kraksim.simulation.domain.*
 class MapService(val mapper: DTOToEntityMapper) {
 
     fun createMap(mapDTO: MapDTO): MapEntity = mapper.createMap(mapDTO)
-
 }
