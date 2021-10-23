@@ -8,10 +8,10 @@ import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
 @Repository
 interface SimulationRepository : JpaRepository<SimulationEntity, Long> {
 
-    fun findAllBy(): List<BasicSimulationInfoDTO>
+    fun findAllBy(): List<BasicSimulationInfo>
 }
 
-interface BasicSimulationInfoDTO {
+interface BasicSimulationInfo {
     val id: Long
     val name: String
     val simulationType: SimulationType
