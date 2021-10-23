@@ -4,29 +4,29 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.simulation.application.MapMapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapService
-import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
-import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
 
 @RequestMapping("/map")
 @RestController
 class MapController(
     val mapper: MapMapper,
-    val mapRepository: MapRepository,
     val service: MapService
 ) {
 
     @PostMapping
     fun createMap(@RequestBody mapDTO: MapDTO) {
-        mapRepository.save(service.createMap(mapDTO))
+        service.createMap(mapDTO)
     }
 
     @GetMapping
     fun getMap(@RequestParam id: Long): ResponseEntity<MapDTO> {
-        return ResponseEntity.ok(mapper.convertToDto(mapRepository.getById(id)))
+        val convertToDto = mapper.convertToDto(service.getById(id))
+        return ResponseEntity.ok(convertToDto)
     }
 
     @GetMapping("/ids")
     fun getAllIds(): ResponseEntity<List<Long>> {
-        return ResponseEntity.ok(mapRepository.findAll().map { it.id })
+        val ids: List<Long> = service.getAllIds()
+        return ResponseEntity.ok(ids)
     }
 }

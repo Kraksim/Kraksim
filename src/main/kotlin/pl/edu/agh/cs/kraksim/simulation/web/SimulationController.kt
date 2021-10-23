@@ -26,7 +26,7 @@ class SimulationController(
 
     @GetMapping("/all")
     fun getSimulations(): ResponseEntity<List<BasicSimulationInfoDTO>> {
-        val simulations = service.getAllSimulations()
+        val simulations = service.getAllSimulationsInfo()
         val dtos = simulations.map {
             BasicSimulationInfoDTO(
                 id = it.id,
@@ -54,7 +54,6 @@ class SimulationController(
         @RequestBody request: CreateSimulationRequest
     ): ResponseEntity<SimulationDTO> {
         val dto = simulationMapper.convertToDTO(service.createSimulation(request))
-
         return ResponseEntity.ok(dto)
     }
 
@@ -65,7 +64,7 @@ class SimulationController(
     }
 
     @DeleteMapping("/delete")
-    fun deleteSimulation(@RequestParam("simulationId") id: Long) {
+    fun deleteSimulation(@RequestParam("id") id: Long) {
         service.deleteSimulation(id)
     }
 }

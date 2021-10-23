@@ -1,7 +1,5 @@
 package pl.edu.agh.cs.kraksim.trafficState.domain.entity
 
-import org.hibernate.annotations.LazyCollection
-import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.GatewayId
 import pl.edu.agh.cs.kraksim.gps.GPSType
 import javax.persistence.*
@@ -9,11 +7,9 @@ import javax.persistence.*
 @Entity
 class GatewayStateEntity(
     var gatewayId: GatewayId,
-    @LazyCollection(value = LazyCollectionOption.FALSE)
     @OneToMany(cascade = [CascadeType.ALL])
     var collectedCars: List<CarEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
-    @LazyCollection(value = LazyCollectionOption.FALSE)
     var generators: List<GeneratorEntity>
 ) {
     @Id
