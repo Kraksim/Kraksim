@@ -1,9 +1,9 @@
 package pl.edu.agh.cs.kraksim.statistics.application
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.statistics.db.StatisticsRepository
 import pl.edu.agh.cs.kraksim.statistics.domain.StatisticsEntity
-import java.util.*
 
 @Service
 class StatisticsService(
@@ -17,7 +17,7 @@ class StatisticsService(
         return repository.findAllBySimulationEntityIdAndTurnGreaterThanEqualAndTurnLessThanEqual(simulationId, from, to)
     }
 
-    fun findById(id: Long): Optional<StatisticsEntity> {
-        return repository.findById(id)
+    fun findById(id: Long): StatisticsEntity? {
+        return repository.findByIdOrNull(id)
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.simulation.db.BasicSimulationInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
@@ -164,5 +165,9 @@ class SimulationService(
 
     fun deleteSimulation(id: Long) {
         return repository.deleteById(id)
+    }
+
+    fun getAllSimulationsInfo(): List<BasicSimulationInfoDTO> {
+        return repository.findAllBy()
     }
 }

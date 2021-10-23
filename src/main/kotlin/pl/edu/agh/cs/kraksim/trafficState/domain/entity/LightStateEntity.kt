@@ -1,7 +1,5 @@
 package pl.edu.agh.cs.kraksim.trafficState.domain.entity
 
-import org.hibernate.annotations.LazyCollection
-import org.hibernate.annotations.LazyCollectionOption
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.LaneId
 import pl.edu.agh.cs.kraksim.common.converter.LongArrayToStringConverter
@@ -12,7 +10,6 @@ import javax.persistence.*
 class TrafficLightEntity(
     var intersectionId: IntersectionId,
     @OneToMany(cascade = [CascadeType.ALL])
-    @LazyCollection(value = LazyCollectionOption.FALSE)
     var phases: List<PhaseEntity>
 ) {
     @Id

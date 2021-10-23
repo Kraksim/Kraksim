@@ -1,16 +1,12 @@
 package pl.edu.agh.cs.kraksim.simulation.domain
 
-import org.hibernate.annotations.LazyCollection
-import org.hibernate.annotations.LazyCollectionOption
 import javax.persistence.*
 
 @Entity
 class MapEntity(
     var type: MapType,
     @OneToMany(cascade = [CascadeType.ALL])
-    @LazyCollection(LazyCollectionOption.FALSE)
     var roadNodes: List<RoadNodeEntity>,
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = [CascadeType.ALL])
     var roads: List<RoadEntity>,
 ) {
@@ -25,13 +21,10 @@ class RoadNodeEntity(
     @Embedded
     var position: PositionEntity,
     @OneToMany(cascade = [CascadeType.ALL])
-    @LazyCollection(LazyCollectionOption.FALSE)
     var endingRoads: List<RoadEntity>,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @LazyCollection(LazyCollectionOption.FALSE)
     var startingRoads: List<RoadEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
-    @LazyCollection(LazyCollectionOption.FALSE)
     var turnDirections: List<TurnDirectionEntity>,
 ) {
     @Id

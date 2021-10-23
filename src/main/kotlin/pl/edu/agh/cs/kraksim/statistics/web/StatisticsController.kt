@@ -17,7 +17,8 @@ class StatisticsController(
     fun getStatistics(
         @PathVariable id: Long
     ): ResponseEntity<StatisticsDTO> {
-        val dto = mapper.convertToDto(service.findById(id).get())
+        val stats = service.findById(id) ?: return ResponseEntity.notFound().build()
+        val dto = mapper.convertToDto(stats)
         return ResponseEntity.ok(dto)
     }
 
