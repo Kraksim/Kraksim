@@ -22,7 +22,7 @@ class RoadNodeEntity(
     var position: PositionEntity,
     @OneToMany(cascade = [CascadeType.ALL])
     var endingRoads: List<RoadEntity>,
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(cascade = [CascadeType.ALL])
     var startingRoads: List<RoadEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
     var turnDirections: List<TurnDirectionEntity>,
@@ -35,7 +35,7 @@ class RoadNodeEntity(
 @Entity
 class RoadEntity(
     var length: Int,
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(cascade = [CascadeType.ALL])
     var lanes: List<LaneEntity>,
 ) {
     @Id
