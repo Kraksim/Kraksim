@@ -13,18 +13,18 @@ class MapController(
     val service: MapService
 ) {
 
-    @PostMapping
+    @PostMapping("/create")
     fun createMap(@RequestBody mapDTO: MapDTO) {
         service.createMap(mapDTO)
     }
 
-    @GetMapping
-    fun getMap(@RequestParam id: Long): ResponseEntity<MapDTO> {
+    @GetMapping("/{id}")
+    fun getMap(@PathVariable id: Long): ResponseEntity<MapDTO> {
         val convertToDto = mapper.convertToDto(service.getById(id))
         return ResponseEntity.ok(convertToDto)
     }
 
-    @GetMapping("/ids")
+    @GetMapping("/all")
     fun getAllIds(): ResponseEntity<List<Long>> {
         val ids: List<Long> = service.getAllIds()
         return ResponseEntity.ok(ids)

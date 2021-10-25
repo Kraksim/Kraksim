@@ -63,8 +63,8 @@ class SimulationController(
         return ResponseEntity.ok(dto)
     }
 
-    @DeleteMapping("/delete")
-    fun deleteSimulation(@RequestParam("id") id: Long) {
+    @DeleteMapping("/delete/{id}")
+    fun deleteSimulation(@PathVariable("id") id: Long) {
         service.deleteSimulation(id)
     }
 }
