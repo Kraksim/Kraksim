@@ -19,7 +19,7 @@ class MapController(
     }
 
     @GetMapping("/{id}")
-    fun getMap(@RequestParam id: Long): ResponseEntity<MapDTO> {
+    fun getMap(@PathVariable id: Long): ResponseEntity<MapDTO> {
         val convertToDto = mapper.convertToDto(service.getById(id))
         return ResponseEntity.ok(convertToDto)
     }
