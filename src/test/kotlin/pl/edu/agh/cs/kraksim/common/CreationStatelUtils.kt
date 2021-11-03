@@ -8,12 +8,15 @@ import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.StateType
 
+typealias RoadNodeId = Long
+typealias IntersectionId = Long
+
 class OneLaneNagelStateBuilder(
     private val intersectionsIds: IntRange,
     gatewaysIds: IntRange
 ) {
-    private val connections: Map<Long, ArrayList<ConnectionData>>
-    private val directionRelations: Map<Long, ArrayList<TurningLaneDirection>>
+    private val connections: Map<RoadNodeId, ArrayList<ConnectionData>>
+    private val directionRelations: Map<IntersectionId, ArrayList<TurningLaneDirection>>
 
     init {
         require(intersectionsIds.intersect(gatewaysIds).isEmpty()) {
@@ -139,7 +142,7 @@ fun <T : SimulationState> T.putCar(
             gps = gps
         )
     }
-    car.moveToLane(lane, 0)
+    car.moveToLaneFront(lane, 0)
     return this
 }
 

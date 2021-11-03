@@ -16,9 +16,9 @@ internal class StatisticsManagerTest {
             velocity = initialVelocity,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
-        val roadId = state.getLane().id
+        val roadId = state.getFirstLane().id
 
         // when
         manager.createStatistics(state)
@@ -47,15 +47,15 @@ internal class StatisticsManagerTest {
             velocity = initialVelocity1,
             gps = mockGps()
         )
-        car1.moveToLane(state.getLane(), 4)
+        car1.moveToLaneFront(state.getFirstLane(), 4)
         val initialVelocity2 = 6
         val car2 = NagelCar(
             velocity = initialVelocity2,
             gps = mockGps()
         )
-        car2.moveToLane(state.getLane(), 0)
+        car2.moveToLaneFront(state.getFirstLane(), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
-        val roadId = state.getLane().id
+        val roadId = state.getFirstLane().id
 
         // when
         manager.createStatistics(state)
@@ -84,15 +84,15 @@ internal class StatisticsManagerTest {
             velocity = initialVelocity1,
             gps = mockGps()
         )
-        car1.moveToLane(state.getLane(), 4)
+        car1.moveToLaneFront(state.getFirstLane(), 4)
         val initialVelocity2 = 6
         val car2 = NagelCar(
             velocity = initialVelocity2,
             gps = mockGps()
         )
-        car2.moveToLane(state.getLane(), 0)
+        car2.moveToLaneFront(state.getFirstLane(), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
-        val roadId = state.getLane().id
+        val roadId = state.getFirstLane().id
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider())
 
         // when
@@ -123,13 +123,13 @@ internal class StatisticsManagerTest {
             velocity = initialVelocity1,
             gps = mockGps()
         )
-        car1.moveToLane(state.getLane(0), 0)
+        car1.moveToLaneFront(state.getFirstLane(0), 0)
         val initialVelocity2 = 6
         val car2 = NagelCar(
             velocity = initialVelocity2,
             gps = mockGps()
         )
-        car2.moveToLane(state.getLane(1), 0)
+        car2.moveToLaneFront(state.getFirstLane(1), 0)
         val manager = StatisticsManager(ArrayList(), emptyMap())
         val roadId1 = 0.toLong()
         val roadId2 = 1.toLong()

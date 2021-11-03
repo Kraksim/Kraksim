@@ -7,6 +7,7 @@ import pl.edu.agh.cs.kraksim.core.state.IntersectionTurningLaneDirection
 import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.core.state.Road
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
+import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor.GREEN
 
 class NagelIntersection(
     override val id: Long,
@@ -33,12 +34,17 @@ class NagelIntersection(
         return road.lanes.flatMap { getPossibleRoads(it) }
     }
 
+    override fun getLanesLeadingTo(road: RoadId): Set<LaneId> {
+        return directions.filter { it.to == road }.map { it.from }.toSet()
+    }
+
     /**
      * Answers if Intersection can be entered from [lane],
      * depends on TrafficLightPhase assigned to that line
      */
     fun canGoThrough(lane: NagelLane): Boolean {
-        return phases[lane.id]!!.state == TrafficLightPhase.LightColor.GREEN
+        val phaseForLane = phases[lane.id] ?: return false
+        return phaseForLane.state == GREEN
     }
 
     override fun lightPhasesOf(road: Road): List<TrafficLightPhase> {

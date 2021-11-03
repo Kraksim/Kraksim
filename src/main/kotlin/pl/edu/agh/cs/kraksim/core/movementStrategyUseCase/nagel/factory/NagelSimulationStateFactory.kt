@@ -115,7 +115,7 @@ class NagelSimulationStateFactory(
         require(it.positionRelativeToStart % Car.AVERAGE_CAR_LENGTH == 0) { "Car id=${it.carId} should have positionRelativeToStart divisible by AVERAGE_CAR_LENGTH=${Car.AVERAGE_CAR_LENGTH}, but has ${it.positionRelativeToStart}" }
         val lanes: Map<LaneId, NagelLane> = roads.values.flatMap { it.lanes }.associateBy { it.id }
         val car = createCar(it, roads)
-        car.moveToLane(lanes[it.currentLaneId], it.positionRelativeToStart / Car.AVERAGE_CAR_LENGTH)
+        car.moveToLaneFront(lanes[it.currentLaneId], it.positionRelativeToStart / Car.AVERAGE_CAR_LENGTH)
     }
 
     private fun createCar(it: CarEntity, roads: Map<RoadId, NagelRoad>? = null): NagelCar {

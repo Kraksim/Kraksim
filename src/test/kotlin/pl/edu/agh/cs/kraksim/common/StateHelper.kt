@@ -5,7 +5,8 @@ import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelLane
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelRoad
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelSimulationState
 
-fun NagelSimulationState.getLane(roadId: Long = 0, lane: Int = 0): NagelLane = (road(roadId) as NagelRoad).lanes[lane]
+fun NagelSimulationState.getFirstLane(roadId: Long = 0): NagelLane = (road(roadId) as NagelRoad).lanes[0]
+fun NagelSimulationState.getLane(roadId: Long = 0, laneId: Long = 0): NagelLane = (road(roadId) as NagelRoad).lanes.find { it.id == laneId }!!
 
 fun SimulationState.road(id: Long) =
     roads[id] ?: throw NullPointerException("Road with id=$id doesnt exist in $roads")

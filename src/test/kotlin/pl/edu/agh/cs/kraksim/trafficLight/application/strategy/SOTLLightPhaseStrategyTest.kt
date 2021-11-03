@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.trafficLight.application.strategy
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.createListOfCars
-import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.getFirstLane
 import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.mockGps
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
@@ -16,8 +16,8 @@ class SOTLLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
-        val lane2 = state.getLane(roadId = 1)
+        val lane1 = state.getFirstLane()
+        val lane2 = state.getFirstLane(roadId = 1)
         val phases = intersection.phases
         // when
         strategy.initializeLights(state.intersections.values)
@@ -35,8 +35,8 @@ class SOTLLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
-        val lane2 = state.getLane(roadId = 1)
+        val lane1 = state.getFirstLane()
+        val lane2 = state.getFirstLane(roadId = 1)
         val phases = intersection.phases
         strategy.initializeLights(state.intersections.values)
 
@@ -59,7 +59,7 @@ class SOTLLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
+        val lane1 = state.getFirstLane()
         val phases = intersection.phases
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
@@ -80,7 +80,7 @@ class SOTLLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
+        val lane1 = state.getFirstLane()
         val phases = intersection.phases
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
@@ -105,7 +105,7 @@ class SOTLLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
+        val lane1 = state.getFirstLane()
         val phases = intersection.phases
         val cars = createListOfCars(4, 3, 1)
         cars.forEach { lane1.addCar(it) }
@@ -128,7 +128,7 @@ class SOTLLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy(minPhaseLength = 5, phiFactor = 5.0)
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
+        val lane1 = state.getFirstLane()
         val phases = intersection.phases
         val lastCar = NagelCar(velocity = 3, gps = mockGps())
         lastCar.positionRelativeToStart = 17

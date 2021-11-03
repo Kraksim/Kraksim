@@ -21,7 +21,7 @@ class NagelGateway(
 
     fun addFinishedCar(car: NagelCar) {
         finishedCars.add(car)
-        car.moveToLane(null)
+        car.moveToLaneFront(null)
     }
 
     override fun toString(): String {

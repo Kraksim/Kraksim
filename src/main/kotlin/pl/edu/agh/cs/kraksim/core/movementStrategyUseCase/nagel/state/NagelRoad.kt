@@ -15,6 +15,10 @@ class NagelRoad(
         lanes.add(newLane)
     }
 
+    fun getLane(indexFromLeft: Int): NagelLane? {
+        return lanes.firstOrNull { lane -> lane.indexFromLeft == indexFromLeft }
+    }
+
     override fun toString(): String {
         return "NagelRoad(id=$id, lanes=$lanes)"
     }

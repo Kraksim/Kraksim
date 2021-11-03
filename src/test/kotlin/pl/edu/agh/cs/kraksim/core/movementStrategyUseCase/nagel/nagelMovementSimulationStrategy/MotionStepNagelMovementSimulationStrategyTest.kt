@@ -18,7 +18,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), newPosition = initialPosition)
+        car.moveToLaneFront(state.getFirstLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -39,7 +39,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), newPosition = initialPosition)
+        car.moveToLaneFront(state.getFirstLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -67,8 +67,8 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = mockGps()
         )
-        car2.moveToLane(state.getLane(), newPosition = secondCarInitialPosition)
-        car1.moveToLane(state.getLane(), newPosition = firstCarInitialPosition)
+        car2.moveToLaneFront(state.getFirstLane(), newPosition = secondCarInitialPosition)
+        car1.moveToLaneFront(state.getFirstLane(), newPosition = firstCarInitialPosition)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -90,7 +90,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), newPosition = initialPosition)
+        car.moveToLaneFront(state.getFirstLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -112,7 +112,7 @@ internal class MotionStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), newPosition = initialPosition)
+        car.moveToLaneFront(state.getFirstLane(), newPosition = initialPosition)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when

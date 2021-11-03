@@ -46,7 +46,7 @@ class DelayGatewayCarGenerator(
 
         return@mapNotNull if (lane != null) {
             val car: Car = generateCar(state.type, gps)
-            car.moveToLane(lane)
+            car.moveToLaneFront(lane)
             generator
         } else null
     }

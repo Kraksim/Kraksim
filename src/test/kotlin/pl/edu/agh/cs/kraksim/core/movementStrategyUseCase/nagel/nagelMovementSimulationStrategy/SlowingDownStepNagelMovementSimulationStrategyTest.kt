@@ -20,7 +20,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(0), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -40,12 +40,12 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(0), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        frontCar.moveToLane(state.getLane(), 2)
+        frontCar.moveToLaneFront(state.getFirstLane(), 2)
         val backCar = NagelCar(
             velocity = initialVelocity,
             gps = GPS(state.road(0), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        backCar.moveToLane(state.getLane(), 1)
+        backCar.moveToLaneFront(state.getFirstLane(), 1)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -66,12 +66,12 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(0), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        frontCar.moveToLane(state.getLane(), 5)
+        frontCar.moveToLaneFront(state.getFirstLane(), 5)
         val backCar = NagelCar(
             velocity = initialVelocity,
             gps = GPS(state.road(0), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        backCar.moveToLane(state.getLane(), 2)
+        backCar.moveToLaneFront(state.getFirstLane(), 2)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -95,7 +95,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car.moveToLane(state.getLane(), 3)
+        car.moveToLaneFront(state.getFirstLane(), 3)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -119,7 +119,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car.moveToLane(state.getLane(), 3)
+        car.moveToLaneFront(state.getFirstLane(), 3)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -143,7 +143,7 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car.moveToLane(state.getLane(), 1)
+        car.moveToLaneFront(state.getFirstLane(), 1)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -165,12 +165,12 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car1.moveToLane(state.getLane(), 3)
+        car1.moveToLaneFront(state.getFirstLane(), 3)
         val car2 = NagelCar(
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car2.moveToLane(state.getLane(roadId = 1), 0)
+        car2.moveToLaneFront(state.getFirstLane(roadId = 1), 0)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -192,12 +192,12 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car1.moveToLane(state.getLane(), 3)
+        car1.moveToLaneFront(state.getFirstLane(), 3)
         val car2 = NagelCar(
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car2.moveToLane(state.getLane(roadId = 1), 1)
+        car2.moveToLaneFront(state.getFirstLane(roadId = 1), 1)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -219,12 +219,12 @@ internal class SlowingDownStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car1.moveToLane(state.getLane(), 2)
+        car1.moveToLaneFront(state.getFirstLane(), 2)
         val car2 = NagelCar(
             velocity = initialVelocity,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car2.moveToLane(state.getLane(roadId = 1), 1)
+        car2.moveToLaneFront(state.getFirstLane(roadId = 1), 1)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
