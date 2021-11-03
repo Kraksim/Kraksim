@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.simulation.application.MapMapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapService
 import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
+import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
 
 @RequestMapping("/map")
 @RestController
@@ -14,8 +15,8 @@ class MapController(
 ) {
 
     @PostMapping("/create")
-    fun createMap(@RequestBody mapDTO: MapDTO) {
-        service.createMap(mapDTO)
+    fun createMap(@RequestBody createMapRequest: CreateMapRequest) {
+        service.createMap(createMapRequest)
     }
 
     @GetMapping("/{id}")

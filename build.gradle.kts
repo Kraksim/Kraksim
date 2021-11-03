@@ -40,6 +40,7 @@ dependencies {
     kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
     implementation("com.google.code.findbugs:jsr305:3.0.2")
     implementation("org.springdoc:springdoc-openapi-ui:1.5.11")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
 }
 
 kapt {
