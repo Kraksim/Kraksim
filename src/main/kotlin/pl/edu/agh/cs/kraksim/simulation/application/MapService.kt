@@ -2,17 +2,17 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
-import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
 import pl.edu.agh.cs.kraksim.simulation.domain.MapEntity
+import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
 
 @Service
 class MapService(
-    val mapper: DTOToEntityMapper,
+    val mapper: RequestToEntityMapper,
     val mapRepository: MapRepository
 ) {
 
-    fun createMap(mapDTO: MapDTO) {
-        val map = mapper.createMap(mapDTO)
+    fun createMap(createMapRequest: CreateMapRequest) {
+        val map = mapper.createMap(createMapRequest)
         mapRepository.save(map)
     }
 

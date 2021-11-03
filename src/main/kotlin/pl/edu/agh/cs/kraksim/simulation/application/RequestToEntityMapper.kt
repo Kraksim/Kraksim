@@ -1,11 +1,8 @@
 package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.springframework.stereotype.Component
-import pl.edu.agh.cs.kraksim.simulation.domain.MapEntity
-import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
-import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
-import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMovementSimulationStrategyRequest
-import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
+import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.simulation.web.request.*
 import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateRequest
@@ -95,4 +92,44 @@ class RequestToEntityMapper {
             )
         }
     }
+
+    fun createMap(createMapRequest: CreateMapRequest): MapEntity {
+        val lanes: Map<Long, LaneEntity> = createMapRequest.roads.flatMap { it.lanes }.associate {
+            it.id to createLane(it)
+        }
+        val roads: Map<Long, RoadEntity> = createMapRequest.roads.associate {
+            it.id to createRoad(it, lanes)
+        }
+        val roadNodes = createMapRequest.roadNodes.map {
+            createRoadNode(it, roads, lanes)
+        }
+        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList())
+    }
+
+    fun createLane(createLaneRequest: CreateLaneRequest) = LaneEntity(
+        startingPoint = createLaneRequest.startingPoint,
+        endingPoint = createLaneRequest.endingPoint,
+        indexFromLeft = createLaneRequest.indexFromLeft
+    )
+
+    fun createRoad(createRoadRequest: CreateRoadRequest, lanes: Map<Long, LaneEntity>) = RoadEntity(
+        createRoadRequest.length,
+        createRoadRequest.lanes.map { laneDTO ->
+            lanes[laneDTO.id]!!
+        }
+    )
+
+    fun createRoadNode(createRoadNodeRequest: CreateRoadNodeRequest, roads: Map<Long, RoadEntity>, lanes: Map<Long, LaneEntity>) =
+        RoadNodeEntity(
+            type = createRoadNodeRequest.type,
+            position = PositionEntity(x = createRoadNodeRequest.position.x, y = createRoadNodeRequest.position.y),
+            endingRoads = createRoadNodeRequest.endingRoadsIds.map { id -> roads[id]!! },
+            startingRoads = createRoadNodeRequest.startingRoadsIds.map { id -> roads[id]!! },
+            turnDirections = createRoadNodeRequest.turnDirections.map { createTurnDirectionRequest ->
+                TurnDirectionEntity(
+                    sourceLane = lanes[createTurnDirectionRequest.sourceLaneId]!!,
+                    destinationRoad = roads[createTurnDirectionRequest.destinationRoadId]!!
+                )
+            }
+        )
 }
