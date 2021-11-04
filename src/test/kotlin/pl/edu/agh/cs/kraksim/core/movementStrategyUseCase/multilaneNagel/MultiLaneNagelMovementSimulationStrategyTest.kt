@@ -2,16 +2,17 @@ package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.multilaneNagel
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.*
+import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.testMultiLaneNagelMovementSimulationStrategy
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.multilaneNagel.utils.getTwoRoadConnectedWithIntersectionMultiLaneSimulationState
-import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
 import pl.edu.agh.cs.kraksim.gps.GPS
 import pl.edu.agh.cs.kraksim.gps.GPSType
 
 internal class MultiLaneNagelMovementSimulationStrategyTest {
 
     @Test
-    fun `Given car in lane, when motion increase position`() {
+    fun `Given car in lane, when full step change lane and go through intersection`() {
         // given
         val state = getTwoRoadConnectedWithIntersectionMultiLaneSimulationState()
         val car = NagelCar(
@@ -22,9 +23,9 @@ internal class MultiLaneNagelMovementSimulationStrategyTest {
         val strategy = testMultiLaneNagelMovementSimulationStrategy()
 
         // when
-        strategy.changeLanes(state)
+        strategy.step(state)
 
         // then
-        assertThat(car.currentLane).isEqualTo(state.getLane(roadId = 0, laneId = 10))
+        assertThat(car.currentLane).isEqualTo(state.getLane(roadId = 1, laneId = 13))
     }
 }

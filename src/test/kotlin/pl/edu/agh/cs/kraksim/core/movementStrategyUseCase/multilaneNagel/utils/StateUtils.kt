@@ -10,24 +10,26 @@ import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
          ----/
  */
 fun getTwoRoadConnectedWithIntersectionMultiLaneSimulationState(
-    trafficLightColor: TrafficLightPhase.LightColor = TrafficLightPhase.LightColor.GREEN
+    trafficLightColor: TrafficLightPhase.LightColor = TrafficLightPhase.LightColor.GREEN,
+    firstRoadLength: Int = 20,
+    firstRoadRightLaneLength: Int = 5
 ): NagelSimulationState {
 
     val state = MultiLaneNagelStateBuilder(0..0, 1..2)
         .connect(
             sourceId = 1, destinationId = 0,
-            road = NagelRoad(id = 0, physicalLength = 20).apply {
+            road = NagelRoad(id = 0, physicalLength = firstRoadLength).apply {
                 addLane(
                     laneId = 10,
                     indexFromLeft = 0,
                     physicalStartingPoint = 0,
-                    physicalEndingPoint = 20
+                    physicalEndingPoint = firstRoadLength
                 )
                 addLane(
                     laneId = 11,
                     indexFromLeft = 1,
                     physicalStartingPoint = 0,
-                    physicalEndingPoint = 5
+                    physicalEndingPoint = firstRoadRightLaneLength
                 )
             }
         )
