@@ -5,9 +5,9 @@ import pl.edu.agh.cs.kraksim.common.random.RandomProvider
 import pl.edu.agh.cs.kraksim.common.takeEachWhile
 import pl.edu.agh.cs.kraksim.common.withoutLast
 import pl.edu.agh.cs.kraksim.core.MovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
 import pl.edu.agh.cs.kraksim.core.state.Road
+import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import kotlin.math.min
 
 open class NagelMovementSimulationStrategy(

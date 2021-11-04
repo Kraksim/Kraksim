@@ -104,6 +104,4 @@ internal class ChangeLaneMultiLaneNagelMovementSimulationStrategyTest {
             ).apply { popNext() }
         )
     }
-
-
 }
