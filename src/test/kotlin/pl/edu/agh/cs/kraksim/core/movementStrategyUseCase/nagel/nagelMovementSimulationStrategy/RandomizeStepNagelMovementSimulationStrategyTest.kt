@@ -3,7 +3,7 @@ package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.nagelMovementSi
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.edu.agh.cs.kraksim.common.MockRandomProvider
-import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.getFirstLane
 import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.mockGps
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSimulationStrategy
@@ -21,7 +21,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = true))
 
         // when
@@ -41,7 +41,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = false))
 
         // when
@@ -61,7 +61,7 @@ internal class RandomizeStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val strategy = NagelMovementSimulationStrategy(MockRandomProvider(booleanToReturn = true))
 
         // when

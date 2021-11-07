@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.nagelMovementSi
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.getFirstLane
 import pl.edu.agh.cs.kraksim.common.getOneRoadSimulationState
 import pl.edu.agh.cs.kraksim.common.mockGps
 import pl.edu.agh.cs.kraksim.common.testNagelMovementSimulationStrategy
@@ -20,7 +20,7 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when
@@ -39,7 +39,7 @@ internal class AccelerateStepNagelMovementSimulationStrategyTest {
             velocity = initialVelocity,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), 0)
+        car.moveToLaneFront(state.getFirstLane(), 0)
         val strategy = testNagelMovementSimulationStrategy()
 
         // when

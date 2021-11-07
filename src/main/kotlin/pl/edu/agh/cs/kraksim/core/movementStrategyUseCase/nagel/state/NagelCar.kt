@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state
 
+import pl.edu.agh.cs.kraksim.common.Direction
 import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.gps.GPS
@@ -14,14 +15,22 @@ class NagelCar(
     var currentLane: NagelLane? = null
     var distanceLeftToMove: Int = 0
 
-    val distanceFromRoadNode: Int
+    val distanceFromEndOfLane: Int
         get() = currentLane!!.cellsCount - positionRelativeToStart - 1
 
-    override fun moveToLane(lane: Lane?, newPosition: Int) {
+    override fun moveToLaneFront(lane: Lane?, newPosition: Int) {
         currentLane?.remove(this)
         currentLane = lane as NagelLane?
         positionRelativeToStart = newPosition
         lane?.addCar(this)
+        distanceLeftToMove = 0
+    }
+
+    fun moveToLane(lane: Lane, newPosition: Int) {
+        currentLane?.remove(this)
+        currentLane = lane as NagelLane?
+        positionRelativeToStart = newPosition
+        lane.insertCarAt(newPosition, this)
         distanceLeftToMove = 0
     }
 
@@ -40,5 +49,9 @@ class NagelCar(
 
     override fun toString(): String {
         return "NagelCar(positionRelativeToStart=$positionRelativeToStart, velocity=$velocity, distanceLeftToMove=$distanceLeftToMove)"
+    }
+
+    fun getChangeLaneDirection(): Direction {
+        return gps.getChangeLaneDirection(currentLane!!)
     }
 }

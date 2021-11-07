@@ -16,7 +16,10 @@ fun <T> MutableList<T>.withoutFirst() =
  * [(1, 2), (2, 3), (3, 4), (4, 5)]
  */
 fun <T> MutableList<T>.adjacentPairs(): List<Pair<T, T>> =
-    withoutLast().zip(withoutFirst())
+    if (this.isEmpty())
+        emptyList()
+    else
+        withoutLast().zip(withoutFirst())
 
 fun <K, V> Map<K, V>.getValues(keys: List<K>): List<V> {
     return keys.map { get(it)!! }

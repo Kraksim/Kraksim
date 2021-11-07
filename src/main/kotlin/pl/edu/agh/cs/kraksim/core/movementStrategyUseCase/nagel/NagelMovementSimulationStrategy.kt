@@ -5,18 +5,19 @@ import pl.edu.agh.cs.kraksim.common.random.RandomProvider
 import pl.edu.agh.cs.kraksim.common.takeEachWhile
 import pl.edu.agh.cs.kraksim.common.withoutLast
 import pl.edu.agh.cs.kraksim.core.MovementSimulationStrategy
-import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
+import pl.edu.agh.cs.kraksim.core.state.Road
+import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import kotlin.math.min
 
-class NagelMovementSimulationStrategy(
+open class NagelMovementSimulationStrategy(
     val random: RandomProvider,
     val maxVelocity: Int = 6
 ) : MovementSimulationStrategy {
 
     init {
 //    minimalna predkość to 1 kratka na sekunde, przy długości auta równej 4.5 m to daje nam 16.2 km/h. Max velocity wtedy to 97.2 km/h
-        require(maxVelocity > 0) { "maxVelocity should be positive, but is $maxVelocity" } // TODO jakieś constrainty jeszcze?
+        require(maxVelocity > 0) { "maxVelocity should be positive, but is $maxVelocity" }
     }
 
     override fun step(state: SimulationState) {
@@ -43,7 +44,6 @@ class NagelMovementSimulationStrategy(
 
     private fun slowCars(lane: NagelLane) {
         slowAllCarsButLast(lane.cars)
-        // todo pamietać o pasach ze się mogą skończyć
         slowLastCar(
             endNode = lane.parentRoad.end,
             lane = lane,
@@ -57,16 +57,15 @@ class NagelMovementSimulationStrategy(
         }
     }
 
-    private fun slowLastCar(endNode: NagelRoadNode, lane: NagelLane, lastCar: NagelCar) {
+    protected open fun slowLastCar(endNode: NagelRoadNode, lane: NagelLane, lastCar: NagelCar) {
         if (endNode is NagelIntersection) {
-            // TODO zastanowić się co z pasem
-            val destinationLane = lastCar.gps.getNext().lanes[0]
+            val destinationLane = getTargetLane(lastCar)
 
             val freeSpaceInCarPath =
                 if (endNode.canGoThrough(lane)) {
-                    lastCar.distanceFromRoadNode + destinationLane.getFreeSpaceInFront()
+                    lastCar.distanceFromEndOfLane + destinationLane.getFreeSpaceInFront()
                 } else {
-                    lastCar.distanceFromRoadNode
+                    lastCar.distanceFromEndOfLane
                 }
 
             lastCar.velocity = min(lastCar.velocity, freeSpaceInCarPath)
@@ -90,8 +89,6 @@ class NagelMovementSimulationStrategy(
 
     private fun moveCars(lane: NagelLane) {
         moveAllCarsButLast(lane.cars)
-
-        // todo pamietać o pasach ze się mogą skończyć
         moveLastCar(
             lastCar = lane.cars.last(),
             endNode = lane.parentRoad.end
@@ -105,7 +102,7 @@ class NagelMovementSimulationStrategy(
     }
 
     private fun moveLastCar(lastCar: NagelCar, endNode: NagelRoadNode) {
-        val distanceToMoveOnCurrentLane = min(lastCar.distanceFromRoadNode, lastCar.velocity)
+        val distanceToMoveOnCurrentLane = min(lastCar.distanceFromEndOfLane, lastCar.velocity)
         lastCar.moveForward(distanceToMoveOnCurrentLane)
 
         if (lastCar.hasDistanceLeftToMove() && endNode is NagelGateway) {
@@ -121,7 +118,7 @@ class NagelMovementSimulationStrategy(
                 .takeEachWhile({ spaceLeft > 0 }) { car ->
                     val newPosition = min(spaceLeft, car.distanceLeftToMove) - 1
 
-                    car.moveToLane(
+                    car.moveToLaneFront(
                         destinationLane,
                         newPosition
                     )
@@ -136,7 +133,14 @@ class NagelMovementSimulationStrategy(
             .mapNotNull { it.cars.lastOrNull() }
             .filter { it.hasDistanceLeftToMove() }
             .groupByTo(hashMapOf()) {
-                it.gps.popNext().lanes[0] as NagelLane
-            } // todo zastanowić się co z pasem
+                val targetLane = getTargetLane(it)
+                it.gps.popNext()
+                targetLane
+            }
     }
+
+    private fun getTargetLane(lastCar: NagelCar) =
+        lastCar.gps.getTargetLaneInNextRoad(this::getLane) as NagelLane
+
+    protected open fun getLane(road: Road) = road.lanes[0]
 }

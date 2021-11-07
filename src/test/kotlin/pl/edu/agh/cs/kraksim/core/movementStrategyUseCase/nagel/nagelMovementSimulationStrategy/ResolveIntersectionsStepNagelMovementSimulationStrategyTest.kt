@@ -14,12 +14,12 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         // given
         val expectedPosition = 1
         val state = getTwoRoadConnectedWithIntersectionSimulationState()
-        val expectedLane = state.getLane(roadId = 1)
+        val expectedLane = state.getFirstLane(roadId = 1)
         val car = NagelCar(
             velocity = 2,
             gps = GPS(state.road(1), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car.moveToLane(state.getLane(), newPosition = 3)
+        car.moveToLaneFront(state.getFirstLane(), newPosition = 3)
         car.distanceLeftToMove = 2
 
         val strategy = testNagelMovementSimulationStrategy()
@@ -37,12 +37,12 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
         // given
         val expectedPosition = 3
         val state = getTwoRoadConnectedWithIntersectionSimulationState()
-        val expectedLane = state.getLane(roadId = 0)
+        val expectedLane = state.getFirstLane(roadId = 0)
         val car = NagelCar(
             velocity = 2,
             gps = mockGps()
         )
-        car.moveToLane(state.getLane(), newPosition = 3)
+        car.moveToLaneFront(state.getFirstLane(), newPosition = 3)
         car.distanceLeftToMove = 0
         val strategy = testNagelMovementSimulationStrategy()
 
@@ -58,7 +58,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
     fun `Given T-intersection with 2 cars merging into same lane when resolve intersection position them correctly`() {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
-        val destinationLane = state.getLane(roadId = 2)
+        val destinationLane = state.getFirstLane(roadId = 2)
         val expectedCar1Position = 1
         val expectedCar2Position = 0
 
@@ -66,14 +66,14 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car1.moveToLane(state.getLane(roadId = 0), newPosition = 3)
+        car1.moveToLaneFront(state.getFirstLane(roadId = 0), newPosition = 3)
         car1.distanceLeftToMove = 2
 
         val car2 = NagelCar(
             velocity = 2,
             gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car2.moveToLane(state.getLane(roadId = 1), newPosition = 3)
+        car2.moveToLaneFront(state.getFirstLane(roadId = 1), newPosition = 3)
         car2.distanceLeftToMove = 1
 
         val strategy = testNagelMovementSimulationStrategy()
@@ -92,7 +92,7 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
     fun `Given T-intersection with 2 cars merging into same lane having same distance left to move when resolve intersection position them correctly`() {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
-        val destinationLane = state.getLane(roadId = 2)
+        val destinationLane = state.getFirstLane(roadId = 2)
         val expectedOneOfTheCarsPosition = 1
         val expectedSecondOfTheCarsPosition = 0
 
@@ -100,14 +100,14 @@ internal class ResolveIntersectionsStepNagelMovementSimulationStrategyTest {
             velocity = 2,
             gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car1.moveToLane(state.getLane(roadId = 0), newPosition = 3)
+        car1.moveToLaneFront(state.getFirstLane(roadId = 0), newPosition = 3)
         car1.distanceLeftToMove = 2
 
         val car2 = NagelCar(
             velocity = 2,
             gps = GPS(state.road(2), type = GPSType.DIJKSTRA_ROAD_LENGTH)
         )
-        car2.moveToLane(state.getLane(roadId = 1), newPosition = 3)
+        car2.moveToLaneFront(state.getFirstLane(roadId = 1), newPosition = 3)
         car2.distanceLeftToMove = 2
 
         val strategy = testNagelMovementSimulationStrategy()

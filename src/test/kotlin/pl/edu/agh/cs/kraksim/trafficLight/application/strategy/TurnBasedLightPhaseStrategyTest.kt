@@ -2,7 +2,7 @@ package pl.edu.agh.cs.kraksim.trafficLight.application.strategy
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.edu.agh.cs.kraksim.common.getLane
+import pl.edu.agh.cs.kraksim.common.getFirstLane
 import pl.edu.agh.cs.kraksim.common.getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor.GREEN
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor.RED
@@ -15,8 +15,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
-        val lane2 = state.getLane(roadId = 1)
+        val lane1 = state.getFirstLane()
+        val lane2 = state.getFirstLane(roadId = 1)
         val phases = intersection.phases
 
         // when
@@ -35,8 +35,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
-        val lane2 = state.getLane(roadId = 1)
+        val lane1 = state.getFirstLane()
+        val lane2 = state.getFirstLane(roadId = 1)
         val phases = intersection.phases
         strategy.initializeLights(state.intersections.values)
 
@@ -56,8 +56,8 @@ internal class TurnBasedLightPhaseStrategyTest {
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
         val intersection = state.intersections[0]!!
-        val lane1 = state.getLane()
-        val lane2 = state.getLane(roadId = 1)
+        val lane1 = state.getFirstLane()
+        val lane2 = state.getFirstLane(roadId = 1)
         val phases = intersection.phases
         val lane1LightPhase = phases[lane1.id]
         val lane2LightPhase = phases[lane2.id]
