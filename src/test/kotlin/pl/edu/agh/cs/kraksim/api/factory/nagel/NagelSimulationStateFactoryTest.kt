@@ -147,7 +147,8 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                         PhaseEntity(
                             laneId = mapEntity.roads[0].lanes.first().id,
                             state = TrafficLightPhase.LightColor.GREEN,
-                            phaseTime = 5
+                            phaseTime = 0,
+                            period = 5
                         )
                     )
                 )

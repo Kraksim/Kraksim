@@ -46,11 +46,18 @@ class RequestToEntityMapper {
                 algorithm = request.algorithm,
                 intersections = request.intersections,
                 turnLength = request.turnLength,
+                phiFactor = request.phiFactor,
+                minPhaseLength = request.minPhaseLength,
+                omegaMin = request.omegaMin,
+                ni = request.ni,
             )
         }
     }
 
-    private fun createInitialSimulationState(request: CreateInitialSimulationStateRequest, stateType: StateType): SimulationStateEntity {
+    private fun createInitialSimulationState(
+        request: CreateInitialSimulationStateRequest,
+        stateType: StateType
+    ): SimulationStateEntity {
         return SimulationStateEntity(
             turn = 0,
             carsOnMap = ArrayList(),
@@ -86,7 +93,8 @@ class RequestToEntityMapper {
                     PhaseEntity(
                         phaseTime = 0,
                         laneId = phase.laneId,
-                        state = phase.state
+                        state = phase.state,
+                        period = null,
                     )
                 }
             )

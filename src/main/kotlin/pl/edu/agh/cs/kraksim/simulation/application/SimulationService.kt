@@ -47,7 +47,9 @@ class SimulationService(
             lightPhaseManager = lightPhaseManager,
             statisticsManager = statisticsManager
         )
-
+        if (simulationState.turn == 0L) {
+            lightPhaseManager.initializeLights()
+        }
         repeat(times) {
             simulation.step()
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)

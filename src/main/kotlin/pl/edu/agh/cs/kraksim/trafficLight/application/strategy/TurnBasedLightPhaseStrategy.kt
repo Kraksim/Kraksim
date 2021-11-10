@@ -29,13 +29,15 @@ class TurnBasedLightPhaseStrategy(
     private fun initializeLights(intersection: Intersection) {
         val (head, tail) = intersection.getLightPhasesOfLanesGroupedByRoad().split()
         head.forEach { phase ->
-            phase.phaseTime = turnLength
+            phase.phaseTime = 0
+            phase.period = turnLength
             phase.state = GREEN
         }
 
         tail.forEachIndexed { index, phases ->
             phases.forEach { phase ->
-                phase.phaseTime = (index + 1) * turnLength
+                phase.phaseTime = 0
+                phase.period = (index + 1) * turnLength
                 phase.state = RED
             }
         }
@@ -46,18 +48,18 @@ class TurnBasedLightPhaseStrategy(
 
         val phasesToChange =
             intersection.getLightPhasesOfLanesGroupedByRoad()
-                .onEach { lanes -> lanes.forEach { it.phaseTime-- } }
-                .filter { roadPhases -> roadPhases[0].phaseTime == 0 }
+                .onEach { lanes -> lanes.forEach { it.phaseTime++ } }
+                .filter { roadPhases -> roadPhases[0].phaseTime == roadPhases[0].period }
 
         phasesToChange.forEach { lanePhases ->
             lanePhases.forEach { phase ->
-                var phaseTime = turnLength
+                var period = turnLength
 
                 // light that will be red after change should last turnLength + what longest red light lasts
                 if (phase.state == GREEN) {
-                    phaseTime *= roadsCount - 1 // minus one green light
+                    period *= roadsCount - 1 // minus one green light
                 }
-                phase.switchLight(phaseTime)
+                phase.switchLight(period)
             }
         }
     }

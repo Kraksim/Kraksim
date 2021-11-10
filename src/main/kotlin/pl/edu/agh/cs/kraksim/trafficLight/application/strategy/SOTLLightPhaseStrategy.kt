@@ -35,13 +35,10 @@ class SOTLLightPhaseStrategy(
     }
 
     override fun switchLights(intersections: Collection<Intersection>) {
-        // increment red, decrement green
+        // increment both
         intersections.forEach {
             it.phases.forEach { (_, phase) ->
-                when (phase.state) {
-                    GREEN -> phase.phaseTime--
-                    RED -> phase.phaseTime++
-                }
+                phase.phaseTime++
             }
         }
         intersections.forEach { switchLights(it) }
@@ -71,11 +68,12 @@ class SOTLLightPhaseStrategy(
                         .minByOrNull { it.positionRelativeToStart }?.positionRelativeToStart ?: 0
                     val lengthToEnd = lane.physicalLength - lastCarPosition
                     // all cars should go through this green light, so we can limit this by 1 * length to beat, although this might be too big value, so //TODO think about this
-                    phase.phaseTime = max(minPhaseLength, lengthToEnd)
+                    phase.phaseTime = 0
+                    phase.period = max(minPhaseLength, lengthToEnd)
                 }
             }
             GREEN -> {
-                if (phase.phaseTime == 0) {
+                if (phase.phaseTime == phase.period) {
                     phase.state = RED
                     phase.phaseTime = 0
                 }

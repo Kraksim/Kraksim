@@ -21,6 +21,7 @@ class TrafficLightEntity(
 class PhaseEntity(
     var laneId: LaneId,
     var phaseTime: Int,
+    var period: Int?,
     var state: TrafficLightPhase.LightColor
 ) {
     @Id
@@ -31,7 +32,11 @@ class PhaseEntity(
 @Entity
 class LightPhaseStrategyEntity(
     var algorithm: AlgorithmType,
-    var turnLength: Int,
+    var turnLength: Int? = null,
+    val phiFactor: Double? = null,
+    val minPhaseLength: Int? = null,
+    val omegaMin: Int? = null,
+    val ni: Int? = null,
     @Convert(converter = LongArrayToStringConverter::class)
     var intersections: List<IntersectionId>
 ) {
@@ -41,5 +46,5 @@ class LightPhaseStrategyEntity(
 }
 
 enum class AlgorithmType {
-    TURN_BASED
+    TURN_BASED, SOTL
 }
