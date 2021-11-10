@@ -18,7 +18,8 @@ class MovementSimulationStrategyEntity(
 }
 
 enum class MovementSimulationStrategyType {
-    NAGEL_SCHRECKENBERG
+    NAGEL_SCHRECKENBERG,
+    MULTI_LANE_NAGEL_SCHRECKENBERG
 }
 
 enum class RandomProviderType {
