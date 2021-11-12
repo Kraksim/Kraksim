@@ -22,12 +22,6 @@ class MapService(
     }
 
     fun getAllMapsBasicInfo(): List<BasicMapInfoDTO> {
-        return mapRepository.findAll().map {
-            BasicMapInfoDTO(
-                name = it.name,
-                id = it.id,
-                type = it.type
-            )
-        }
+        return mapRepository.getAllMapsBasicInfo()
     }
 }
