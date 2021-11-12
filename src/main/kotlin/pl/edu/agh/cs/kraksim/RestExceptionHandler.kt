@@ -15,6 +15,7 @@ class RestExceptionHandler {
 
     @ExceptionHandler(value = [Exception::class])
     protected fun handleDefault(ex: Exception): ResponseEntity<Any> {
+        ex.printStackTrace()
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.toString())
     }
 }

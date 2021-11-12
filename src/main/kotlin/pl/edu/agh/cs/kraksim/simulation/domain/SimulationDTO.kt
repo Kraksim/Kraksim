@@ -12,7 +12,8 @@ class SimulationDTO(
     var movementSimulationStrategy: MovementSimulationStrategyDTO,
     var simulationType: SimulationType,
     var expectedVelocity: Map<RoadId, Velocity>,
-    var lightPhaseStrategies: List<LightPhaseStrategyDTO>
+    var lightPhaseStrategies: List<LightPhaseStrategyDTO>,
+    var name: String = "",
 ) {
     var id: Long = 0
 }

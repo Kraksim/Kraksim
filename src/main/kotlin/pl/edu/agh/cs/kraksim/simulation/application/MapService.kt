@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.simulation.application
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.MapEntity
+import pl.edu.agh.cs.kraksim.simulation.domain.BasicMapInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
 
 @Service
@@ -20,7 +21,13 @@ class MapService(
         return mapRepository.getById(id)
     }
 
-    fun getAllIds(): List<Long> {
-        return mapRepository.findAllIds().map { it.id }
+    fun getAllMapsBasicInfo(): List<BasicMapInfoDTO> {
+        return mapRepository.findAll().map {
+            BasicMapInfoDTO(
+                name = it.name,
+                id = it.id,
+                type = it.type
+            )
+        }
     }
 }
