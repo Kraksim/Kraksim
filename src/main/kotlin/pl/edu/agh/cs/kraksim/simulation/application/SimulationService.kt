@@ -57,11 +57,11 @@ class SimulationService(
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
             simulationEntity.simulationStateEntities.add(stateEntity)
             simulationEntity.statisticsEntities += (
-                    statisticsFactory.createStatisticsEntity(
-                        statisticsManager.latestState,
-                        simulationEntity
-                    )
-                    )
+                statisticsFactory.createStatisticsEntity(
+                    statisticsManager.latestState,
+                    simulationEntity
+                )
+                )
             simulationEntity = repository.save(simulationEntity)
         }
 

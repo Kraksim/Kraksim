@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import pl.edu.agh.cs.kraksim.simulation.domain.BasicMapInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.domain.MapEntity
-import pl.edu.agh.cs.kraksim.simulation.domain.MapType
 
 @Repository
 interface MapRepository : JpaRepository<MapEntity, Long> {
