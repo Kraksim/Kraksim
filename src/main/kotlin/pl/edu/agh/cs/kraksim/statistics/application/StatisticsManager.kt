@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.statistics.application
 import pl.edu.agh.cs.kraksim.common.CarSpeed
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
+import pl.edu.agh.cs.kraksim.common.averageOr
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.statistics.domain.RoadData
 import pl.edu.agh.cs.kraksim.statistics.domain.SpeedStatistics
@@ -24,7 +25,7 @@ class StatisticsManager(
         val density = roadData.associate { it.id to it.carsNumber.toDouble() / it.surface }
         val roadFlowRatio = roadsSpeed.filter { expectedVelocity.containsKey(it.key) }
             .map { (id, carSpeeds) ->
-                id to carSpeeds.average() / expectedVelocity[id]!!
+                id to carSpeeds.averageOr(0.0) / expectedVelocity[id]!!
             }.toMap()
 
         val currentStatisticsValues = StatisticsValues(
@@ -57,9 +58,9 @@ class StatisticsManager(
 
     private fun speedStatistics(roadsSpeed: Map<RoadId, List<CarSpeed>>): SpeedStatistics {
         val wholeMapAverageSpeed = roadsSpeed.flatMap { it.value }
-            .average()
+            .averageOr(0.0)
 
-        val roadAverageSpeed = roadsSpeed.map { (key, value) -> key to value.average() }
+        val roadAverageSpeed = roadsSpeed.map { (key, value) -> key to value.averageOr(0.0) }
             .toMap()
 
         return SpeedStatistics(wholeMapAverageSpeed, roadAverageSpeed)
@@ -69,24 +70,24 @@ class StatisticsManager(
 
         val statsList = states.map { it.currentStatisticsValues } + listOf(currentStatisticsValues)
 
-        val wholeMapAverageSpeed = statsList.map { it.speedStatistics.wholeMapAverageSpeed }.average()
+        val wholeMapAverageSpeed = statsList.map { it.speedStatistics.wholeMapAverageSpeed }.averageOr(0.0)
 
         val roadAverageSpeed = statsList
             .flatMap { it.speedStatistics.roadAverageSpeed.asIterable() }
             .groupBy { it.key }
-            .map { (key, value) -> key to value.map { (_, speed) -> speed }.average() }
+            .map { (key, value) -> key to value.map { (_, speed) -> speed }.averageOr(0.0) }
             .toMap()
 
         val roadDensity = statsList
             .flatMap { it.density.asIterable() }
             .groupBy { it.key }
-            .map { (key, value) -> key to value.map { (_, density) -> density }.average() }
+            .map { (key, value) -> key to value.map { (_, density) -> density }.averageOr(0.0) }
             .toMap()
 
         val roadFlowRatio = statsList
             .flatMap { it.roadFlowRatio.asIterable() }
             .groupBy { it.key }
-            .map { (key, value) -> key to value.map { (_, flow) -> flow }.average() }
+            .map { (key, value) -> key to value.map { (_, flow) -> flow }.averageOr(0.0) }
             .toMap()
 
         return StatisticsValues(
