@@ -9,6 +9,7 @@ class MapEntity(
     var roadNodes: List<RoadNodeEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
     var roads: List<RoadEntity>,
+    var name: String = "",
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +27,7 @@ class RoadNodeEntity(
     var startingRoads: List<RoadEntity>,
     @OneToMany(cascade = [CascadeType.ALL])
     var turnDirections: List<TurnDirectionEntity>,
+    var name: String = "",
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,6 +39,7 @@ class RoadEntity(
     var length: Int,
     @OneToMany(cascade = [CascadeType.ALL])
     var lanes: List<LaneEntity>,
+    var name: String = "",
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,6 +51,7 @@ class LaneEntity(
     var startingPoint: Int,
     var endingPoint: Int,
     var indexFromLeft: Int,
+    var name: String = "",
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

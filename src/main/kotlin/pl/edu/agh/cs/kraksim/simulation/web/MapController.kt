@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.simulation.application.MapMapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapService
 import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
+import pl.edu.agh.cs.kraksim.simulation.domain.BasicMapInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
 
 @RequestMapping("/map")
@@ -26,8 +27,8 @@ class MapController(
     }
 
     @GetMapping("/all")
-    fun getAllIds(): ResponseEntity<List<Long>> {
-        val ids: List<Long> = service.getAllIds()
-        return ResponseEntity.ok(ids)
+    fun getAllIds(): ResponseEntity<List<BasicMapInfoDTO>> {
+        val basicMaps = service.getAllMapsBasicInfo()
+        return ResponseEntity.ok(basicMaps)
     }
 }

@@ -7,6 +7,7 @@ class CreateMapRequest(
     var type: MapType,
     var roadNodes: List<CreateRoadNodeRequest>,
     var roads: List<CreateRoadRequest>,
+    var name: String,
 )
 
 class CreateRoadNodeRequest(
@@ -15,12 +16,14 @@ class CreateRoadNodeRequest(
     var endingRoadsIds: List<Long>,
     var startingRoadsIds: List<Long>,
     var turnDirections: List<CreateTurnDirectionRequest>,
+    var name: String,
 )
 
 class CreateRoadRequest(
     var length: Int,
     var lanes: List<CreateLaneRequest>,
-    var id: Long = 0
+    var id: Long = 0,
+    var name: String,
 )
 
 class CreateLaneRequest(
