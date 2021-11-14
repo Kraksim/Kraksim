@@ -102,29 +102,32 @@ class RequestToEntityMapper {
     }
 
     fun createMap(createMapRequest: CreateMapRequest): MapEntity {
-        val lanes: Map<Long, LaneEntity> = createMapRequest.roads.flatMap { it.lanes }.associate {
-            it.id to createLane(it)
-        }
+        val lanes: Map<Long, LaneEntity> = createMapRequest.roads
+            .flatMap { road -> road.lanes.map { lane -> Pair(lane, road.name) } }.associate {
+                it.first.id to createLane(it.first, it.second)
+            }
         val roads: Map<Long, RoadEntity> = createMapRequest.roads.associate {
             it.id to createRoad(it, lanes)
         }
         val roadNodes = createMapRequest.roadNodes.map {
             createRoadNode(it, roads, lanes)
         }
-        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList())
+        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList(), name = createMapRequest.name)
     }
 
-    fun createLane(createLaneRequest: CreateLaneRequest) = LaneEntity(
+    fun createLane(createLaneRequest: CreateLaneRequest, roadName: String) = LaneEntity(
         startingPoint = createLaneRequest.startingPoint,
         endingPoint = createLaneRequest.endingPoint,
-        indexFromLeft = createLaneRequest.indexFromLeft
+        indexFromLeft = createLaneRequest.indexFromLeft,
+        name = roadName + createLaneRequest.indexFromLeft,
     )
 
     fun createRoad(createRoadRequest: CreateRoadRequest, lanes: Map<Long, LaneEntity>) = RoadEntity(
         createRoadRequest.length,
         createRoadRequest.lanes.map { laneDTO ->
             lanes[laneDTO.id]!!
-        }
+        },
+        createRoadRequest.name
     )
 
     fun createRoadNode(createRoadNodeRequest: CreateRoadNodeRequest, roads: Map<Long, RoadEntity>, lanes: Map<Long, LaneEntity>) =
@@ -138,6 +141,7 @@ class RequestToEntityMapper {
                     sourceLane = lanes[createTurnDirectionRequest.sourceLaneId]!!,
                     destinationRoad = roads[createTurnDirectionRequest.destinationRoadId]!!
                 )
-            }
+            },
+            name = createRoadNodeRequest.name
         )
 }

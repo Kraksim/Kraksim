@@ -2,8 +2,11 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
+import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GPSType
+import pl.edu.agh.cs.kraksim.gps.GpsFactory
 import pl.edu.agh.cs.kraksim.simulation.db.BasicSimulationInfo
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
@@ -24,6 +27,7 @@ class SimulationService(
     val statisticsFactory: StatisticsFactory,
     val simulationFactory: SimulationFactory,
     val mapRepository: MapRepository,
+    val gpsFactory: GpsFactory,
     val requestMapper: RequestToEntityMapper
 ) {
 
@@ -75,11 +79,16 @@ class SimulationService(
     }
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
-        val mapEntity = mapRepository.findById(request.mapId)
-        if (mapEntity.isEmpty) throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
-        val simulation = requestMapper.createSimulation(request, mapEntity.get())
+        val mapEntity = mapRepository.findByIdOrNull(request.mapId) ?: throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
+        val simulationEntity = requestMapper.createSimulation(request, mapEntity)
+        val simulationState = stateFactory.from(simulationEntity)
 
-        return repository.save(simulation)
+        val exceptions: List<IllegalStateException> = validateState(simulationState)
+        if (exceptions.isNotEmpty()) {
+            throw InvalidSimulationStateConfigurationException(exceptions)
+        }
+
+        return repository.save(simulationEntity)
     }
 
     fun populate(): SimulationEntity {
@@ -172,4 +181,18 @@ class SimulationService(
     fun getAllSimulationsInfo(): List<BasicSimulationInfo> {
         return repository.findAllBy()
     }
+
+    private fun validateState(simulationState: SimulationState) =
+        validateGenerators(simulationState)
+
+    private fun validateGenerators(simulationState: SimulationState) =
+        simulationState.gateways.flatMap { (_, gateway) -> gateway.generators.map { Pair(gateway, it) } }
+            .mapNotNull { (gateway, generator) ->
+                try {
+                    gpsFactory.from(gateway, generator, simulationState)
+                } catch (e: IllegalStateException) {
+                    return@mapNotNull e
+                }
+                return@mapNotNull null
+            }
 }
