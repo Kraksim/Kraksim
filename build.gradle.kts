@@ -55,6 +55,12 @@ tasks {
         archiveFileName.set("kraksim.jar")
     }
 
+    withType<Jar> {
+        manifest {
+            attributes["Main-Class"] = "pl.edu.agh.cs.kraksim.KraksimApplication"
+        }
+    }
+
     processResources {
         expand(project.properties)
     }
