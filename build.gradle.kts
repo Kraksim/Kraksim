@@ -55,12 +55,6 @@ tasks {
         archiveFileName.set("kraksim.jar")
     }
 
-    withType<Jar> {
-        manifest {
-            attributes["Main-Class"] = "pl.edu.agh.cs.kraksim.KraksimApplication"
-        }
-    }
-
     processResources {
         expand(project.properties)
     }
@@ -78,6 +72,8 @@ tasks {
 
     disableCodeFormattingChecks("ktlintFormat", "ktlintCheck")
 }
+
+springBoot { mainClass.set("pl.edu.agh.cs.kraksim.KraksimApplicationKt") }
 
 /**
  * Disable code formatting checks,
