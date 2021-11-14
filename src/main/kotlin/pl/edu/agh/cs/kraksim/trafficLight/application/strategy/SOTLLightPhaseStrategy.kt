@@ -12,9 +12,6 @@ import kotlin.math.max
 class SOTLLightPhaseStrategy(
     private val phiFactor: Double = 10.0,
     private val minPhaseLength: Int = 2,
-    // TODO("Rename those")
-    private val omegaMin: Int = 10,
-    private val ni: Int = 5,
     override val id: Long = 0
 ) : LightPhaseStrategy {
 
@@ -67,7 +64,7 @@ class SOTLLightPhaseStrategy(
                     val lastCarPosition = lane.cars
                         .minByOrNull { it.positionRelativeToStart }?.positionRelativeToStart ?: 0
                     val lengthToEnd = lane.physicalLength - lastCarPosition
-                    // all cars should go through this green light, so we can limit this by 1 * length to beat, although this might be too big value, so //TODO think about this
+                    // all cars should go through this green light, so we can limit this by 1 * length to beat
                     phase.phaseTime = 0
                     phase.period = max(minPhaseLength, lengthToEnd)
                 }

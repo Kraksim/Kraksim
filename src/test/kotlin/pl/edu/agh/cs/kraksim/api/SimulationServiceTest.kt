@@ -32,10 +32,6 @@ internal class SimulationServiceTest @Autowired constructor(
     val carRepository: CarRepository,
 ) {
 
-    // todo zjebane to jest cos niby przechodzi ale sie nie zatrzymuje ten test, ale basic idea containerów testowych
-    // jest wjebana, pewnie można tro ulepszyc czy coś, moze na stacku zapostuje potem
-    // skurwione te testy troche ugh
-
     companion object {
         @Container
         private val postgreSQLContainer = PostgreSQLContainer<Nothing>("postgres:latest")

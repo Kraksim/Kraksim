@@ -32,8 +32,6 @@ class LightPhaseManagerFactory {
     private fun createSOTLStrategy(it: LightPhaseStrategyEntity) = SOTLLightPhaseStrategy(
         phiFactor = it.phiFactor!!,
         minPhaseLength = it.minPhaseLength!!,
-        omegaMin = it.omegaMin!!,
-        ni = it.ni!!,
         id = it.id
     )
 }
