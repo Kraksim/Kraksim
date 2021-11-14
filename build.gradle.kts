@@ -66,14 +66,18 @@ tasks {
         }
     }
 
+    withType<Jar> {
+        manifest {
+            attributes["Main-Class"] = "pl.edu.agh.cs.kraksim.KraksimApplicationKt"
+        }
+    }
+
     withType<Test> {
         useJUnitPlatform()
     }
 
     disableCodeFormattingChecks("ktlintFormat", "ktlintCheck")
 }
-
-springBoot { mainClass.set("pl.edu.agh.cs.kraksim.KraksimApplicationKt") }
 
 /**
  * Disable code formatting checks,
