@@ -211,8 +211,11 @@ class SimulationService(
             .mapNotNull { (gateway, generator) ->
                 try {
                     gpsFactory.from(gateway, generator, simulationState)
-                } catch (e: IllegalStateException) {
-                    return@mapNotNull e.message
+                } catch (e: Exception) {
+                    return@mapNotNull when (e) {
+                        is IllegalArgumentException, is IllegalStateException -> e.message
+                        else -> throw e
+                    }
                 }
                 return@mapNotNull null
             }
