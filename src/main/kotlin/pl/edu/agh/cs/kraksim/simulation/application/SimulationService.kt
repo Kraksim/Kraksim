@@ -60,11 +60,11 @@ class SimulationService(
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
             simulationEntity.simulationStateEntities.add(stateEntity)
             simulationEntity.statisticsEntities += (
-                statisticsFactory.createStatisticsEntity(
-                    statisticsManager.latestState,
-                    simulationEntity
-                )
-                )
+                    statisticsFactory.createStatisticsEntity(
+                        statisticsManager.latestState,
+                        simulationEntity
+                    )
+                    )
             simulationEntity = repository.save(simulationEntity)
         }
 
@@ -211,8 +211,11 @@ class SimulationService(
             .mapNotNull { (gateway, generator) ->
                 try {
                     gpsFactory.from(gateway, generator, simulationState)
-                } catch (e: IllegalStateException) {
-                    return@mapNotNull e.message
+                } catch (e: Exception) {
+                    return@mapNotNull when (e) {
+                        is IllegalArgumentException, is IllegalStateException -> e.message
+                        else -> throw e
+                    }
                 }
                 return@mapNotNull null
             }
