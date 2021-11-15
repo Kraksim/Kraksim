@@ -73,6 +73,8 @@ tasks {
     disableCodeFormattingChecks("ktlintFormat", "ktlintCheck")
 }
 
+springBoot { mainClass.set("pl.edu.agh.cs.kraksim.KraksimApplicationKt") }
+
 /**
  * Disable code formatting checks,
  * when e.x. `gradle build` we don't want to fail because of code format,
