@@ -3,11 +3,11 @@ package pl.edu.agh.cs.kraksim.simulation.application
 import org.springframework.stereotype.Component
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.simulation.web.request.*
+import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
-import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateTrafficLightRequest
 
 @Component
 class RequestToEntityMapper {
@@ -22,7 +22,7 @@ class RequestToEntityMapper {
         return SimulationEntity(
             name = request.name,
             mapEntity = mapEntity,
-            simulationStateEntities = arrayListOf(createInitialSimulationState(request.initialState, stateType)),
+            simulationStateEntities = arrayListOf(createInitialSimulationState(request.initialState, stateType, mapEntity.roadNodes)),
             movementSimulationStrategy = movementSimulationStrategyEntity,
             simulationType = request.simulationType,
             expectedVelocity = request.expectedVelocity,
@@ -46,17 +46,23 @@ class RequestToEntityMapper {
                 algorithm = request.algorithm,
                 intersections = request.intersections,
                 turnLength = request.turnLength,
+                phiFactor = request.phiFactor,
+                minPhaseLength = request.minPhaseLength
             )
         }
     }
 
-    private fun createInitialSimulationState(request: CreateInitialSimulationStateRequest, stateType: StateType): SimulationStateEntity {
+    private fun createInitialSimulationState(
+        request: CreateInitialSimulationStateRequest,
+        stateType: StateType,
+        roadNodes: List<RoadNodeEntity>
+    ): SimulationStateEntity {
         return SimulationStateEntity(
             turn = 0,
             carsOnMap = ArrayList(),
             stateType = stateType,
             gatewaysStates = createGatewayStates(request.gatewaysStates),
-            trafficLights = createTrafficLights(request.trafficLights)
+            trafficLights = createTrafficLights(roadNodes)
         )
     }
 
@@ -78,19 +84,22 @@ class RequestToEntityMapper {
         }
     }
 
-    private fun createTrafficLights(requests: List<CreateTrafficLightRequest>): List<TrafficLightEntity> {
-        return requests.map {
-            TrafficLightEntity(
-                intersectionId = it.intersectionId,
-                phases = it.phases.map { phase ->
-                    PhaseEntity(
-                        phaseTime = 0,
-                        laneId = phase.laneId,
-                        state = phase.state
-                    )
-                }
-            )
-        }
+    private fun createTrafficLights(roadNodes: List<RoadNodeEntity>): List<TrafficLightEntity> {
+        return roadNodes.filter { it.type == RoadNodeType.INTERSECTION }
+            .map { intersectionEntity ->
+                TrafficLightEntity(
+                    intersectionId = intersectionEntity.id,
+                    phases = intersectionEntity.endingRoads.flatMap { it.lanes }
+                        .map { lane ->
+                            PhaseEntity(
+                                phaseTime = 0,
+                                laneId = lane.id,
+                                state = TrafficLightPhase.LightColor.RED,
+                                period = null,
+                            )
+                        }
+                )
+            }
     }
 
     fun createMap(createMapRequest: CreateMapRequest): MapEntity {

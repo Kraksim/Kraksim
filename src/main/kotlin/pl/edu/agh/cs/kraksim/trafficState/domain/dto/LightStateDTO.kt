@@ -15,6 +15,7 @@ class TrafficLightDTO(
 class PhaseDTO(
     var laneId: LaneId,
     var phaseTime: Int,
+    var period: Int?,
     var state: TrafficLightPhase.LightColor
 ) {
     var id: Long = 0

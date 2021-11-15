@@ -12,9 +12,6 @@ import kotlin.math.max
 class SOTLLightPhaseStrategy(
     private val phiFactor: Double = 10.0,
     private val minPhaseLength: Int = 2,
-    // TODO("Rename those")
-    private val omegaMin: Int = 10,
-    private val ni: Int = 5,
     override val id: Long = 0
 ) : LightPhaseStrategy {
 
@@ -35,13 +32,10 @@ class SOTLLightPhaseStrategy(
     }
 
     override fun switchLights(intersections: Collection<Intersection>) {
-        // increment red, decrement green
+        // increment both
         intersections.forEach {
             it.phases.forEach { (_, phase) ->
-                when (phase.state) {
-                    GREEN -> phase.phaseTime--
-                    RED -> phase.phaseTime++
-                }
+                phase.phaseTime++
             }
         }
         intersections.forEach { switchLights(it) }
@@ -70,12 +64,13 @@ class SOTLLightPhaseStrategy(
                     val lastCarPosition = lane.cars
                         .minByOrNull { it.positionRelativeToStart }?.positionRelativeToStart ?: 0
                     val lengthToEnd = lane.physicalLength - lastCarPosition
-                    // all cars should go through this green light, so we can limit this by 1 * length to beat, although this might be too big value, so //TODO think about this
-                    phase.phaseTime = max(minPhaseLength, lengthToEnd)
+                    // all cars should go through this green light, so we can limit this by 1 * length to beat
+                    phase.phaseTime = 0
+                    phase.period = max(minPhaseLength, lengthToEnd)
                 }
             }
             GREEN -> {
-                if (phase.phaseTime == 0) {
+                if (phase.phaseTime == phase.period) {
                     phase.state = RED
                     phase.phaseTime = 0
                 }

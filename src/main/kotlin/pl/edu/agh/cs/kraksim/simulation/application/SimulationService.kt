@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
@@ -51,7 +52,9 @@ class SimulationService(
             lightPhaseManager = lightPhaseManager,
             statisticsManager = statisticsManager
         )
-
+        if (simulationState.turn == 0L) {
+            lightPhaseManager.initializeLights()
+        }
         repeat(times) {
             simulation.step()
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
@@ -77,11 +80,12 @@ class SimulationService(
     }
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
-        val mapEntity = mapRepository.findByIdOrNull(request.mapId) ?: throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
+        val mapEntity = mapRepository.findByIdOrNull(request.mapId)
+            ?: throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
         val simulationEntity = requestMapper.createSimulation(request, mapEntity)
         val simulationState = stateFactory.from(simulationEntity)
 
-        val exceptions: List<IllegalStateException> = validateState(simulationState)
+        val exceptions: List<String> = validateState(simulationState, simulationEntity)
         if (exceptions.isNotEmpty()) {
             throw InvalidSimulationStateConfigurationException(exceptions)
         }
@@ -180,8 +184,27 @@ class SimulationService(
         return repository.findAllBy()
     }
 
-    private fun validateState(simulationState: SimulationState) =
-        validateGenerators(simulationState)
+    private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity): List<String> {
+        return listOf(
+            validateLightPhaseStrategies(simulationState, simulationEntity),
+            validateGenerators(simulationState)
+        ).flatten()
+    }
+
+    private fun validateLightPhaseStrategies(
+        simulationState: SimulationState,
+        simulationEntity: SimulationEntity
+    ): List<String> {
+        val intersectionsWithStrategy: Set<IntersectionId> =
+            simulationEntity.lightPhaseStrategies.flatMap { strategy -> strategy.intersections }.toSet()
+        return simulationState.intersections.keys.mapNotNull {
+            if (!intersectionsWithStrategy.contains(it)) {
+                it
+            } else {
+                null
+            }
+        }.map { "Intersection with id=$it doesn't contain traffic light strategy" }
+    }
 
     private fun validateGenerators(simulationState: SimulationState) =
         simulationState.gateways.flatMap { (_, gateway) -> gateway.generators.map { Pair(gateway, it) } }
@@ -189,7 +212,7 @@ class SimulationService(
                 try {
                     gpsFactory.from(gateway, generator, simulationState)
                 } catch (e: IllegalStateException) {
-                    return@mapNotNull e
+                    return@mapNotNull e.message
                 }
                 return@mapNotNull null
             }

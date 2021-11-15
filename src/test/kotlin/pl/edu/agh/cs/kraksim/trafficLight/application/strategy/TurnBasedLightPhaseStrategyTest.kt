@@ -23,14 +23,14 @@ internal class TurnBasedLightPhaseStrategyTest {
         strategy.initializeLights(state.intersections.values)
 
         // then
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(5)
+        assertThat(phases[lane1.id]?.period).isEqualTo(5)
         assertThat(phases[lane1.id]?.state).isEqualTo(GREEN)
-        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(5)
+        assertThat(phases[lane2.id]?.period).isEqualTo(5)
         assertThat(phases[lane2.id]?.state).isEqualTo(RED)
     }
 
     @Test
-    fun `Given state with initialized intersection lights, when switch light decrease phase time`() {
+    fun `Given state with initialized intersection lights, when switch light increase phase time`() {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = TurnBasedLightPhaseStrategy()
@@ -44,9 +44,9 @@ internal class TurnBasedLightPhaseStrategyTest {
         strategy.switchLights(state.intersections.values)
 
         // then
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(4)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(1)
         assertThat(phases[lane1.id]?.state).isEqualTo(GREEN)
-        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(4)
+        assertThat(phases[lane2.id]?.phaseTime).isEqualTo(1)
         assertThat(phases[lane2.id]?.state).isEqualTo(RED)
     }
 
@@ -61,18 +61,21 @@ internal class TurnBasedLightPhaseStrategyTest {
         val phases = intersection.phases
         val lane1LightPhase = phases[lane1.id]
         val lane2LightPhase = phases[lane2.id]
-        lane1LightPhase?.phaseTime = 1
+        lane1LightPhase?.phaseTime = 4
         lane1LightPhase?.state = GREEN
-        lane2LightPhase?.phaseTime = 1
+        lane1LightPhase?.period = 5
+
+        lane2LightPhase?.phaseTime = 4
         lane2LightPhase?.state = RED
+        lane2LightPhase?.period = 5
 
         // when
         strategy.switchLights(state.intersections.values)
 
         // then
-        assertThat(lane1LightPhase?.phaseTime).isEqualTo(5)
+        assertThat(lane1LightPhase?.phaseTime).isEqualTo(0)
         assertThat(lane1LightPhase?.state).isEqualTo(RED)
-        assertThat(lane2LightPhase?.phaseTime).isEqualTo(5)
+        assertThat(lane2LightPhase?.phaseTime).isEqualTo(0)
         assertThat(lane2LightPhase?.state).isEqualTo(GREEN)
     }
 }

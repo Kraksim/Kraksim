@@ -71,11 +71,12 @@ class SOTLLightPhaseStrategyTest {
         }
         // then
         assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(20)
+        assertThat(phases[lane1.id]?.period).isEqualTo(20)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(0)
     }
 
     @Test
-    fun `Given state with initialized intersection lights, when lights are switched decrease green phaseTime`() {
+    fun `Given state with initialized intersection lights, when lights are switched increase green phaseTime`() {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy()
@@ -96,7 +97,8 @@ class SOTLLightPhaseStrategyTest {
 
         // then
         assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(16)
+        assertThat(phases[lane1.id]?.period).isEqualTo(20)
+        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(4)
     }
 
     @Test
@@ -123,7 +125,7 @@ class SOTLLightPhaseStrategyTest {
     }
 
     @Test
-    fun `Given state with initialized intersection and proper amount of cars in lane, switch lights to green with min phaseTime value`() {
+    fun `Given state with initialized intersection and proper amount of cars in lane, switch lights to green with min period value`() {
         // given
         val state = getTwoRoadMeetingInIntersectionLeadingToThirdRoadSimulationState()
         val strategy = SOTLLightPhaseStrategy(minPhaseLength = 5, phiFactor = 5.0)
@@ -141,6 +143,6 @@ class SOTLLightPhaseStrategyTest {
         }
         // then
         assertThat(phases[lane1.id]?.state).isEqualTo(TrafficLightPhase.LightColor.GREEN)
-        assertThat(phases[lane1.id]?.phaseTime).isEqualTo(5)
+        assertThat(phases[lane1.id]?.period).isEqualTo(5)
     }
 }

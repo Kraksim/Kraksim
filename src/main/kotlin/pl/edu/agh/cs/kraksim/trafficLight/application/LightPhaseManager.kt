@@ -6,14 +6,20 @@ import pl.edu.agh.cs.kraksim.core.state.SimulationState
 
 class LightPhaseManager(
     simulationState: SimulationState,
-    public val strategies: Map<LightPhaseStrategy, List<IntersectionId>>
+    val strategies: Map<LightPhaseStrategy, List<IntersectionId>>
 ) {
 
     private val lightStrategyGroups: List<LightStrategyGroup> = strategies.map { (strategy, intersectionIds) ->
-        val intersections = intersectionIds.map { id -> simulationState.intersections[id]!! }
-        LightStrategyGroup(strategy, intersections)
-    }.onEach { (lightPhaseStrategy, intersections) ->
-        lightPhaseStrategy.initializeLights(intersections)
+        LightStrategyGroup(
+            lightPhaseStrategy = strategy,
+            intersections = intersectionIds.map { id -> simulationState.intersections[id]!! }
+        )
+    }
+
+    fun initializeLights() {
+        lightStrategyGroups.forEach { (lightPhaseStrategy, intersections) ->
+            lightPhaseStrategy.initializeLights(intersections)
+        }
     }
 
     fun changeLights() {

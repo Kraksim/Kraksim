@@ -46,7 +46,8 @@ class NagelSimulationStateFactory(
                         PhaseEntity(
                             laneId = laneId,
                             phaseTime = phase.phaseTime,
-                            state = phase.state
+                            state = phase.state,
+                            period = phase.period
                         )
                     }
                 )
