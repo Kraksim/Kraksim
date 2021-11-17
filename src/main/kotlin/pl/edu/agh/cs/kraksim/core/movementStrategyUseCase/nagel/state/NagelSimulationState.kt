@@ -11,7 +11,8 @@ class NagelSimulationState(
     roads: List<NagelRoad>,
     gateways: List<NagelGateway>,
     intersections: List<NagelIntersection>,
-    override var turn: Long
+    override var turn: Long,
+    override var finished: Boolean = false
 ) : SimulationState {
 
     override val roads: Map<RoadId, NagelRoad> = roads.associateBy { it.id }

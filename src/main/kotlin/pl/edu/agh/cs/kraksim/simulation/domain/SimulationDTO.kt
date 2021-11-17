@@ -14,6 +14,7 @@ class SimulationDTO(
     var expectedVelocity: Map<RoadId, Velocity>,
     var lightPhaseStrategies: List<LightPhaseStrategyDTO>,
     var name: String = "",
+    var isFinished: Boolean = false
 ) {
     var id: Long = 0
 }
