@@ -115,17 +115,20 @@ class NagelSimulationStateFactory(
     private fun putCarOnMap(it: CarEntity, roads: Map<RoadId, NagelRoad>) {
         require(it.positionRelativeToStart % Car.AVERAGE_CAR_LENGTH == 0) { "Car id=${it.carId} should have positionRelativeToStart divisible by AVERAGE_CAR_LENGTH=${Car.AVERAGE_CAR_LENGTH}, but has ${it.positionRelativeToStart}" }
         val lanes: Map<LaneId, NagelLane> = roads.values.flatMap { it.lanes }.associateBy { it.id }
-        val car = createCar(it, roads)
+        val car = createCar(it, roads, lanes[it.currentLaneId])
         car.moveToLaneFront(lanes[it.currentLaneId], it.positionRelativeToStart / Car.AVERAGE_CAR_LENGTH)
     }
 
-    private fun createCar(it: CarEntity, roads: Map<RoadId, NagelRoad>? = null): NagelCar {
-        val route = it.gps.route.mapNotNull { roads?.get(it) } // empty list if roads is null
-        val gps = GPS(route, it.gps.type)
+    private fun createCar(carEntity: CarEntity, roads: Map<RoadId, NagelRoad>? = null, currentLane: NagelLane? = null): NagelCar {
+        val route = carEntity.gps.route.mapNotNull { roads?.get(it) } // empty list if roads is null
+        val gps = GPS(route, carEntity.gps.type)
+        if (currentLane?.parentRoad != null) {
+            gps.currentRoad = currentLane.parentRoad
+        }
 
         return NagelCar(
-            id = it.carId,
-            velocity = it.velocity,
+            id = carEntity.carId,
+            velocity = carEntity.velocity,
             gps = gps
         )
     }

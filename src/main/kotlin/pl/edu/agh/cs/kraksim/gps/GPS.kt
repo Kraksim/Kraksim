@@ -15,7 +15,7 @@ class GPS(
     constructor(vararg route: Road, type: GPSType) : this(ArrayList(route.map { it }), type)
     constructor(route: List<Road>, type: GPSType) : this(ArrayList(route), type)
 
-    private lateinit var currentRoad: Road
+    lateinit var currentRoad: Road
     private val cachedChangeLaneDirection: CachedValue<Lane, Direction> =
         CachedValue(this::calculateChangeLaneDirection)
     private var cachedTargetLaneInNextRoad: CachedValue<Road, Lane>? = null
