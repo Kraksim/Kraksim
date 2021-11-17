@@ -32,7 +32,9 @@ class SimulationController(
                 id = it.id,
                 name = it.name,
                 type = it.simulationType,
-                mapId = it.mapEntity.id
+                mapId = it.mapEntity.id,
+                isFinished = it.finished,
+                turn = it.simulationStateEntities.maxByOrNull { it.turn }?.turn ?: 0
             )
         }
         return ResponseEntity.ok(dtos)

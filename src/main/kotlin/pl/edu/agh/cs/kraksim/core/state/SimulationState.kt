@@ -17,4 +17,6 @@ interface SimulationState {
     val cars: List<Car>
 
     val type: StateType
+
+    var finished: Boolean
 }

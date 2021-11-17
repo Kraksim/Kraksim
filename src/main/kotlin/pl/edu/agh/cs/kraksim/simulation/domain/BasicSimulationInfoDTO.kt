@@ -4,5 +4,7 @@ class BasicSimulationInfoDTO(
     val id: Long,
     val name: String,
     val type: SimulationType,
-    val mapId: Long
+    val mapId: Long,
+    var isFinished: Boolean,
+    var turn: Long
 )

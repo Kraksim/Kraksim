@@ -56,19 +56,33 @@ class SimulationService(
             lightPhaseManager.initializeLights()
         }
         repeat(times) {
+            if (simulationState.finished) {
+                return simulationEntity
+            }
             simulation.step()
+
+            checkIfFinished(simulation.state)
             val stateEntity = stateFactory.toEntity(simulation.state, simulationEntity)
-            simulationEntity.simulationStateEntities.add(stateEntity)
-            simulationEntity.statisticsEntities += (
-                statisticsFactory.createStatisticsEntity(
-                    statisticsManager.latestState,
-                    simulationEntity
-                )
-                )
+
+            simulationEntity.apply {
+                simulationStateEntities.add(stateEntity)
+                statisticsEntities +=
+                    statisticsFactory.createStatisticsEntity(statisticsManager.latestState, simulationEntity)
+                finished = simulation.state.finished
+            }
             simulationEntity = repository.save(simulationEntity)
         }
 
         return simulationEntity
+    }
+
+    private fun checkIfFinished(simulationState: SimulationState) {
+        simulationState.finished = simulationState.cars.isEmpty() &&
+            simulationState.gateways
+                .values
+                .asSequence()
+                .flatMap { it.generators }
+                .all { it.carsToRelease == 0 }
     }
 
     fun getSimulation(id: Long): SimulationEntity? {

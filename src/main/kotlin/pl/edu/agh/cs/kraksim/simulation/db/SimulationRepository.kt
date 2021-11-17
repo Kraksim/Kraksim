@@ -16,8 +16,14 @@ interface BasicSimulationInfo {
     val name: String
     val simulationType: SimulationType
     val mapEntity: MapEntityId
+    val simulationStateEntities: List<SimulationStateEntityTurn>
+    var finished: Boolean
 }
 
 interface MapEntityId {
     val id: Long
+}
+
+interface SimulationStateEntityTurn {
+    val turn: Long
 }

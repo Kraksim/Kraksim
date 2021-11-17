@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.simulation.domain
 
+import org.hibernate.annotations.ColumnDefault
 import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.Velocity
 import pl.edu.agh.cs.kraksim.statistics.domain.StatisticsEntity
@@ -25,12 +26,15 @@ class SimulationEntity(
     var statisticsEntities: List<StatisticsEntity>,
     var name: String
 ) {
-    val latestTrafficStateEntity
+    val latestTrafficStateEntity: SimulationStateEntity
         get() = simulationStateEntities.maxByOrNull { it.turn }!!
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long = 0
+
+    @ColumnDefault("false")
+    var finished: Boolean = false
 }
 
 enum class SimulationType {
