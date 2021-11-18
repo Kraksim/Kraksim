@@ -34,7 +34,8 @@ class SimulationController(
                 type = it.simulationType,
                 mapId = it.mapEntity.id,
                 isFinished = it.finished,
-                turn = it.simulationStateEntities.maxByOrNull { it.turn }?.turn ?: 0
+                turn = it.simulationStateEntities.maxByOrNull { it.turn }?.turn ?: 0,
+                movementSimulationStrategyType = it.movementSimulationStrategy.type
             )
         }
         return ResponseEntity.ok(dtos)
