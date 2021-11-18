@@ -29,12 +29,13 @@ class SimulationService(
     val simulationFactory: SimulationFactory,
     val mapRepository: MapRepository,
     val gpsFactory: GpsFactory,
-    val requestMapper: RequestToEntityMapper
+    val requestMapper: RequestToEntityMapper,
+    val mapService: MapService
 ) {
 
-    fun simulateStep(simulationId: Long = 0L, times: Int = 1): SimulationEntity {
+    fun simulateStep(simulationId: Long, times: Int = 1): SimulationEntity {
 
-        var simulationEntity = repository.getById(simulationId)
+        var simulationEntity = getSimulation(simulationId)
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =
             movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
@@ -85,8 +86,8 @@ class SimulationService(
                 .all { it.carsToRelease == 0 }
     }
 
-    fun getSimulation(id: Long): SimulationEntity? {
-        return repository.findByIdOrNull(id)
+    fun getSimulation(id: Long): SimulationEntity {
+        return repository.findByIdOrNull(id) ?: throw ObjectNotFoundException("Couldn't find simulation with id = $id")
     }
 
     fun getAllSimulations(): List<SimulationEntity> {
@@ -94,8 +95,7 @@ class SimulationService(
     }
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
-        val mapEntity = mapRepository.findByIdOrNull(request.mapId)
-            ?: throw ObjectNotFoundException("Couldn't find map with id " + request.mapId)
+        val mapEntity = mapService.getById(request.mapId)
         val simulationEntity = requestMapper.createSimulation(request, mapEntity)
         val simulationState = stateFactory.from(simulationEntity)
 
