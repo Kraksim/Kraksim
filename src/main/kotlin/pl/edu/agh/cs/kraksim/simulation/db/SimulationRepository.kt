@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationType
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyEntity
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 
 @Repository
 interface SimulationRepository : JpaRepository<SimulationEntity, Long> {
@@ -18,6 +20,7 @@ interface BasicSimulationInfo {
     val mapEntity: MapEntityId
     val simulationStateEntities: List<SimulationStateEntityTurn>
     var finished: Boolean
+    var movementSimulationStrategy: MovementSimulationStrategyEntityType
 }
 
 interface MapEntityId {
@@ -26,4 +29,8 @@ interface MapEntityId {
 
 interface SimulationStateEntityTurn {
     val turn: Long
+}
+
+interface MovementSimulationStrategyEntityType {
+    var type: MovementSimulationStrategyType
 }
