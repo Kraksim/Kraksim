@@ -25,6 +25,9 @@ class GPS(
         return currentRoad
     }
 
+    fun getNext(): Road =
+        route.first()
+
     fun getChangeLaneDirection(currentLane: Lane): Direction {
         return cachedChangeLaneDirection.get(currentLane)
     }
@@ -54,7 +57,4 @@ class GPS(
         }
         return 0
     }
-
-    private fun getNext(): Road =
-        route.first()
 }
