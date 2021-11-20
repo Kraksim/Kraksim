@@ -113,7 +113,7 @@ class RequestToEntityMapper {
         val roadNodes = createMapRequest.roadNodes.map {
             createRoadNode(it, roads, lanes)
         }
-        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList(), name = createMapRequest.name)
+        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList(), name = createMapRequest.name, compatibleWith = createMapRequest.compatibleWith)
     }
 
     fun createLane(createLaneRequest: CreateLaneRequest, roadName: String) = LaneEntity(

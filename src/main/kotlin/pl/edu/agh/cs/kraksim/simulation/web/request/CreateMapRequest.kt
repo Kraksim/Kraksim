@@ -2,12 +2,14 @@ package pl.edu.agh.cs.kraksim.simulation.web.request
 
 import pl.edu.agh.cs.kraksim.simulation.domain.MapType
 import pl.edu.agh.cs.kraksim.simulation.domain.RoadNodeType
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 import javax.validation.constraints.NotBlank
 
 class CreateMapRequest(
     var type: MapType,
     var roadNodes: List<CreateRoadNodeRequest>,
     var roads: List<CreateRoadRequest>,
+    var compatibleWith: List<MovementSimulationStrategyType>,
     @field:NotBlank
     var name: String,
 )

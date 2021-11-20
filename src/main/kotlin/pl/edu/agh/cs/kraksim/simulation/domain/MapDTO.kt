@@ -1,10 +1,13 @@
 package pl.edu.agh.cs.kraksim.simulation.domain
 
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
+
 class MapDTO(
     var type: MapType,
     var roadNodes: List<RoadNodeDTO>,
     var roads: List<RoadDTO>,
     var name: String,
+    var compatibleWith: List<MovementSimulationStrategyType>,
 ) {
     var id: Long = 0
 }

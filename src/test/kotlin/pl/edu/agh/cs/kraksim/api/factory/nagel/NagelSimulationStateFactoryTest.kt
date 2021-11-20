@@ -111,7 +111,8 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                     turnDirections = emptyList()
                 ),
             ),
-            roads = roads
+            roads = roads,
+            compatibleWith = listOf(MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG, MovementSimulationStrategyType.NAGEL_SCHRECKENBERG)
         )
         mapEntity = mapRepository.save(mapEntity)
         val firstLane = mapEntity.roads.first()

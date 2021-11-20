@@ -95,7 +95,8 @@ class MapstructTest @Autowired constructor(
             mapEntity = MapEntity(
                 type = MapType.MAP,
                 roadNodes = listOf(roadNodeEntity),
-                roads = listOf(roadEntity)
+                roads = listOf(roadEntity),
+                compatibleWith = listOf(MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG, MovementSimulationStrategyType.NAGEL_SCHRECKENBERG)
             ),
             statisticsEntities = listOf()
         )
@@ -103,7 +104,8 @@ class MapstructTest @Autowired constructor(
         val mapEntity = MapEntity(
             type = MapType.MAP,
             roadNodes = listOf(roadNodeEntity),
-            roads = listOf()
+            roads = listOf(),
+            compatibleWith = listOf(MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG, MovementSimulationStrategyType.NAGEL_SCHRECKENBERG)
         )
 
         val mapDTO = mapMapper.convertToDto(mapEntity, CycleAvoidingMappingContext())
