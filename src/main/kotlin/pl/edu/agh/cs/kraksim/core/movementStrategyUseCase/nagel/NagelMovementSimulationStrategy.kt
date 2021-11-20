@@ -122,6 +122,7 @@ open class NagelMovementSimulationStrategy(
                         destinationLane,
                         newPosition
                     )
+                    car.gps.popNext()
                     spaceLeft = newPosition
                 }
         }
@@ -134,7 +135,7 @@ open class NagelMovementSimulationStrategy(
             .filter { it.hasDistanceLeftToMove() }
             .groupByTo(hashMapOf()) {
                 val targetLane = getTargetLane(it)
-                it.gps.popNext()
+                it.gps.getNext()
                 targetLane
             }
     }

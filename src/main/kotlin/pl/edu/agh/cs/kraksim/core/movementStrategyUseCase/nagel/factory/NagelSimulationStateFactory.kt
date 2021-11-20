@@ -109,6 +109,7 @@ class NagelSimulationStateFactory(
                 ?: throw IllegalStateException("Intersection id=${it.intersectionId} doesnt have phase for TrafficLightEntity id=${it.id}")
             phase.state = e.state
             phase.phaseTime = e.phaseTime
+            phase.period = e.period
         }
     }
 
