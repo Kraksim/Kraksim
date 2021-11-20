@@ -136,7 +136,8 @@ class SimulationService(
                     turnDirections = ArrayList()
                 )
             ),
-            roads = arrayListOf(road)
+            roads = arrayListOf(road),
+            compatibleWith = listOf(MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG, MovementSimulationStrategyType.NAGEL_SCHRECKENBERG)
         )
 
         mapEntity = mapRepository.save(mapEntity)
