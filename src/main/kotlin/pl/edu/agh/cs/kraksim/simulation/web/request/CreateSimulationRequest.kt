@@ -11,17 +11,17 @@ import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Positive
 
 class CreateSimulationRequest(
-        @field:NotBlank
-        var name: String,
-        var mapId: Long = 0,
-        var simulationType: SimulationType,
-        @field:Valid
-        var expectedVelocity: Map<RoadId, @Positive Velocity>,
-        @field:Valid
-        var movementSimulationStrategy: CreateMovementSimulationStrategyRequest,
-        @field:Valid
-        @field:NotEmpty
-        var lightPhaseStrategies: List<CreateLightPhaseStrategyRequest>,
-        @field:Valid
-        var initialState: CreateInitialSimulationStateRequest
+    @field:NotBlank
+    var name: String,
+    var mapId: Long = 0,
+    var simulationType: SimulationType,
+    @field:Valid
+    var expectedVelocity: Map<RoadId, @Positive Velocity>,
+    @field:Valid
+    var movementSimulationStrategy: CreateMovementSimulationStrategyRequest,
+    @field:Valid
+    @field:NotEmpty
+    var lightPhaseStrategies: List<CreateLightPhaseStrategyRequest>,
+    @field:Valid
+    var initialState: CreateInitialSimulationStateRequest
 )
