@@ -58,7 +58,7 @@ class MapService(
             BasicEdgeDto(
                 from = fromMap[e.id]!!.id,
                 to = toMap[e.id]!!.id,
-                lanesThickness = e.lanes.size,
+                roadThickness = e.lanes.size,
             )
         }
     }

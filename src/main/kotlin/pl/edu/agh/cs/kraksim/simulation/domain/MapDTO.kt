@@ -24,7 +24,7 @@ class BasicMapInfoDTO(
 class BasicEdgeDto(
     var from: Long,
     var to: Long,
-    var lanesThickness: Int
+    var roadThickness: Int
 )
 
 class BasicRoadNodeDto(
