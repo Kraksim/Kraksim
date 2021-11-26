@@ -8,6 +8,7 @@ import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulation
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 import javax.validation.constraints.Positive
 
 class CreateSimulationRequest(
@@ -17,7 +18,7 @@ class CreateSimulationRequest(
     var simulationType: SimulationType,
     @field:Valid
     @field:NotEmpty
-    var expectedVelocity: Map<RoadId, @Positive Velocity>,
+    var expectedVelocity: Map<RoadId, @Positive @NotNull Velocity>,
     @field:Valid
     var movementSimulationStrategy: CreateMovementSimulationStrategyRequest,
     @field:Valid
