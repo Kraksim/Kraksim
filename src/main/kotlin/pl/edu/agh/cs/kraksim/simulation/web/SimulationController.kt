@@ -58,7 +58,7 @@ class SimulationController(
     @PostMapping("/create")
     @ResponseBody
     fun createSimulation(
-        @RequestBody request: CreateSimulationRequest
+        @RequestBody @Valid request: CreateSimulationRequest
     ): ResponseEntity<SimulationDTO> {
         val dto = simulationMapper.convertToDTO(service.createSimulation(request))
         return ResponseEntity.ok(dto)
