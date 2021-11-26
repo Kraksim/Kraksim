@@ -15,6 +15,22 @@ class MapDTO(
 class BasicMapInfoDTO(
     var type: MapType,
     var name: String,
+    var id: Long = 0,
+    var nodes: List<BasicRoadNodeDto>,
+    var edges: List<BasicEdgeDto>
+
+)
+
+class BasicEdgeDto(
+    var from: Long,
+    var to: Long,
+    var roadThickness: Int
+)
+
+class BasicRoadNodeDto(
+    var name: String,
+    var type: RoadNodeType,
+    var position: PositionDTO,
     var id: Long = 0
 )
 

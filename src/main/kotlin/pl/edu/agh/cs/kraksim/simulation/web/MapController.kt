@@ -26,6 +26,12 @@ class MapController(
         return ResponseEntity.ok(convertToDto)
     }
 
+    @GetMapping("/basic/{id}")
+    fun getBasicMap(@PathVariable id: Long): ResponseEntity<BasicMapInfoDTO> {
+        val map = service.getBasicById(id)
+        return ResponseEntity.ok(map)
+    }
+
     @GetMapping("/all")
     fun getAllIds(): ResponseEntity<List<BasicMapInfoDTO>> {
         val basicMaps = service.getAllMapsBasicInfo()
