@@ -38,8 +38,8 @@ class RestExceptionHandler {
         log.error(ex.stackTraceToString())
         val message = ex.bindingResult
             .fieldErrors
-            .joinToString(separator = "\n") {
-                "${it.field} - ${it.defaultMessage}, but was ${it.rejectedValue}"
+            .joinToString(separator = ",\n") {
+                "${it.field} - ${it.defaultMessage}, but was \'${it.rejectedValue}\'"
             }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message)
     }
