@@ -39,7 +39,7 @@ class RestExceptionHandler {
         val message = ex.bindingResult
             .fieldErrors
             .joinToString(separator = "\n") {
-                it.field + " - " + it.defaultMessage
+                "${it.field} - ${it.defaultMessage}, but was ${it.rejectedValue}"
             }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message)
     }
