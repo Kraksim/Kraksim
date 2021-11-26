@@ -16,6 +16,7 @@ class CreateSimulationRequest(
     var mapId: Long = 0,
     var simulationType: SimulationType,
     @field:Valid
+    @field:NotEmpty
     var expectedVelocity: Map<RoadId, @Positive Velocity>,
     @field:Valid
     var movementSimulationStrategy: CreateMovementSimulationStrategyRequest,
