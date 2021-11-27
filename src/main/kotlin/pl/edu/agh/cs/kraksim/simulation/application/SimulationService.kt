@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
@@ -33,6 +34,7 @@ class SimulationService(
     val mapService: MapService
 ) {
 
+    @Transactional
     fun simulateStep(simulationId: Long, times: Int = 1): SimulationEntity {
 
         val simulationEntity = getSimulation(simulationId)
