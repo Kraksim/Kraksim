@@ -79,7 +79,7 @@ open class NagelMovementSimulationStrategy(
         car.velocity = min(car.velocity, freeSpaceInCarPath)
     }
 
-    protected open fun randomization(state: NagelSimulationState) {
+    fun randomization(state: NagelSimulationState) {
         state.cars
             .forEach { car ->
                 val shouldSlowDown = car.velocity > 0 && random.drawWhetherShouldSlowDown()
