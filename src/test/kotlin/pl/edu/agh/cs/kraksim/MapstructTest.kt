@@ -56,7 +56,7 @@ class MapstructTest @Autowired constructor(
             velocity = 0,
             currentLaneId = null,
             positionRelativeToStart = 0,
-            gps = GPSEntity(route = listOf(), type = GPSType.DIJKSTRA_ROAD_LENGTH)
+            gps = GPSEntity(route = listOf(), type = GPSType.DIJKSTRA_ROAD_LENGTH), brakeLightOn = null
         )
         val trafficLightEntity = TrafficLightEntity(0, listOf())
         val simulationStateEntity = SimulationStateEntity(
