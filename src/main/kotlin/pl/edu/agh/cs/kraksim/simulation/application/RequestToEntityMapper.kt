@@ -22,7 +22,13 @@ class RequestToEntityMapper {
         return SimulationEntity(
             name = request.name,
             mapEntity = mapEntity,
-            simulationStateEntities = arrayListOf(createInitialSimulationState(request.initialState, stateType, mapEntity.roadNodes)),
+            simulationStateEntities = arrayListOf(
+                createInitialSimulationState(
+                    request.initialState,
+                    stateType,
+                    mapEntity.roadNodes
+                )
+            ),
             movementSimulationStrategy = movementSimulationStrategyEntity,
             simulationType = request.simulationType,
             expectedVelocity = request.expectedVelocity,
@@ -36,7 +42,10 @@ class RequestToEntityMapper {
             type = request.type,
             randomProvider = request.randomProvider,
             slowDownProbability = request.slowDownProbability,
-            maxVelocity = request.maxVelocity
+            maxVelocity = request.maxVelocity,
+            threshold = request.threshold,
+            accelerationDelayProbability = request.accelerationDelayProbability,
+            breakLightReactionProbability = request.breakLightReactionProbability
         )
     }
 
@@ -113,7 +122,12 @@ class RequestToEntityMapper {
         val roadNodes = createMapRequest.roadNodes.map {
             createRoadNode(it, roads, lanes)
         }
-        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList(), name = createMapRequest.name)
+        return MapEntity(
+            type = createMapRequest.type,
+            roadNodes = roadNodes,
+            roads = roads.values.toList(),
+            name = createMapRequest.name
+        )
     }
 
     fun createLane(createLaneRequest: CreateLaneRequest, roadName: String) = LaneEntity(
@@ -131,7 +145,11 @@ class RequestToEntityMapper {
         createRoadRequest.name
     )
 
-    fun createRoadNode(createRoadNodeRequest: CreateRoadNodeRequest, roads: Map<Long, RoadEntity>, lanes: Map<Long, LaneEntity>) =
+    fun createRoadNode(
+        createRoadNodeRequest: CreateRoadNodeRequest,
+        roads: Map<Long, RoadEntity>,
+        lanes: Map<Long, LaneEntity>
+    ) =
         RoadNodeEntity(
             type = createRoadNodeRequest.type,
             position = PositionEntity(x = createRoadNodeRequest.position.x, y = createRoadNodeRequest.position.y),

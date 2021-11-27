@@ -53,7 +53,7 @@ open class NagelMovementSimulationStrategy(
 
     private fun slowAllCarsButLast(cars: MutableList<NagelCar>) {
         cars.adjacentPairs().forEach { (car, carInFront) ->
-            car.velocity = min(car.velocity, car.distanceFrom(carInFront))
+            slowCar(car, car.distanceFrom(carInFront))
         }
     }
 
@@ -68,11 +68,18 @@ open class NagelMovementSimulationStrategy(
                     lastCar.distanceFromEndOfLane
                 }
 
-            lastCar.velocity = min(lastCar.velocity, freeSpaceInCarPath)
+            slowCar(lastCar, freeSpaceInCarPath)
         }
     }
 
-    fun randomization(state: NagelSimulationState) {
+    protected open fun slowCar(
+        car: NagelCar,
+        freeSpaceInCarPath: Int
+    ) {
+        car.velocity = min(car.velocity, freeSpaceInCarPath)
+    }
+
+    protected open fun randomization(state: NagelSimulationState) {
         state.cars
             .forEach { car ->
                 val shouldSlowDown = car.velocity > 0 && random.drawWhetherShouldSlowDown()

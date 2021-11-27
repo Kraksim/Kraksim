@@ -10,7 +10,10 @@ class MovementSimulationStrategyEntity(
     var type: MovementSimulationStrategyType,
     var randomProvider: RandomProviderType,
     var slowDownProbability: Double,
-    var maxVelocity: Int
+    var maxVelocity: Int,
+    var threshold: Int? = null,
+    var accelerationDelayProbability: Double? = null,
+    var breakLightReactionProbability: Double? = null
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +22,8 @@ class MovementSimulationStrategyEntity(
 
 enum class MovementSimulationStrategyType {
     NAGEL_SCHRECKENBERG,
-    MULTI_LANE_NAGEL_SCHRECKENBERG
+    MULTI_LANE_NAGEL_SCHRECKENBERG,
+    BRAKE_LIGHT
 }
 
 enum class RandomProviderType {

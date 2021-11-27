@@ -79,11 +79,11 @@ class SimulationService(
 
     private fun checkIfFinished(simulationState: SimulationState) {
         simulationState.finished = simulationState.cars.isEmpty() &&
-            simulationState.gateways
-                .values
-                .asSequence()
-                .flatMap { it.generators }
-                .all { it.carsToRelease == 0 }
+                simulationState.gateways
+                    .values
+                    .asSequence()
+                    .flatMap { it.generators }
+                    .all { it.carsToRelease == 0 }
     }
 
     fun getSimulation(id: Long): SimulationEntity {
@@ -172,7 +172,8 @@ class SimulationService(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = ArrayList()
-                    )
+                    ),
+                    brakeLightOn = null
                 ),
                 CarEntity(
                     carId = 2,
@@ -182,7 +183,8 @@ class SimulationService(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = ArrayList()
-                    )
+                    ),
+                    brakeLightOn = null
                 )
             )
         )

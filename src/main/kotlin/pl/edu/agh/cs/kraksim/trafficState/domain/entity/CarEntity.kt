@@ -18,7 +18,8 @@ class CarEntity(
     var currentLaneId: LaneId?,
     var positionRelativeToStart: Int,
     @OneToOne(cascade = [CascadeType.ALL])
-    var gps: GPSEntity
+    var gps: GPSEntity,
+    var brakeLightOn: Boolean?
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -73,7 +73,8 @@ class DelayGatewayCarGenerator(
         return NagelCar(
             id = Random.nextPositiveLong(),
             velocity = 0, // todo moze jakies losowanko z jaka predkoscia wjezdza?
-            gps = gps
+            gps = gps,
+            brakeLightOn = null
         )
     }
 }

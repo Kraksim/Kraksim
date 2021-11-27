@@ -8,4 +8,7 @@ class CreateMovementSimulationStrategyRequest {
     lateinit var randomProvider: RandomProviderType
     var slowDownProbability: Double = 0.0
     var maxVelocity: Int = 0
+    var threshold: Int? = null
+    var accelerationDelayProbability: Double? = null
+    var breakLightReactionProbability: Double? = null
 }
