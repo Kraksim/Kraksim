@@ -78,5 +78,4 @@ class BrakeLightMovementSimulationStrategy(
             random.probabilityMap += (car to probability)
         }
     }
-
 }
