@@ -6,6 +6,8 @@ import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSim
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelLane
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelSimulationState
+import pl.edu.agh.cs.kraksim.core.state.Car
+import pl.edu.agh.cs.kraksim.core.state.Gateway
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import kotlin.math.min
 
@@ -53,20 +55,28 @@ class BrakeLightMovementSimulationStrategy(
     private fun setBLAllCarsButLast(cars: MutableList<NagelCar>) {
         cars.adjacentPairs().forEach { (car, carInFront) ->
             val ts = min(car.velocity, threshold)
-            val timeToReachNext = car.distanceFrom(carInFront) / car.velocity
-            val probability = if (carInFront.brakeLightOn!! && timeToReachNext > ts) breakLightReactionProbability else if (car.velocity == 0) accelerationDelayProbability else defaultProbability
+            val timeToReachNext = if (car.velocity != 0) car.distanceFrom(carInFront) / car.velocity else ts + 1
+            val probability =
+                if (carInFront.brakeLightOn!! && timeToReachNext > ts) breakLightReactionProbability else if (car.velocity == 0) accelerationDelayProbability else defaultProbability
             random.probabilityMap += (car to probability)
         }
     }
 
-    private fun setBLLastCar(car: NagelCar){
-        val distanceToMoveOnCurrentLane = min(car.distanceFromEndOfLane, car.velocity)
-        val distanceTotal = if (car.velocity > distanceToMoveOnCurrentLane) car.gps.getTargetLaneInNextRoad(this::getLane).getFreeSpaceInFront() + distanceToMoveOnCurrentLane else distanceToMoveOnCurrentLane
-        val ts = min(car.velocity, threshold)
-        val th = distanceTotal / car.velocity
-        val carOnNextRoad = car.gps.getTargetLaneInNextRoad(this::getLane).cars[0] as NagelCar
-        val probability = if (carOnNextRoad.brakeLightOn!! && th > ts) breakLightReactionProbability else if (car.velocity == 0) accelerationDelayProbability else defaultProbability
-        random.probabilityMap += (car to probability)
+    private fun setBLLastCar(car: NagelCar) {
+        if (car.currentLane?.parentRoad?.end is Gateway) {
+            random.probabilityMap += (car to defaultProbability)
+        } else {
+            val distanceToMoveOnCurrentLane = min(car.distanceFromEndOfLane, car.velocity)
+            val distanceTotal =
+                if (car.velocity > distanceToMoveOnCurrentLane) car.gps.getTargetLaneInNextRoad(this::getLane)
+                    .getFreeSpaceInFront() + distanceToMoveOnCurrentLane else distanceToMoveOnCurrentLane
+            val ts = min(car.velocity, threshold)
+            val timeToReachNext = if (car.velocity != 0) distanceTotal / car.velocity else ts + 1
+            val carOnNextRoad: Car? = car.gps.getTargetLaneInNextRoad(this::getLane).cars.getOrNull(0)
+            val probability =
+                if ((carOnNextRoad as NagelCar?)?.brakeLightOn == true && timeToReachNext > ts) breakLightReactionProbability else if (car.velocity == 0) accelerationDelayProbability else defaultProbability
+            random.probabilityMap += (car to probability)
+        }
     }
 
 }
