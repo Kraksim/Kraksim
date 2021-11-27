@@ -79,7 +79,9 @@ class SimulationService(
             }
         }
         log.info("Simulation id=$simulationId finished simulating, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
-        return repository.save(simulationEntity)
+        val result = repository.save(simulationEntity)
+        log.info("Simulation id=$simulationId has been saved")
+        return result
     }
 
     fun getSimulation(id: Long): SimulationEntity {
