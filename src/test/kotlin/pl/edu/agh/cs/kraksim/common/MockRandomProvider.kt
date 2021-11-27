@@ -5,7 +5,8 @@ import pl.edu.agh.cs.kraksim.core.state.Car
 import kotlin.random.Random
 
 class MockRandomProvider(
-    private val booleanToReturn: Boolean = true, private val randomElementIndex: Int? = null,
+    private val booleanToReturn: Boolean = true,
+    private val randomElementIndex: Int? = null,
     override var probabilityMap: Map<Car, Double> = emptyMap()
 ) :
     RandomProvider {
