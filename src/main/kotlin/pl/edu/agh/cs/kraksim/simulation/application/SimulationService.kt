@@ -35,7 +35,7 @@ class SimulationService(
 
     fun simulateStep(simulationId: Long, times: Int = 1): SimulationEntity {
 
-        var simulationEntity = getSimulation(simulationId)
+        val simulationEntity = getSimulation(simulationId)
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =
             movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
@@ -58,7 +58,7 @@ class SimulationService(
         }
         repeat(times) {
             if (simulationState.finished) {
-                return simulationEntity
+                return@repeat
             }
             simulation.step()
 
@@ -71,10 +71,9 @@ class SimulationService(
                     statisticsFactory.createStatisticsEntity(statisticsManager.latestState, simulationEntity)
                 finished = simulation.state.finished
             }
-            simulationEntity = repository.save(simulationEntity)
         }
 
-        return simulationEntity
+        return repository.save(simulationEntity)
     }
 
     private fun checkIfFinished(simulationState: SimulationState) {
