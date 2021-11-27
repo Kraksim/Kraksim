@@ -18,6 +18,7 @@ import pl.edu.agh.cs.kraksim.api.factory.nagel.assertObject.NagelRoadsAssert
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.factory.NagelMapFactory
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 
 @Testcontainers
 @SpringBootTest(
@@ -100,7 +101,11 @@ class NagelMapFactoryTest @Autowired constructor(
                     turnDirections = emptyList()
                 ),
             ),
-            roads = roads
+            roads = roads,
+            compatibleWith = listOf(
+                MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG,
+                MovementSimulationStrategyType.NAGEL_SCHRECKENBERG
+            )
         )
         return mapRepository.save(mapEntity).id
     }

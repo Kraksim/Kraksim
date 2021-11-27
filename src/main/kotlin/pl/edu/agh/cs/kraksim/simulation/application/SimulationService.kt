@@ -1,7 +1,9 @@
 package pl.edu.agh.cs.kraksim.simulation.application
 
+import org.apache.logging.log4j.LogManager
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
@@ -32,10 +34,14 @@ class SimulationService(
     val requestMapper: RequestToEntityMapper,
     val mapService: MapService
 ) {
+    private val log = LogManager.getLogger()
 
+    @Transactional
     fun simulateStep(simulationId: Long, times: Int = 1): SimulationEntity {
+        val simulationEntity = repository.getByIdWithLock(simulationId)
+            ?: throw ObjectNotFoundException("Couldn't find simulation with id = $simulationId")
+        log.info("Simulation id=$simulationId runs simulate for $times times, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
 
-        var simulationEntity = getSimulation(simulationId)
         val simulationState = stateFactory.from(simulationEntity)
         val movementStrategy =
             movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
@@ -58,7 +64,7 @@ class SimulationService(
         }
         repeat(times) {
             if (simulationState.finished) {
-                return simulationEntity
+                return@repeat
             }
             simulation.step()
 
@@ -71,30 +77,25 @@ class SimulationService(
                     statisticsFactory.createStatisticsEntity(statisticsManager.latestState, simulationEntity)
                 finished = simulation.state.finished
             }
-            simulationEntity = repository.save(simulationEntity)
         }
-
-        return simulationEntity
-    }
-
-    private fun checkIfFinished(simulationState: SimulationState) {
-        simulationState.finished = simulationState.cars.isEmpty() &&
-                simulationState.gateways
-                    .values
-                    .asSequence()
-                    .flatMap { it.generators }
-                    .all { it.carsToRelease == 0 }
+        log.info("Simulation id=$simulationId finished simulating, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
+        val result = repository.save(simulationEntity)
+        log.info("Simulation id=$simulationId has been saved")
+        return result
     }
 
     fun getSimulation(id: Long): SimulationEntity {
+        log.info("Fetching simulation id=$id")
         return repository.findByIdOrNull(id) ?: throw ObjectNotFoundException("Couldn't find simulation with id = $id")
     }
 
     fun getAllSimulations(): List<SimulationEntity> {
+        log.info("Fetching all simulations")
         return repository.findAll()
     }
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
+        log.info("Creating simulation name=${request.name}, mapId=${request.mapId}")
         val mapEntity = mapService.getById(request.mapId)
         val simulationEntity = requestMapper.createSimulation(request, mapEntity)
         val simulationState = stateFactory.from(simulationEntity)
@@ -136,7 +137,11 @@ class SimulationService(
                     turnDirections = ArrayList()
                 )
             ),
-            roads = arrayListOf(road)
+            roads = arrayListOf(road),
+            compatibleWith = listOf(
+                MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG,
+                MovementSimulationStrategyType.NAGEL_SCHRECKENBERG
+            )
         )
 
         mapEntity = mapRepository.save(mapEntity)
@@ -193,11 +198,22 @@ class SimulationService(
     }
 
     fun deleteSimulation(id: Long) {
+        log.info("Deleting simulation id=$id")
         return repository.deleteById(id)
     }
 
     fun getAllSimulationsInfo(): List<BasicSimulationInfo> {
+        log.info("Fetching all simulation basic info")
         return repository.findAllBy()
+    }
+
+    private fun checkIfFinished(simulationState: SimulationState) {
+        simulationState.finished = simulationState.cars.isEmpty() &&
+            simulationState.gateways
+                .values
+                .asSequence()
+                .flatMap { it.generators }
+                .all { it.carsToRelease == 0 }
     }
 
     private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity): List<String> {

@@ -1,5 +1,7 @@
 package pl.edu.agh.cs.kraksim.simulation.domain
 
+import pl.edu.agh.cs.kraksim.common.converter.MovementEnumToStringConverter
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 import javax.persistence.*
 
 @Entity
@@ -10,6 +12,9 @@ class MapEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     var roads: List<RoadEntity>,
     var name: String = "",
+    @Column
+    @Convert(converter = MovementEnumToStringConverter::class)
+    var compatibleWith: List<MovementSimulationStrategyType>,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

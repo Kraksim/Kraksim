@@ -126,7 +126,8 @@ class RequestToEntityMapper {
             type = createMapRequest.type,
             roadNodes = roadNodes,
             roads = roads.values.toList(),
-            name = createMapRequest.name
+            name = createMapRequest.name,
+            compatibleWith = createMapRequest.compatibleWith
         )
     }
 
