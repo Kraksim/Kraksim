@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.simulation.application
 
+import org.apache.logging.log4j.LogManager
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
@@ -12,22 +13,27 @@ class MapService(
     val mapper: RequestToEntityMapper,
     val mapRepository: MapRepository
 ) {
+    private val log = LogManager.getLogger()
 
     fun createMap(createMapRequest: CreateMapRequest) {
+        log.info("Creating map name=${createMapRequest.name}")
         val map = mapper.createMap(createMapRequest)
         mapRepository.save(map)
     }
 
     fun getById(id: Long): MapEntity {
+        log.info("Fetching map id=$id")
         return mapRepository.findByIdOrNull(id) ?: throw ObjectNotFoundException("Couldn't find map with id = $id")
     }
 
     fun getBasicById(id: Long): BasicMapInfoDTO {
+        log.info("Fetching basic map id=$id")
         val map = mapRepository.findByIdOrNull(id) ?: throw ObjectNotFoundException("Couldn't find map with id = $id")
         return getBasicMapInfoDTO(map)
     }
 
     fun getAllMapsBasicInfo(): List<BasicMapInfoDTO> {
+        log.info("Fetching all maps basic info")
         val all = mapRepository.findAll()
         return all.map { entity -> getBasicMapInfoDTO(entity) }
     }
