@@ -49,10 +49,9 @@ class SimulationController(
     fun simulateStep(
         @RequestParam("id") simulationId: Long,
         @RequestParam("times") @Valid @Positive times: Int,
-    ): ResponseEntity<SimulationDTO> {
-        val simulation = service.simulateStep(simulationId, times)
-        val dto = simulationMapper.convertToDTO(simulation)
-        return ResponseEntity.ok(dto)
+    ): ResponseEntity<Void> {
+        service.simulateStep(simulationId, times)
+        return ResponseEntity.noContent().build()
     }
 
     @PostMapping("/create")
@@ -61,12 +60,6 @@ class SimulationController(
         @RequestBody @Valid request: CreateSimulationRequest
     ): ResponseEntity<SimulationDTO> {
         val dto = simulationMapper.convertToDTO(service.createSimulation(request))
-        return ResponseEntity.ok(dto)
-    }
-
-    @PostMapping("/populate")
-    fun populate(): ResponseEntity<SimulationDTO> {
-        val dto = simulationMapper.convertToDTO(service.populate())
         return ResponseEntity.ok(dto)
     }
 
