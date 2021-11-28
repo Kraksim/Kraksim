@@ -33,7 +33,7 @@ class SimulationService(
     private val log = LogManager.getLogger()
 
     @Transactional
-    fun simulateStep(simulationId: Long, times: Int = 1): SimulationEntity {
+    fun simulateStep(simulationId: Long, times: Int = 1) {
         val simulationEntity = repository.getByIdWithLock(simulationId)
             ?: throw ObjectNotFoundException("Couldn't find simulation with id = $simulationId")
         log.info("Simulation id=$simulationId runs simulate for $times times, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
@@ -75,9 +75,8 @@ class SimulationService(
             }
         }
         log.info("Simulation id=$simulationId finished simulating, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
-        val result = repository.save(simulationEntity)
+        repository.save(simulationEntity)
         log.info("Simulation id=$simulationId has been saved")
-        return result
     }
 
     fun getSimulation(id: Long): SimulationEntity {

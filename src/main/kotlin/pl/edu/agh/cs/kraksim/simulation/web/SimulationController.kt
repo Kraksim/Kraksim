@@ -1,5 +1,6 @@
 package pl.edu.agh.cs.kraksim.simulation.web
 
+import org.apache.logging.log4j.LogManager
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -18,6 +19,8 @@ class SimulationController(
     val service: SimulationService,
     val simulationMapper: SimulationMapper,
 ) {
+
+    private val log = LogManager.getLogger()
 
     @GetMapping("/{id}")
     fun getSimulation(
@@ -51,6 +54,7 @@ class SimulationController(
         @RequestParam("times") @Valid @Positive times: Int,
     ): ResponseEntity<Void> {
         service.simulateStep(simulationId, times)
+        log.info("Simulation id=$simulationId has been committed to db")
         return ResponseEntity.noContent().build()
     }
 
