@@ -12,6 +12,7 @@ class MapEntity(
     @OneToMany(cascade = [CascadeType.ALL])
     var roads: List<RoadEntity>,
     var name: String = "",
+    var description: String = "",
     @Column
     @Convert(converter = MovementEnumToStringConverter::class)
     var compatibleWith: List<MovementSimulationStrategyType>,
