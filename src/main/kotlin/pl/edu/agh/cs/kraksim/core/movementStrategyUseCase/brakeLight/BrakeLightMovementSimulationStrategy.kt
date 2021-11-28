@@ -43,6 +43,8 @@ class BrakeLightMovementSimulationStrategy(
                 if (shouldSlowDown) {
                     car.velocity -= 1
                     car.brakeLightOn = true
+                } else {
+                    car.brakeLightOn = false
                 }
             }
     }
