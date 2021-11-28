@@ -175,7 +175,7 @@ class RequestToEntityMapper {
 
         if (request.type == RoadNodeType.INTERSECTION) {
             if (!initialTurnDirectionsSpecified && !overrideTurnDirections)
-                return "Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere."
+                return "Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere"
             else if (initialTurnDirectionsSpecified && overrideTurnDirections) {
                 log.warn("Specified turn directions for node name='${request.name}' will be ignored!")
             }
