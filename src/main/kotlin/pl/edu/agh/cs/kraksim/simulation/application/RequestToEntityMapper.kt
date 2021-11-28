@@ -1,6 +1,8 @@
 package pl.edu.agh.cs.kraksim.simulation.application
 
+import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
+import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.simulation.web.request.*
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
@@ -11,6 +13,7 @@ import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulation
 
 @Component
 class RequestToEntityMapper {
+    private val log = LogManager.getLogger()
 
     fun createSimulation(request: CreateSimulationRequest, mapEntity: MapEntity): SimulationEntity {
         val movementSimulationStrategyEntity = createMovementSimulationStrategy(request.movementSimulationStrategy)
@@ -22,7 +25,13 @@ class RequestToEntityMapper {
         return SimulationEntity(
             name = request.name,
             mapEntity = mapEntity,
-            simulationStateEntities = arrayListOf(createInitialSimulationState(request.initialState, stateType, mapEntity.roadNodes)),
+            simulationStateEntities = arrayListOf(
+                createInitialSimulationState(
+                    request.initialState,
+                    stateType,
+                    mapEntity.roadNodes
+                )
+            ),
             movementSimulationStrategy = movementSimulationStrategyEntity,
             simulationType = request.simulationType,
             expectedVelocity = request.expectedVelocity,
@@ -103,6 +112,7 @@ class RequestToEntityMapper {
     }
 
     fun createMap(createMapRequest: CreateMapRequest): MapEntity {
+        validateCreateMap(createMapRequest)
         val lanes: Map<Long, LaneEntity> = createMapRequest.roads
             .flatMap { road -> road.lanes.map { lane -> Pair(lane, road.name) } }.associate {
                 it.first.id to createLane(it.first, it.second)
@@ -113,7 +123,14 @@ class RequestToEntityMapper {
         val roadNodes = createMapRequest.roadNodes.map {
             createRoadNode(it, roads, lanes)
         }
-        return MapEntity(type = createMapRequest.type, roadNodes = roadNodes, roads = roads.values.toList(), name = createMapRequest.name, compatibleWith = createMapRequest.compatibleWith)
+        return MapEntity(
+            type = createMapRequest.type,
+            roadNodes = roadNodes,
+            roads = roads.values.toList(),
+            name = createMapRequest.name,
+            description = createMapRequest.description,
+            compatibleWith = createMapRequest.compatibleWith
+        )
     }
 
     fun createLane(createLaneRequest: CreateLaneRequest, roadName: String) = LaneEntity(
@@ -131,18 +148,81 @@ class RequestToEntityMapper {
         createRoadRequest.name
     )
 
-    fun createRoadNode(createRoadNodeRequest: CreateRoadNodeRequest, roads: Map<Long, RoadEntity>, lanes: Map<Long, LaneEntity>) =
+    fun createRoadNode(
+        createRoadNodeRequest: CreateRoadNodeRequest,
+        roads: Map<Long, RoadEntity>,
+        lanes: Map<Long, LaneEntity>
+    ) =
         RoadNodeEntity(
             type = createRoadNodeRequest.type,
             position = PositionEntity(x = createRoadNodeRequest.position.x, y = createRoadNodeRequest.position.y),
             endingRoads = createRoadNodeRequest.endingRoadsIds.map { id -> roads[id]!! },
             startingRoads = createRoadNodeRequest.startingRoadsIds.map { id -> roads[id]!! },
-            turnDirections = createRoadNodeRequest.turnDirections.map { createTurnDirectionRequest ->
-                TurnDirectionEntity(
-                    sourceLane = lanes[createTurnDirectionRequest.sourceLaneId]!!,
-                    destinationRoad = roads[createTurnDirectionRequest.destinationRoadId]!!
-                )
-            },
+            turnDirections = getTurnDirections(createRoadNodeRequest, lanes, roads),
             name = createRoadNodeRequest.name
         )
+
+    private fun validateCreateMap(createMapRequest: CreateMapRequest) {
+        val exceptions = createMapRequest.roadNodes.mapNotNull { validate(it) }
+        if (exceptions.isNotEmpty()) {
+            throw InvalidMapConfigurationException(exceptions)
+        }
+    }
+
+    private fun validate(request: CreateRoadNodeRequest): String? {
+        val initialTurnDirectionsSpecified = request.turnDirections != null && request.turnDirections.isNotEmpty()
+        val overrideTurnDirections = request.overrideTurnDirectionsTurnEverywhere
+
+        if (request.type == RoadNodeType.INTERSECTION) {
+            if (!initialTurnDirectionsSpecified && !overrideTurnDirections)
+                return "Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere."
+            else if (initialTurnDirectionsSpecified && overrideTurnDirections) {
+                log.warn("Specified turn directions for node name='${request.name}' will be ignored!")
+            }
+        } else {
+            if (initialTurnDirectionsSpecified || overrideTurnDirections) {
+                log.warn("Even through node name='${request.name}' type is Gateway there were turnDirections or overrideTurnDirectionsTurnEverywhere specified - they will be ignored!")
+            }
+        }
+        return null
+    }
+
+    private fun getTurnDirections(
+        request: CreateRoadNodeRequest,
+        lanes: Map<Long, LaneEntity>,
+        roads: Map<Long, RoadEntity>
+    ): List<TurnDirectionEntity> {
+        if (request.type == RoadNodeType.GATEWAY) {
+            return emptyList()
+        }
+        if (request.overrideTurnDirectionsTurnEverywhere) {
+            return generateTurnDirectionEverywhere(roads, request)
+        }
+        return request.turnDirections!!.map { createTurnDirectionRequest ->
+            TurnDirectionEntity(
+                sourceLane = lanes[createTurnDirectionRequest.sourceLaneId]!!,
+                destinationRoad = roads[createTurnDirectionRequest.destinationRoadId]!!
+            )
+        }
+    }
+
+    private fun generateTurnDirectionEverywhere(
+        roads: Map<Long, RoadEntity>,
+        createRoadNodeRequest: CreateRoadNodeRequest
+    ): List<TurnDirectionEntity> {
+        return createRoadNodeRequest.endingRoadsIds.asSequence()
+            .map { roads[it]!! }
+            .flatMap { road: RoadEntity -> road.lanes }
+            .flatMap { lane ->
+                createRoadNodeRequest.startingRoadsIds
+                    .map { roads[it]!! }
+                    .map { destinationRoad ->
+                        TurnDirectionEntity(
+                            sourceLane = lane,
+                            destinationRoad = destinationRoad
+                        )
+                    }
+            }
+            .toList()
+    }
 }
