@@ -156,8 +156,12 @@ class RequestToEntityMapper {
         RoadNodeEntity(
             type = createRoadNodeRequest.type,
             position = PositionEntity(x = createRoadNodeRequest.position.x, y = createRoadNodeRequest.position.y),
-            endingRoads = createRoadNodeRequest.endingRoadsIds.map { id -> roads[id]!! },
-            startingRoads = createRoadNodeRequest.startingRoadsIds.map { id -> roads[id]!! },
+            endingRoads = createRoadNodeRequest.endingRoadsIds.map { id ->
+                roads[id] ?: throw InvalidMapConfigurationException(listOf("Road with id=$id doesn't exist"))
+            },
+            startingRoads = createRoadNodeRequest.startingRoadsIds.map { id ->
+                roads[id] ?: throw InvalidMapConfigurationException(listOf("Road with id=$id doesn't exist"))
+            },
             turnDirections = getTurnDirections(createRoadNodeRequest, lanes, roads),
             name = createRoadNodeRequest.name
         )

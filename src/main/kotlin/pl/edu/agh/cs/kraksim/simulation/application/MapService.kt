@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.simulation.application
 import org.apache.logging.log4j.LogManager
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
@@ -73,11 +74,12 @@ class MapService(
         }
 
         return entity.roads
-            .filter { fromMap[it.id] != null && toMap[it.id] != null } // so creating map isn't annoying
             .map { e ->
                 BasicEdgeDto(
-                    from = fromMap[e.id]!!.id,
-                    to = toMap[e.id]!!.id,
+                    from = fromMap[e.id]?.id
+                        ?: throw InvalidMapConfigurationException(listOf("Road with name='${e.name}' has no attached start")),
+                    to = toMap[e.id]?.id
+                        ?: throw InvalidMapConfigurationException(listOf("Road with name='${e.name}' has no attached end")),
                     roadThickness = e.lanes.size,
                 )
             }
