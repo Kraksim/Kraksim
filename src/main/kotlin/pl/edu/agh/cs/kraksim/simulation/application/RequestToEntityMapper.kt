@@ -167,10 +167,27 @@ class RequestToEntityMapper {
         )
 
     private fun validateCreateMap(createMapRequest: CreateMapRequest) {
-        val exceptions = createMapRequest.roadNodes.mapNotNull { validate(it) }
+        val exceptions = listOf(
+            createMapRequest.roadNodes.mapNotNull { validate(it) },
+            validateRoads(createMapRequest.roads)
+        ).flatten()
         if (exceptions.isNotEmpty()) {
             throw InvalidMapConfigurationException(exceptions)
         }
+    }
+
+    private fun validateRoads(roads: List<CreateRoadRequest>): List<String> {
+        val errors = ArrayList<String>()
+        val areRoadsIdUnique = roads.distinctBy { it.id }.size == roads.size
+        if (!areRoadsIdUnique) {
+            errors.add("Road ids must be unique")
+        }
+        val lanes = roads.flatMap { it.lanes }
+        val areLaneIdsUnique = lanes.distinctBy { it.id }.size == lanes.size
+        if (!areLaneIdsUnique) {
+            errors.add("Lane ids must be unique")
+        }
+        return errors
     }
 
     private fun validate(request: CreateRoadNodeRequest): String? {
