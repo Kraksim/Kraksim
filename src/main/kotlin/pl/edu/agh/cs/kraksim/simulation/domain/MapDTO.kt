@@ -8,9 +8,8 @@ class MapDTO(
     val roads: List<RoadDTO>,
     val name: String,
     val compatibleWith: List<MovementSimulationStrategyType>,
-) {
     val id: Long = 0
-}
+)
 
 class BasicMapInfoDTO(
     val type: MapType,
@@ -20,7 +19,6 @@ class BasicMapInfoDTO(
     val compatibleWith: List<MovementSimulationStrategyType>,
     val nodes: List<BasicRoadNodeDto>,
     val edges: List<BasicEdgeDto>
-
 )
 
 class BasicEdgeDto(
@@ -43,32 +41,28 @@ class RoadNodeDTO(
     val startingRoads: List<RoadDTO>,
     val turnDirections: List<TurnDirectionDTO>,
     val name: String,
-) {
     val id: Long = 0
-}
+)
 
 class RoadDTO(
     val length: Int,
     val lanes: List<LaneDTO>,
     val name: String,
-) {
     val id: Long = 0
-}
+)
 
 class LaneDTO(
     val startingPoint: Int,
     val endingPoint: Int,
     val indexFromLeft: Int,
     val name: String,
-) {
     val id: Long = 0
-}
+)
 
 class TurnDirectionDTO(
     val sourceLane: LaneDTO,
-    val destinationRoad: RoadDTO
-) {
+    val destinationRoad: RoadDTO,
     val id: Long = 0
-}
+)
 
 data class PositionDTO(val x: Double, val y: Double)
