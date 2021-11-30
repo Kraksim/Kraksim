@@ -3,10 +3,12 @@ package pl.edu.agh.cs.kraksim.simulation.application
 import org.apache.logging.log4j.LogManager
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
+import kotlin.random.Random
 
 @Service
 class MapService(
@@ -19,6 +21,15 @@ class MapService(
         log.info("Creating map name=${createMapRequest.name}")
         val map = mapper.createMap(createMapRequest)
         return mapRepository.save(map)
+    }
+
+    fun validateMap(createMapRequest: CreateMapRequest): BasicMapInfoDTO {
+        log.info("Validating map name=${createMapRequest.name}")
+        val createMap = mapper.createMap(createMapRequest)
+        createMap.id = Random.nextLong()
+        createMap.roadNodes.forEach { it.id = Random.nextLong() }
+        createMap.roads.forEach { it.id = Random.nextLong() }
+        return getBasicMapInfoDTO(createMap)
     }
 
     fun getById(id: Long): MapEntity {
@@ -62,13 +73,16 @@ class MapService(
             }
         }
 
-        return entity.roads.map { e ->
-            BasicEdgeDto(
-                from = fromMap[e.id]!!.id,
-                to = toMap[e.id]!!.id,
-                roadThickness = e.lanes.size,
-            )
-        }
+        return entity.roads
+            .map { e ->
+                BasicEdgeDto(
+                    from = fromMap[e.id]?.id
+                        ?: throw InvalidMapConfigurationException(listOf("Road with name='${e.name}' has no attached start")),
+                    to = toMap[e.id]?.id
+                        ?: throw InvalidMapConfigurationException(listOf("Road with name='${e.name}' has no attached end")),
+                    roadThickness = e.lanes.size,
+                )
+            }
     }
 
     private fun calculateNodes(entity: MapEntity): List<BasicRoadNodeDto> {

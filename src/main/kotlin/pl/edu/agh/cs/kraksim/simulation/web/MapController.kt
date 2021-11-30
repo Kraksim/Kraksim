@@ -24,6 +24,12 @@ class MapController(
         return ResponseEntity.ok(result)
     }
 
+    @PostMapping("/validate")
+    fun validateMap(@Valid @RequestBody createMapRequest: CreateMapRequest): ResponseEntity<BasicMapInfoDTO> {
+        val result = service.validateMap(createMapRequest)
+        return ResponseEntity.ok(result)
+    }
+
     @GetMapping("/{id}")
     fun getMap(@PathVariable id: Long): ResponseEntity<MapDTO> {
         val result = mapper.convertToDto(service.getById(id))
