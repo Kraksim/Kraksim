@@ -207,11 +207,11 @@ class SimulationService(
 
     private fun checkIfFinished(simulationState: SimulationState) {
         simulationState.finished = simulationState.cars.isEmpty() &&
-                simulationState.gateways
-                    .values
-                    .asSequence()
-                    .flatMap { it.generators }
-                    .all { it.carsToRelease == 0 }
+            simulationState.gateways
+                .values
+                .asSequence()
+                .flatMap { it.generators }
+                .all { it.carsToRelease == 0 }
     }
 
     private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity): List<String> {
@@ -219,7 +219,7 @@ class SimulationService(
             validateLightPhaseStrategies(simulationState, simulationEntity),
             validateGenerators(simulationState),
             validateBrakeLight(simulationEntity)
-            ).flatten()
+        ).flatten()
     }
 
     private fun validateBrakeLight(simulationEntity: SimulationEntity): List<String> {
@@ -227,9 +227,11 @@ class SimulationService(
         val movementSimulationStrategy = simulationEntity.movementSimulationStrategy
         return if (
             movementSimulationStrategy.type == MovementSimulationStrategyType.BRAKE_LIGHT &&
-            (movementSimulationStrategy.threshold == null ||
+            (
+                movementSimulationStrategy.threshold == null ||
                     movementSimulationStrategy.accelerationDelayProbability == null ||
-                    movementSimulationStrategy.breakLightReactionProbability == null)
+                    movementSimulationStrategy.breakLightReactionProbability == null
+                )
         ) listOf("Lacking parameters for brake light strategy")
         else emptyList()
     }

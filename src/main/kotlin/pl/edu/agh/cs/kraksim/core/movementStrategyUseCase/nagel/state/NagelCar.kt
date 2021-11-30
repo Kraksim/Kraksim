@@ -19,7 +19,7 @@ class NagelCar(
     val distanceFromEndOfLane: Int
         get() {
             val result = currentLane!!.cellsCount - positionRelativeToStart - 1
-            if(result < 0) throw IllegalStateException("Car position is greater than lane length, carId=$id, position=$positionRelativeToStart, currentLaneId=${currentLane?.id}")
+            if (result < 0) throw IllegalStateException("Car position is greater than lane length, carId=$id, position=$positionRelativeToStart, currentLaneId=${currentLane?.id}")
             return result
         }
 
