@@ -111,8 +111,7 @@ internal class SimulationServiceTest @Autowired constructor(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = ArrayList()
-                    ),
-                    brakeLightOn = null
+                    )
                 ),
                 CarEntity(
                     carId = 2,
@@ -122,8 +121,7 @@ internal class SimulationServiceTest @Autowired constructor(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = ArrayList()
-                    ),
-                    brakeLightOn = null
+                    )
                 )
             )
         )

@@ -73,8 +73,7 @@ class DelayGatewayCarGenerator(
         return NagelCar(
             id = Random.nextPositiveLong(),
             velocity = 0,
-            gps = gps,
-            brakeLightOn = null
+            gps = gps
         )
     }
 }

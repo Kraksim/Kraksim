@@ -34,14 +34,17 @@ class MovementSimulationStrategyFactory {
     }
 
     private fun createBrakeLightStrategy(entity: MovementSimulationStrategyEntity): BrakeLightMovementSimulationStrategy {
-        requireNotNull(entity.threshold)
+        val threshold = requireNotNull(entity.threshold)
+        val breakLightReactionProbability = requireNotNull(entity.breakLightReactionProbability)
+        val accelerationDelayProbability = requireNotNull(entity.accelerationDelayProbability)
         val randomProvider = createRandomProvider(entity)
+
         return BrakeLightMovementSimulationStrategy(
             randomProvider,
             entity.maxVelocity,
-            entity.threshold!!,
-            breakLightReactionProbability = entity.breakLightReactionProbability!!,
-            accelerationDelayProbability = entity.accelerationDelayProbability!!,
+            threshold,
+            breakLightReactionProbability = breakLightReactionProbability,
+            accelerationDelayProbability = accelerationDelayProbability,
             defaultProbability = entity.slowDownProbability
         )
     }

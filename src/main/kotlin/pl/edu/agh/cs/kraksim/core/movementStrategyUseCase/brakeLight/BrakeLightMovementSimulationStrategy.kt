@@ -57,27 +57,42 @@ class BrakeLightMovementSimulationStrategy(
     private fun setBLAllCarsButLast(cars: MutableList<NagelCar>) {
         cars.adjacentPairs().forEach { (car, carInFront) ->
             val ts = min(car.velocity, threshold)
-            val timeToReachNext = if (car.velocity != 0) car.distanceFrom(carInFront) / car.velocity else ts + 1
+            val timeToReachNext =
+                if (car.velocity != 0)
+                    car.distanceFrom(carInFront) / car.velocity
+                else
+                    ts + 1
             val probability =
-                if (carInFront.brakeLightOn!! && timeToReachNext > ts) breakLightReactionProbability else if (car.velocity == 0) accelerationDelayProbability else defaultProbability
-            random.probabilityMap += (car to probability)
+                if (carInFront.brakeLightOn!! && timeToReachNext > ts)
+                    breakLightReactionProbability
+                else if (car.velocity == 0)
+                    accelerationDelayProbability
+                else
+                    defaultProbability
+            random.setProbabilityForCar(car, probability)
         }
     }
 
     private fun setBLLastCar(car: NagelCar) {
         if (car.currentLane?.parentRoad?.end is Gateway) {
-            random.probabilityMap += (car to defaultProbability)
+            random.setProbabilityForCar(car, defaultProbability)
         } else {
             val distanceToMoveOnCurrentLane = min(car.distanceFromEndOfLane, car.velocity)
             val distanceTotal =
-                if (car.velocity > distanceToMoveOnCurrentLane) car.gps.getTargetLaneInNextRoad(this::getLane)
-                    .getFreeSpaceInFront() + distanceToMoveOnCurrentLane else distanceToMoveOnCurrentLane
+                if (car.velocity > distanceToMoveOnCurrentLane)
+                    car.gps.getTargetLaneInNextRoad(this::getLane)
+                        .getFreeSpaceInFront() + distanceToMoveOnCurrentLane
+                else
+                    distanceToMoveOnCurrentLane
             val ts = min(car.velocity, threshold)
             val timeToReachNext = if (car.velocity != 0) distanceTotal / car.velocity else ts + 1
-            val carOnNextRoad: Car? = car.gps.getTargetLaneInNextRoad(this::getLane).cars.getOrNull(0)
+            val carOnNextRoad: NagelCar? = car.gps.getTargetLaneInNextRoad(this::getLane).cars.getOrNull(0) as NagelCar?
             val probability =
-                if ((carOnNextRoad as NagelCar?)?.brakeLightOn == true && timeToReachNext > ts) breakLightReactionProbability else if (car.velocity == 0) accelerationDelayProbability else defaultProbability
-            random.probabilityMap += (car to probability)
+                if (carOnNextRoad?.brakeLightOn == true && timeToReachNext > ts)
+                    breakLightReactionProbability
+                else if (car.velocity == 0)
+                    accelerationDelayProbability else defaultProbability
+            random.setProbabilityForCar(car, probability)
         }
     }
 }

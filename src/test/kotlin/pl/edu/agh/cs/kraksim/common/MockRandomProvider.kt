@@ -7,7 +7,7 @@ import kotlin.random.Random
 class MockRandomProvider(
     private val booleanToReturn: Boolean = true,
     private val randomElementIndex: Int? = null,
-    override var probabilityMap: Map<Car, Double> = emptyMap()
+    private var probabilityMap: HashMap<Car, Double> = HashMap()
 ) :
     RandomProvider {
 
@@ -16,5 +16,9 @@ class MockRandomProvider(
 
     override fun <T> getRandomElement(list: List<T>): T {
         return randomElementIndex?.let { list[it] } ?: list[Random.nextInt(list.size)]
+    }
+
+    override fun setProbabilityForCar(car: Car, probability: Double) {
+        probabilityMap[car] = probability
     }
 }

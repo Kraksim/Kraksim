@@ -177,8 +177,7 @@ class SimulationService(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = ArrayList()
-                    ),
-                    brakeLightOn = null
+                    )
                 ),
                 CarEntity(
                     carId = 2,
@@ -188,8 +187,7 @@ class SimulationService(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = ArrayList()
-                    ),
-                    brakeLightOn = null
+                    )
                 )
             )
         )
@@ -209,18 +207,31 @@ class SimulationService(
 
     private fun checkIfFinished(simulationState: SimulationState) {
         simulationState.finished = simulationState.cars.isEmpty() &&
-            simulationState.gateways
-                .values
-                .asSequence()
-                .flatMap { it.generators }
-                .all { it.carsToRelease == 0 }
+                simulationState.gateways
+                    .values
+                    .asSequence()
+                    .flatMap { it.generators }
+                    .all { it.carsToRelease == 0 }
     }
 
     private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity): List<String> {
         return listOf(
             validateLightPhaseStrategies(simulationState, simulationEntity),
-            validateGenerators(simulationState)
-        ).flatten()
+            validateGenerators(simulationState),
+            validateBrakeLight(simulationEntity)
+            ).flatten()
+    }
+
+    private fun validateBrakeLight(simulationEntity: SimulationEntity): List<String> {
+
+        val movementSimulationStrategy = simulationEntity.movementSimulationStrategy
+        return if (
+            movementSimulationStrategy.type == MovementSimulationStrategyType.BRAKE_LIGHT &&
+            (movementSimulationStrategy.threshold == null ||
+                    movementSimulationStrategy.accelerationDelayProbability == null ||
+                    movementSimulationStrategy.breakLightReactionProbability == null)
+        ) listOf("Lacking parameters for brake light strategy")
+        else emptyList()
     }
 
     private fun validateLightPhaseStrategies(

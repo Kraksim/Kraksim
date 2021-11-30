@@ -6,7 +6,7 @@ import pl.edu.agh.cs.kraksim.core.state.Lane
 import pl.edu.agh.cs.kraksim.gps.GPS
 import kotlin.math.abs
 
-open class NagelCar(
+class NagelCar(
     override val id: Long = 0,
     override var velocity: Int = 0,
     override val gps: GPS,
@@ -17,7 +17,11 @@ open class NagelCar(
     var distanceLeftToMove: Int = 0
 
     val distanceFromEndOfLane: Int
-        get() = currentLane!!.cellsCount - positionRelativeToStart - 1
+        get() {
+            val result = currentLane!!.cellsCount - positionRelativeToStart - 1
+            if(result < 0) throw IllegalStateException("Car position is greater than lane length, carId=$id, position=$positionRelativeToStart, currentLaneId=${currentLane?.id}")
+            return result
+        }
 
     override fun moveToLaneFront(lane: Lane?, newPosition: Int) {
         currentLane?.remove(this)

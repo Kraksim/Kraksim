@@ -19,7 +19,7 @@ class CarEntity(
     var positionRelativeToStart: Int,
     @OneToOne(cascade = [CascadeType.ALL])
     var gps: GPSEntity,
-    var brakeLightOn: Boolean?
+    var brakeLightOn: Boolean? = null
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

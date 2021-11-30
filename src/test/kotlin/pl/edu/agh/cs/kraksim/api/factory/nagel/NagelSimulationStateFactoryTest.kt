@@ -179,8 +179,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = emptyList()
-                    ),
-                    brakeLightOn = null
+                    )
                 ),
                 CarEntity(
                     carId = 2,
@@ -190,8 +189,7 @@ class NagelSimulationStateFactoryTest @Autowired constructor(
                     gps = GPSEntity(
                         type = GPSType.DIJKSTRA_ROAD_LENGTH,
                         route = emptyList()
-                    ),
-                    brakeLightOn = null
+                    )
                 )
             )
         )
