@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import pl.edu.agh.cs.kraksim.common.exception.InvalidConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import javax.validation.ConstraintViolationException
@@ -21,8 +22,8 @@ class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message)
     }
 
-    @ExceptionHandler(value = [InvalidSimulationStateConfigurationException::class])
-    protected fun handleInvalidSimulationStateConfigurationException(ex: InvalidSimulationStateConfigurationException): ResponseEntity<Any> {
+    @ExceptionHandler(value = [InvalidConfigurationException::class])
+    protected fun handleInvalidSimulationStateConfigurationException(ex: InvalidConfigurationException): ResponseEntity<Any> {
         log.error(ex.stackTraceToString())
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.message)
     }

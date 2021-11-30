@@ -3,46 +3,53 @@ package pl.edu.agh.cs.kraksim.simulation.web.request
 import pl.edu.agh.cs.kraksim.simulation.domain.MapType
 import pl.edu.agh.cs.kraksim.simulation.domain.RoadNodeType
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
+import javax.validation.Valid
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 class CreateMapRequest(
-    var type: MapType,
-    var roadNodes: List<CreateRoadNodeRequest>,
-    var roads: List<CreateRoadRequest>,
-    var compatibleWith: List<MovementSimulationStrategyType>,
+    val type: MapType,
+    @field:Valid
+    val roadNodes: List<CreateRoadNodeRequest>,
+    @field:Valid
+    val roads: List<CreateRoadRequest>,
+    @field:Valid
+    val compatibleWith: List<MovementSimulationStrategyType>,
     @field:NotBlank
-    var name: String,
+    val name: String,
+    @field:NotBlank
+    val description: String,
 )
 
 class CreateRoadNodeRequest(
-    var type: RoadNodeType,
-    var position: CreatePositionRequest,
-    var endingRoadsIds: List<Long>,
-    var startingRoadsIds: List<Long>,
-    var turnDirections: List<CreateTurnDirectionRequest>,
+    val type: RoadNodeType,
+    val position: CreatePositionRequest,
+    val endingRoadsIds: List<Long>,
+    val startingRoadsIds: List<Long>,
+    val turnDirections: List<CreateTurnDirectionRequest>?,
+    val overrideTurnDirectionsTurnEverywhere: Boolean = false,
     @field:NotBlank
-    var name: String,
+    val name: String,
 )
 
 class CreateRoadRequest(
-    var length: Int,
-    var lanes: List<CreateLaneRequest>,
-    var id: Long = 0,
+    val length: Int,
+    val lanes: List<CreateLaneRequest>,
+    val id: Long = 0,
     @field:NotBlank
-    var name: String,
+    val name: String,
 )
 
 class CreateLaneRequest(
-    var startingPoint: Int,
-    var endingPoint: Int,
-    var indexFromLeft: Int,
-    @field:NotBlank
-    var id: Long = 0
+    val startingPoint: Int,
+    val endingPoint: Int,
+    val indexFromLeft: Int,
+    val id: Long = 0
 )
 
 class CreateTurnDirectionRequest(
-    var sourceLaneId: Long,
-    var destinationRoadId: Long
+    val sourceLaneId: Long,
+    val destinationRoadId: Long
 )
 
-data class CreatePositionRequest(var x: Double, var y: Double)
+data class CreatePositionRequest(val x: Double, val y: Double)

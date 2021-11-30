@@ -15,10 +15,10 @@ class MapService(
 ) {
     private val log = LogManager.getLogger()
 
-    fun createMap(createMapRequest: CreateMapRequest) {
+    fun createMap(createMapRequest: CreateMapRequest): MapEntity {
         log.info("Creating map name=${createMapRequest.name}")
         val map = mapper.createMap(createMapRequest)
-        mapRepository.save(map)
+        return mapRepository.save(map)
     }
 
     fun getById(id: Long): MapEntity {
@@ -41,7 +41,9 @@ class MapService(
     private fun getBasicMapInfoDTO(entity: MapEntity) = BasicMapInfoDTO(
         type = entity.type,
         name = entity.name,
+        description = entity.description,
         id = entity.id,
+        compatibleWith = entity.compatibleWith,
         nodes = calculateNodes(entity),
         edges = calculateEdges(entity)
     )

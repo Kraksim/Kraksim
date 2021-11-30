@@ -8,18 +8,15 @@ import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.gps.GPSType
 import pl.edu.agh.cs.kraksim.gps.GpsFactory
 import pl.edu.agh.cs.kraksim.simulation.db.BasicSimulationInfo
-import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.db.SimulationRepository
-import pl.edu.agh.cs.kraksim.simulation.domain.*
+import pl.edu.agh.cs.kraksim.simulation.domain.SimulationEntity
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
 import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
 import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
-import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
 
 @Service
 class SimulationService(
@@ -29,7 +26,6 @@ class SimulationService(
     val lightPhaseManagerFactory: LightPhaseManagerFactory,
     val statisticsFactory: StatisticsFactory,
     val simulationFactory: SimulationFactory,
-    val mapRepository: MapRepository,
     val gpsFactory: GpsFactory,
     val requestMapper: RequestToEntityMapper,
     val mapService: MapService
@@ -37,7 +33,7 @@ class SimulationService(
     private val log = LogManager.getLogger()
 
     @Transactional
-    fun simulateStep(simulationId: Long, times: Int = 1): SimulationEntity {
+    fun simulateStep(simulationId: Long, times: Int = 1) {
         val simulationEntity = repository.getByIdWithLock(simulationId)
             ?: throw ObjectNotFoundException("Couldn't find simulation with id = $simulationId")
         log.info("Simulation id=$simulationId runs simulate for $times times, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
@@ -79,19 +75,13 @@ class SimulationService(
             }
         }
         log.info("Simulation id=$simulationId finished simulating, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
-        val result = repository.save(simulationEntity)
+        repository.save(simulationEntity)
         log.info("Simulation id=$simulationId has been saved")
-        return result
     }
 
     fun getSimulation(id: Long): SimulationEntity {
         log.info("Fetching simulation id=$id")
         return repository.findByIdOrNull(id) ?: throw ObjectNotFoundException("Couldn't find simulation with id = $id")
-    }
-
-    fun getAllSimulations(): List<SimulationEntity> {
-        log.info("Fetching all simulations")
-        return repository.findAll()
     }
 
     fun createSimulation(request: CreateSimulationRequest): SimulationEntity {
@@ -105,93 +95,6 @@ class SimulationService(
             throw InvalidSimulationStateConfigurationException(exceptions)
         }
 
-        return repository.save(simulationEntity)
-    }
-
-    fun populate(): SimulationEntity {
-        var lane = LaneEntity(
-            startingPoint = 0,
-            endingPoint = 400,
-            indexFromLeft = 0
-        )
-        val road = RoadEntity(
-            length = 400,
-            lanes = arrayListOf(lane)
-        )
-
-        var mapEntity = MapEntity(
-            type = MapType.MAP,
-            roadNodes = arrayListOf(
-                RoadNodeEntity(
-                    type = RoadNodeType.GATEWAY,
-                    position = PositionEntity(1.0, 1.0),
-                    endingRoads = ArrayList(),
-                    startingRoads = arrayListOf(road),
-                    turnDirections = ArrayList()
-                ),
-                RoadNodeEntity(
-                    type = RoadNodeType.GATEWAY,
-                    position = PositionEntity(21.0, 1.0),
-                    endingRoads = arrayListOf(road),
-                    startingRoads = ArrayList(),
-                    turnDirections = ArrayList()
-                )
-            ),
-            roads = arrayListOf(road),
-            compatibleWith = listOf(
-                MovementSimulationStrategyType.MULTI_LANE_NAGEL_SCHRECKENBERG,
-                MovementSimulationStrategyType.NAGEL_SCHRECKENBERG
-            )
-        )
-
-        mapEntity = mapRepository.save(mapEntity)
-        lane = road.lanes.first()
-
-        val simulationEntity = SimulationEntity(
-            name = "POPULATED_SIMULATION",
-            mapEntity = mapEntity,
-            simulationStateEntities = ArrayList(),
-            movementSimulationStrategy = MovementSimulationStrategyEntity(
-                type = MovementSimulationStrategyType.NAGEL_SCHRECKENBERG,
-                randomProvider = RandomProviderType.TRUE,
-                slowDownProbability = 0.3,
-                maxVelocity = 6
-            ),
-            simulationType = SimulationType.NAGEL_CORE,
-            expectedVelocity = emptyMap(),
-            lightPhaseStrategies = ArrayList(),
-            statisticsEntities = ArrayList()
-        )
-
-        val simulationStateEntity = SimulationStateEntity(
-            turn = 0,
-            trafficLights = ArrayList(),
-            stateType = StateType.NAGEL_SCHRECKENBERG,
-            gatewaysStates = ArrayList(),
-            carsOnMap = arrayListOf(
-                CarEntity(
-                    carId = 1,
-                    velocity = 2,
-                    currentLaneId = lane.id,
-                    positionRelativeToStart = 30,
-                    gps = GPSEntity(
-                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                        route = ArrayList()
-                    )
-                ),
-                CarEntity(
-                    carId = 2,
-                    velocity = 6,
-                    currentLaneId = lane.id,
-                    positionRelativeToStart = 50,
-                    gps = GPSEntity(
-                        type = GPSType.DIJKSTRA_ROAD_LENGTH,
-                        route = ArrayList()
-                    )
-                )
-            )
-        )
-        simulationEntity.simulationStateEntities.add(simulationStateEntity)
         return repository.save(simulationEntity)
     }
 
