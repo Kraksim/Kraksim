@@ -12,7 +12,7 @@ internal class BrakeLightMovementSimulationStrategyTest {
     private val defaultProbability = 0.5
 
     @Test
-    fun `Given car in lane, when accelerate increase velocity`() {
+    fun `test if reacts to brake lights in front`() {
         // given
         val initialVelocity = 4
         val state = getOneRoadSimulationState()
@@ -43,7 +43,7 @@ internal class BrakeLightMovementSimulationStrategyTest {
     }
 
     @Test
-    fun `Given car in lane, when accelerate increase velocity2`() {
+    fun `test if acceleration delay probability is applied if stopped`() {
         // given
         val initialVelocity = 0
         val state = getOneRoadSimulationState()
@@ -67,7 +67,7 @@ internal class BrakeLightMovementSimulationStrategyTest {
     }
 
     @Test
-    fun `Given car in lane, when accelerate increase velocity3`() {
+    fun `test if default probability applied if car in front too far`() {
         // given
         val initialVelocity = 3
         val state = getOneRoadSimulationState()
