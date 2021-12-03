@@ -7,4 +7,5 @@ interface RandomProvider {
     fun drawWhetherShouldSlowDown(car: Car): Boolean
     fun <T> getRandomElement(list: List<T>): T
     fun setProbabilityForCar(car: Car, probability: Double)
+    fun drawProbabilityForCar(car: Car): Double?
 }

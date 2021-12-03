@@ -14,6 +14,8 @@ class MockRandomProvider(
     override fun drawWhetherShouldSlowDown() = booleanToReturn
     override fun drawWhetherShouldSlowDown(car: Car) = booleanToReturn
 
+    override fun drawProbabilityForCar(car: Car) = probabilityMap[car]
+
     override fun <T> getRandomElement(list: List<T>): T {
         return randomElementIndex?.let { list[it] } ?: list[Random.nextInt(list.size)]
     }

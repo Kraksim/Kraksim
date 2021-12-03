@@ -24,7 +24,7 @@ class BrakeLightMovementSimulationStrategy(
         super.step(state)
     }
 
-    private fun brakeLightPhase(state: NagelSimulationState) {
+    fun brakeLightPhase(state: NagelSimulationState) {
         state.lanes.filter { it.containsCar() }
             .forEach { lane -> setBLParameter(lane) }
     }
@@ -63,7 +63,7 @@ class BrakeLightMovementSimulationStrategy(
                 else
                     ts + 1
             val probability =
-                if (carInFront.brakeLightOn!! && timeToReachNext > ts)
+                if (carInFront.brakeLightOn!! && timeToReachNext < ts)
                     breakLightReactionProbability
                 else if (car.velocity == 0)
                     accelerationDelayProbability
@@ -75,7 +75,10 @@ class BrakeLightMovementSimulationStrategy(
 
     private fun setBLLastCar(car: NagelCar) {
         if (car.currentLane?.parentRoad?.end is Gateway) {
-            random.setProbabilityForCar(car, defaultProbability)
+            if (car.velocity == 0)
+                random.setProbabilityForCar(car, accelerationDelayProbability)
+            else
+                random.setProbabilityForCar(car, defaultProbability)
         } else {
             val distanceToMoveOnCurrentLane = min(car.distanceFromEndOfLane, car.velocity)
             val distanceTotal =
@@ -88,7 +91,7 @@ class BrakeLightMovementSimulationStrategy(
             val timeToReachNext = if (car.velocity != 0) distanceTotal / car.velocity else ts + 1
             val carOnNextRoad: NagelCar? = car.gps.getTargetLaneInNextRoad(this::getLane).cars.getOrNull(0) as NagelCar?
             val probability =
-                if (carOnNextRoad?.brakeLightOn == true && timeToReachNext > ts)
+                if (carOnNextRoad?.brakeLightOn == true && timeToReachNext < ts)
                     breakLightReactionProbability
                 else if (car.velocity == 0)
                     accelerationDelayProbability else defaultProbability

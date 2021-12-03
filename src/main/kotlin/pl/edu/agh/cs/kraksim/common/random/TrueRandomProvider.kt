@@ -30,4 +30,6 @@ class TrueRandomProvider(
     override fun setProbabilityForCar(car: Car, probability: Double) {
         probabilityMap[car] = probability
     }
+
+    override fun drawProbabilityForCar(car: Car): Double? = probabilityMap[car]
 }
