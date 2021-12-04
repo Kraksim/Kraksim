@@ -7,7 +7,7 @@ import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 
 interface Intersection : RoadNode {
     val phases: Map<LaneId, TrafficLightPhase>
-
+    val directions: List<IntersectionTurningLaneDirection>
     fun lightPhasesOf(road: Road): List<TrafficLightPhase>
     fun getPossibleRoads(lane: Lane): List<Road>
     fun getPossibleRoads(road: Road): List<NagelRoad>
