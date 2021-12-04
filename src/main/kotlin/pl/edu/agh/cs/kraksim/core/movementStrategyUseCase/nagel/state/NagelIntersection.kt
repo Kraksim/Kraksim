@@ -11,7 +11,7 @@ import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase.LightColor.GR
 
 class NagelIntersection(
     override val id: Long,
-    val directions: List<IntersectionTurningLaneDirection>,
+    override val directions: List<IntersectionTurningLaneDirection>,
     endingRoads: List<NagelRoad>,
     startingRoads: List<NagelRoad>,
     override val phases: Map<LaneId, TrafficLightPhase>
