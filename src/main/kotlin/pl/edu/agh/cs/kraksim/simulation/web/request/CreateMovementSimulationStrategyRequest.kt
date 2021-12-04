@@ -14,4 +14,11 @@ class CreateMovementSimulationStrategyRequest {
     var slowDownProbability: Double = 0.0
     @field:Positive
     var maxVelocity: Int = 0
+    var threshold: Int? = null
+    @field:Min(0)
+    @field:Max(1)
+    var accelerationDelayProbability: Double? = null
+    @field:Min(0)
+    @field:Max(1)
+    var breakLightReactionProbability: Double? = null
 }

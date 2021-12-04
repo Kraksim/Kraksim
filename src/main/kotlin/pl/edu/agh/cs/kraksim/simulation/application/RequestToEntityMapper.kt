@@ -46,7 +46,10 @@ class RequestToEntityMapper {
             type = request.type,
             randomProvider = request.randomProvider,
             slowDownProbability = request.slowDownProbability,
-            maxVelocity = request.maxVelocity
+            maxVelocity = request.maxVelocity,
+            threshold = request.threshold,
+            accelerationDelayProbability = request.accelerationDelayProbability,
+            breakLightReactionProbability = request.breakLightReactionProbability
         )
     }
 
@@ -129,7 +132,9 @@ class RequestToEntityMapper {
             roadNodes = roadNodes,
             roads = roads.values.toList(),
             name = createMapRequest.name,
+
             description = createMapRequest.description,
+
             compatibleWith = createMapRequest.compatibleWith
         )
     }

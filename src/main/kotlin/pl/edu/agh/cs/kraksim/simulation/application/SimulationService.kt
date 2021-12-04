@@ -17,6 +17,7 @@ import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
 import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 
 @Service
 class SimulationService(
@@ -120,8 +121,23 @@ class SimulationService(
     private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity): List<String> {
         return listOf(
             validateLightPhaseStrategies(simulationState, simulationEntity),
-            validateGenerators(simulationState)
+            validateGenerators(simulationState),
+            validateBrakeLight(simulationEntity)
         ).flatten()
+    }
+
+    private fun validateBrakeLight(simulationEntity: SimulationEntity): List<String> {
+
+        val movementSimulationStrategy = simulationEntity.movementSimulationStrategy
+        return if (
+            movementSimulationStrategy.type == MovementSimulationStrategyType.BRAKE_LIGHT &&
+            (
+                movementSimulationStrategy.threshold == null ||
+                    movementSimulationStrategy.accelerationDelayProbability == null ||
+                    movementSimulationStrategy.breakLightReactionProbability == null
+                )
+        ) listOf("Lacking parameters for brake light strategy")
+        else emptyList()
     }
 
     private fun validateLightPhaseStrategies(

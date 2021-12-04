@@ -81,14 +81,14 @@ class NagelSimulationStateFactory(
         return simState
     }
 
-    private fun adjustGatewayState(it: GatewayStateEntity, gateways: Map<GatewayId, NagelGateway>) {
+    private fun adjustGatewayState(gatewayStateEntity: GatewayStateEntity, gateways: Map<GatewayId, NagelGateway>) {
         val gateway =
-            requireNotNull(gateways[it.gatewayId]) { "Gateway id=${it.gatewayId} doesnt exist for GatewayStateEntity id=${it.id}" }
+            requireNotNull(gateways[gatewayStateEntity.gatewayId]) { "Gateway id=${gatewayStateEntity.gatewayId} doesnt exist for GatewayStateEntity id=${gatewayStateEntity.id}" }
 
-        it.collectedCars.map { createCar(it) }
+        gatewayStateEntity.collectedCars.map { createCar(it) }
             .forEach { gateway.addFinishedCar(it) }
 
-        gateway.generators = it.generators.map { generatorEntity ->
+        gateway.generators = gatewayStateEntity.generators.map { generatorEntity ->
             Generator(
                 generatorEntity.lastCarReleasedTurnsAgo,
                 generatorEntity.releaseDelay,
@@ -100,27 +100,31 @@ class NagelSimulationStateFactory(
         }
     }
 
-    private fun insertTrafficLightState(it: TrafficLightEntity, intersections: Map<IntersectionId, NagelIntersection>) {
+    private fun insertTrafficLightState(trafficLightEntity: TrafficLightEntity, intersections: Map<IntersectionId, NagelIntersection>) {
         val intersection =
-            requireNotNull(intersections[it.intersectionId]) { "Intersection id=${it.intersectionId} doesnt exist for TrafficLightEntity id=${it.id}" }
+            requireNotNull(intersections[trafficLightEntity.intersectionId]) { "Intersection id=${trafficLightEntity.intersectionId} doesnt exist for TrafficLightEntity id=${trafficLightEntity.id}" }
 
-        it.phases.forEach { e: PhaseEntity ->
+        trafficLightEntity.phases.forEach { e: PhaseEntity ->
             val phase = intersection.phases[e.laneId]
-                ?: throw IllegalStateException("Intersection id=${it.intersectionId} doesnt have phase for TrafficLightEntity id=${it.id}")
+                ?: throw IllegalStateException("Intersection id=${trafficLightEntity.intersectionId} doesnt have phase for TrafficLightEntity id=${trafficLightEntity.id}")
             phase.state = e.state
             phase.phaseTime = e.phaseTime
             phase.period = e.period
         }
     }
 
-    private fun putCarOnMap(it: CarEntity, roads: Map<RoadId, NagelRoad>) {
-        require(it.positionRelativeToStart % Car.AVERAGE_CAR_LENGTH == 0) { "Car id=${it.carId} should have positionRelativeToStart divisible by AVERAGE_CAR_LENGTH=${Car.AVERAGE_CAR_LENGTH}, but has ${it.positionRelativeToStart}" }
+    private fun putCarOnMap(carEntity: CarEntity, roads: Map<RoadId, NagelRoad>) {
+        require(carEntity.positionRelativeToStart % Car.AVERAGE_CAR_LENGTH == 0) { "Car id=${carEntity.carId} should have positionRelativeToStart divisible by AVERAGE_CAR_LENGTH=${Car.AVERAGE_CAR_LENGTH}, but has ${carEntity.positionRelativeToStart}" }
         val lanes: Map<LaneId, NagelLane> = roads.values.flatMap { it.lanes }.associateBy { it.id }
-        val car = createCar(it, roads, lanes[it.currentLaneId])
-        car.moveToLaneFront(lanes[it.currentLaneId], it.positionRelativeToStart / Car.AVERAGE_CAR_LENGTH)
+        val car = createCar(carEntity, roads, lanes[carEntity.currentLaneId])
+        car.moveToLaneFront(lanes[carEntity.currentLaneId], carEntity.positionRelativeToStart / Car.AVERAGE_CAR_LENGTH)
     }
 
-    private fun createCar(carEntity: CarEntity, roads: Map<RoadId, NagelRoad>? = null, currentLane: NagelLane? = null): NagelCar {
+    private fun createCar(
+        carEntity: CarEntity,
+        roads: Map<RoadId, NagelRoad>? = null,
+        currentLane: NagelLane? = null
+    ): NagelCar {
         val route = carEntity.gps.route.mapNotNull { roads?.get(it) } // empty list if roads is null
         val gps = GPS(route, carEntity.gps.type)
         if (currentLane?.parentRoad != null) {
@@ -130,7 +134,8 @@ class NagelSimulationStateFactory(
         return NagelCar(
             id = carEntity.carId,
             velocity = carEntity.velocity,
-            gps = gps
+            gps = gps,
+            brakeLightOn = carEntity.brakeLightOn
         )
     }
 
@@ -143,7 +148,8 @@ class NagelSimulationStateFactory(
             gps = GPSEntity(
                 route = car.gps.route.map { route -> route.id },
                 type = car.gps.type
-            )
+            ),
+            brakeLightOn = car.brakeLightOn
         )
     }
 }

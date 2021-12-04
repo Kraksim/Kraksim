@@ -7,7 +7,10 @@ class MovementSimulationStrategyDTO(
     var type: MovementSimulationStrategyType,
     var randomProvider: RandomProviderType,
     var slowDownProbability: Double,
-    var maxVelocity: Int
+    var maxVelocity: Int,
+    var threshold: Int? = null,
+    var accelerationDelayProbability: Double? = null,
+    var breakLightReactionProbability: Double? = null
 ) {
     var id: Long = 0
 }

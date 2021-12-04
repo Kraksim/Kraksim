@@ -44,6 +44,12 @@ class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.message)
     }
 
+    @ExceptionHandler(value = [IllegalStateException::class])
+    protected fun handleIllegalState(ex: IllegalStateException): ResponseEntity<Any> {
+        log.error(ex.stackTraceToString())
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.message)
+    }
+
     @ExceptionHandler(value = [Exception::class])
     protected fun handleDefault(ex: Exception): ResponseEntity<Any> {
         log.error(ex.stackTraceToString())

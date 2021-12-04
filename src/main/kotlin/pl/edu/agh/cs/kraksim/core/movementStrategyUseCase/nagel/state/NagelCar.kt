@@ -10,13 +10,18 @@ class NagelCar(
     override val id: Long = 0,
     override var velocity: Int = 0,
     override val gps: GPS,
+    var brakeLightOn: Boolean? = null
 ) : Car {
     override var positionRelativeToStart: Int = 0
     var currentLane: NagelLane? = null
     var distanceLeftToMove: Int = 0
 
     val distanceFromEndOfLane: Int
-        get() = currentLane!!.cellsCount - positionRelativeToStart - 1
+        get() {
+            val result = currentLane!!.cellsCount - positionRelativeToStart - 1
+            if (result < 0) throw IllegalStateException("Car position is greater than lane length, carId=$id, position=$positionRelativeToStart, currentLaneId=${currentLane?.id}")
+            return result
+        }
 
     override fun moveToLaneFront(lane: Lane?, newPosition: Int) {
         currentLane?.remove(this)
