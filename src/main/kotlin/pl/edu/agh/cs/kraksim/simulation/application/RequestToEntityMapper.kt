@@ -217,8 +217,10 @@ class RequestToEntityMapper {
         val maxIndexFromLeft = road.lanes.maxOf { it.indexFromLeft }
         val errors = ArrayList<String>()
 
-        errors.addAll(road.lanes.filter { it.startingPoint < 0 || it.endingPoint > road.length }
-            .map { "$errorPrefix lane id=${it.id} has incorrect starting or ending point" })
+        errors.addAll(
+            road.lanes.filter { it.startingPoint < 0 || it.endingPoint > road.length }
+                .map { "$errorPrefix lane id=${it.id} has incorrect starting or ending point" }
+        )
 
         if (minIndexFromLeft != 0)
             errors.add("$errorPrefix lane index from left has to start from 0")
@@ -283,7 +285,7 @@ class RequestToEntityMapper {
         if (changeLaneAndTryReachEndRecc(rightLane, visitedLanes, currentRange, lanes, length, it))
             return true
 
-        return false;
+        return false
     }
 
     private fun changeLaneAndTryReachEndRecc(
@@ -322,7 +324,6 @@ class RequestToEntityMapper {
             if (request.startingRoadsIds.isEmpty()) {
                 errors.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road starting from it")
             }
-
         } else {
             if (initialTurnDirectionsSpecified || overrideTurnDirections) {
                 log.warn("Even through node name='${request.name}' type is Gateway there were turnDirections or overrideTurnDirectionsTurnEverywhere specified - they will be ignored!")
