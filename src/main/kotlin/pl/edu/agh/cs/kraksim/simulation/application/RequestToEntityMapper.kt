@@ -297,12 +297,12 @@ class RequestToEntityMapper {
         it: CreateLaneRequest
     ): Boolean {
         if (targetLane != null && !visitedLanes.contains(targetLane)) {
-            val rightRange = targetLane.startingPoint..targetLane.endingPoint
-            val rangeWhereNextToEachOther = currentRange.intersect(rightRange)
+            val targetRange = targetLane.startingPoint..targetLane.endingPoint
+            val rangeWhereNextToEachOther = currentRange.intersect(targetRange)
             if (rangeWhereNextToEachOther.isNotEmpty()) {
-                val resultRight =
+                val result =
                     tryReachEndRecc(targetLane, rangeWhereNextToEachOther.first(), lanes, length, visitedLanes + it)
-                if (resultRight)
+                if (result)
                     return true
             }
         }
