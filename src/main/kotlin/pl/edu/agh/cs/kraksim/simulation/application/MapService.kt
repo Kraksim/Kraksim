@@ -58,10 +58,8 @@ class MapService(
         if (createMapRequest.roadNodes.isEmpty())
             errors.add("Cannot create map without any road nodes")
 
-
         if (createMapRequest.roads.isEmpty())
             errors.add("Cannot create map without any roads")
-
 
         if (createMapRequest.roadNodes.none { it.type == RoadNodeType.GATEWAY })
             errors.add("Map has to contain at least one gateway")
