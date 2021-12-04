@@ -176,20 +176,12 @@ class RequestToEntityMapper {
         val exceptions = listOf(
             createMapRequest.roadNodes.map { validateRoadNode(it) }.flatten(),
             validateRoads(createMapRequest.roads),
-            validateAtLeastOneGateway(createMapRequest.roadNodes),
             createMapRequest.roadNodes.getRepeatsBy { it.name }.map { "Bad intersection configuration name='${it.key}' - road node names have to be unique" }
 
         ).flatten()
         if (exceptions.isNotEmpty()) {
             throw InvalidMapConfigurationException(exceptions)
         }
-    }
-
-    private fun validateAtLeastOneGateway(roadNodes: List<CreateRoadNodeRequest>): List<String> {
-        return if (roadNodes.none { it.type == RoadNodeType.GATEWAY })
-            listOf("Map has to contain at least one gateway")
-        else
-            emptyList()
     }
 
     private fun validateRoads(roads: List<CreateRoadRequest>): List<String> {

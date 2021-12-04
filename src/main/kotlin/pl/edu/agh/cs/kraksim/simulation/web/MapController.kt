@@ -25,8 +25,8 @@ class MapController(
     }
 
     @PostMapping("/validate")
-    fun validateMap(@Valid @RequestBody createMapRequest: CreateMapRequest): ResponseEntity<BasicMapInfoDTO> {
-        val result = service.validateMap(createMapRequest)
+    fun validateMapToDraw(@Valid @RequestBody createMapRequest: CreateMapRequest): ResponseEntity<BasicMapInfoDTO> {
+        val result = service.validateMapToDraw(createMapRequest)
         return ResponseEntity.ok(result)
     }
 
