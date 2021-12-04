@@ -5,15 +5,19 @@ import pl.edu.agh.cs.kraksim.simulation.domain.RoadNodeType
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
 class CreateMapRequest(
     val type: MapType,
     @field:Valid
+    @field:NotEmpty
     val roadNodes: List<CreateRoadNodeRequest>,
     @field:Valid
+    @field:NotEmpty
     val roads: List<CreateRoadRequest>,
     @field:Valid
+    @field:NotEmpty
     val compatibleWith: List<MovementSimulationStrategyType>,
     @field:NotBlank
     val name: String,
@@ -34,6 +38,7 @@ class CreateRoadNodeRequest(
 
 class CreateRoadRequest(
     val length: Int,
+    @field:NotEmpty
     val lanes: List<CreateLaneRequest>,
     val id: Long = 0,
     @field:NotBlank

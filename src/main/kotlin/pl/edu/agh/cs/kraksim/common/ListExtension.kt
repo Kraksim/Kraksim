@@ -52,3 +52,7 @@ inline fun <reified FIRST : T, reified SECOND : T, T> Iterable<T>.partitionByTyp
 fun <T> Collection<T>.toArrayList(): ArrayList<T> {
     return ArrayList(this)
 }
+
+fun <T, K> Collection<T>.getRepeatsBy(keySelector: (T) -> K): Map<K, Int> {
+    return groupingBy(keySelector).eachCount().filter { it.value > 1 }
+}
