@@ -11,10 +11,8 @@ import javax.validation.constraints.NotNull
 class CreateMapRequest(
     val type: MapType,
     @field:Valid
-    @field:NotEmpty
     val roadNodes: List<CreateRoadNodeRequest>,
     @field:Valid
-    @field:NotEmpty
     val roads: List<CreateRoadRequest>,
     @field:Valid
     @field:NotEmpty
