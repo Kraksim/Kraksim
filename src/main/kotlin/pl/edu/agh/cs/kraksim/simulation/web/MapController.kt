@@ -43,7 +43,7 @@ class MapController(
     }
 
     @GetMapping("/all")
-    fun getAllIds(): ResponseEntity<List<BasicMapInfoDTO>> {
+    fun getAllBasicMaps(): ResponseEntity<List<BasicMapInfoDTO>> {
         val basicMaps = service.getAllMapsBasicInfo()
         return ResponseEntity.ok(basicMaps)
     }
