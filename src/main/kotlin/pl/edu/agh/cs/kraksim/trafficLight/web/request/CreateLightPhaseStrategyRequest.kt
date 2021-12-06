@@ -11,7 +11,8 @@ class CreateLightPhaseStrategyRequest {
     lateinit var algorithm: AlgorithmType
     @field:Positive
     var turnLength: Int? = null
-    @field:Positive @field:Max(1)
+    @field:Positive
+    @field:Max(1)
     var phiFactor: Double? = null
     @field:Positive
     var minPhaseLength: Int? = null

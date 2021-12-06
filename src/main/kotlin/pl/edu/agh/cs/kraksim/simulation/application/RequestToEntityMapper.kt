@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
+import pl.edu.agh.cs.kraksim.common.exception.ConfigurationErrorService
 import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
 import pl.edu.agh.cs.kraksim.common.getRepeatsBy
 import pl.edu.agh.cs.kraksim.simulation.domain.*
@@ -13,7 +14,9 @@ import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateReque
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
 
 @Component
-class RequestToEntityMapper {
+class RequestToEntityMapper(
+    val errorService: ConfigurationErrorService
+) {
     private val log = LogManager.getLogger()
 
     fun createSimulation(request: CreateSimulationRequest, mapEntity: MapEntity): SimulationEntity {
@@ -173,70 +176,68 @@ class RequestToEntityMapper {
         )
 
     private fun validateCreateMap(createMapRequest: CreateMapRequest) {
-        val exceptions = listOf(
-            createMapRequest.roadNodes.map { validateRoadNode(it) }.flatten(),
-            validateRoads(createMapRequest.roads),
-            createMapRequest.roadNodes.getRepeatsBy { it.name }.map { "Bad intersection configuration name='${it.key}' - road node names have to be unique" }
-
-        ).flatten()
-        if (exceptions.isNotEmpty()) {
-            throw InvalidMapConfigurationException(exceptions)
-        }
+        validateRoadNodes(createMapRequest.roadNodes)
+        validateRoads(createMapRequest.roads)
     }
 
-    private fun validateRoads(roads: List<CreateRoadRequest>): List<String> {
-        val errors = ArrayList<String>()
+    private fun validateRoadNodes(roadNodes: List<CreateRoadNodeRequest>) {
+        if (roadNodes.isEmpty())
+            errorService.add("Cannot create map without any road nodes")
+        if (roadNodes.none { it.type == RoadNodeType.GATEWAY })
+            errorService.add("Map has to contain at least one gateway")
+
+        roadNodes.forEach { validateRoadNode(it) }
+        roadNodes.getRepeatsBy { it.name }
+            .forEach { errorService.add("Bad intersection configuration name='${it.key}' - road node names have to be unique") }
+    }
+
+    private fun validateRoads(roads: List<CreateRoadRequest>) {
+        if (roads.isEmpty())
+            errorService.add("Cannot create map without any roads")
+
         val repeatedRoadIds = roads.getRepeatsBy { it.id }
         if (repeatedRoadIds.isNotEmpty()) {
-            errors.add("Road ids must be unique (${repeatedRoadIds.keys})")
+            errorService.add("Road ids must be unique (${repeatedRoadIds.keys})")
         }
 
         val repeatedRoadNames = roads.getRepeatsBy { it.name }
         if (repeatedRoadNames.isNotEmpty()) {
-            errors.add("Road names must be unique (${repeatedRoadNames.keys})")
+            errorService.add("Road names must be unique (${repeatedRoadNames.keys})")
         }
 
         val lanes = roads.flatMap { it.lanes }
         val repeatedLaneIds = lanes.getRepeatsBy { it.id }
         if (repeatedLaneIds.isNotEmpty()) {
-            errors.add("Lane ids must be unique (${repeatedLaneIds.keys})")
+            errorService.add("Lane ids must be unique (${repeatedLaneIds.keys})")
         }
 
-        val laneErrors = roads.flatMap { validateLanes(it) }
-        errors.addAll(laneErrors)
-        return errors
+        roads.forEach { validateLanes(it) }
     }
 
-    private fun validateLanes(road: CreateRoadRequest): List<String> {
+    private fun validateLanes(road: CreateRoadRequest) {
         val errorPrefix = "Road id=${road.id} has incorrect lane configuration -"
 
         val minIndexFromLeft = road.lanes.minOf { it.indexFromLeft }
         val maxIndexFromLeft = road.lanes.maxOf { it.indexFromLeft }
-        val errors = ArrayList<String>()
 
-        errors.addAll(
+        errorService.addAll(
             road.lanes.filter { it.startingPoint < 0 || it.endingPoint > road.length }
                 .map { "$errorPrefix lane id=${it.id} has incorrect starting or ending point" }
         )
 
         if (minIndexFromLeft != 0)
-            errors.add("$errorPrefix lane index from left has to start from 0")
+            errorService.add("$errorPrefix lane index from left has to start from 0")
 
         if (maxIndexFromLeft != road.lanes.size - 1)
-            errors.add("$errorPrefix lane index from left have to be in sequence from 0 to number of lanes - 1")
+            errorService.add("$errorPrefix lane index from left have to be in sequence from 0 to number of lanes - 1")
 
-        val driveError = validateIfRoadCanBeDrivenThrough(road, errorPrefix)
-        if (driveError != null) {
-            errors.add(driveError)
-        }
-
-        return errors
+        validateIfRoadCanBeDrivenThrough(road, errorPrefix)
     }
 
-    private fun validateIfRoadCanBeDrivenThrough(road: CreateRoadRequest, errorPrefix: String): String? {
+    private fun validateIfRoadCanBeDrivenThrough(road: CreateRoadRequest, errorPrefix: String) {
         val startingLanes = road.lanes.filter { it.startingPoint == 0 }
         if (startingLanes.isEmpty())
-            return "$errorPrefix no lane with starting point = 0"
+            errorService.add("$errorPrefix no lane with starting point = 0")
 
         val canBeDrivenThrough =
             startingLanes.all {
@@ -250,8 +251,7 @@ class RequestToEntityMapper {
             } // we must assume that from every lane starting where road start we can reach end
         // because while simulating we can't distinguish which starting lane will lead to road end
         if (!canBeDrivenThrough)
-            return "$errorPrefix can't reach end of the road with this lane configuration"
-        return null
+            errorService.add("$errorPrefix can't reach end of the road with this lane configuration")
     }
 
     /**
@@ -306,27 +306,25 @@ class RequestToEntityMapper {
         return false
     }
 
-    private fun validateRoadNode(request: CreateRoadNodeRequest): List<String> {
+    private fun validateRoadNode(request: CreateRoadNodeRequest) {
         val initialTurnDirectionsSpecified = request.turnDirections != null && request.turnDirections.isNotEmpty()
         val overrideTurnDirections = request.overrideTurnDirectionsTurnEverywhere
-        val errors = ArrayList<String>()
 
         if (request.type == RoadNodeType.INTERSECTION) {
             if (!initialTurnDirectionsSpecified && !overrideTurnDirections)
-                errors.add("Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere")
+                errorService.add("Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere")
             else if (initialTurnDirectionsSpecified && overrideTurnDirections) {
                 log.warn("Specified turn directions for node name='${request.name}' will be ignored!")
             }
 
             if (request.startingRoadsIds.isEmpty()) {
-                errors.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road starting from it")
+                errorService.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road starting from it")
             }
         } else {
             if (initialTurnDirectionsSpecified || overrideTurnDirections) {
                 log.warn("Even through node name='${request.name}' type is Gateway there were turnDirections or overrideTurnDirectionsTurnEverywhere specified - they will be ignored!")
             }
         }
-        return errors
     }
 
     private fun getTurnDirections(

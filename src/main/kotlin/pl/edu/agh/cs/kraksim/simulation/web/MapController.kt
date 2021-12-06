@@ -3,6 +3,7 @@ package pl.edu.agh.cs.kraksim.simulation.web
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import pl.edu.agh.cs.kraksim.common.exception.ErrorWrapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapMapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapService
 import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
@@ -25,7 +26,7 @@ class MapController(
     }
 
     @PostMapping("/validate")
-    fun validateMapToDraw(@Valid @RequestBody createMapRequest: CreateMapRequest): ResponseEntity<BasicMapInfoDTO> {
+    fun validateMapToDraw(@Valid @RequestBody createMapRequest: CreateMapRequest): ResponseEntity<ErrorWrapper<BasicMapInfoDTO>> {
         val result = service.validateMapToDraw(createMapRequest)
         return ResponseEntity.ok(result)
     }
