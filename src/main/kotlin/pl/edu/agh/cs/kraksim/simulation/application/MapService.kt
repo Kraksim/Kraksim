@@ -3,6 +3,8 @@ package pl.edu.agh.cs.kraksim.simulation.application
 import org.apache.logging.log4j.LogManager
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.edu.agh.cs.kraksim.common.exception.ConfigurationErrorService
+import pl.edu.agh.cs.kraksim.common.exception.ErrorWrapper
 import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
@@ -15,24 +17,26 @@ import kotlin.random.Random
 @Service
 class MapService(
     val mapper: RequestToEntityMapper,
-    val mapRepository: MapRepository
+    val mapRepository: MapRepository,
+    val errorService: ConfigurationErrorService
 ) {
     private val log = LogManager.getLogger()
 
     fun createMap(createMapRequest: CreateMapRequest): MapEntity {
-        validateCreation(createMapRequest)
         log.info("Creating map name=${createMapRequest.name}")
         val map = mapper.createMap(createMapRequest)
+        errorService.validate()
         return mapRepository.save(map)
     }
 
-    fun validateMapToDraw(createMapRequest: CreateMapRequest): BasicMapInfoDTO {
+    fun validateMapToDraw(createMapRequest: CreateMapRequest): ErrorWrapper<BasicMapInfoDTO> {
         log.info("Validating map name=${createMapRequest.name}")
         val createMap = mapper.createMap(createMapRequest)
         createMap.id = Random.nextLong()
         createMap.roadNodes.forEach { it.id = Random.nextLong() }
         createMap.roads.forEach { it.id = Random.nextLong() }
-        return getBasicMapInfoDTO(createMap)
+        val basicMapInfoDTO = getBasicMapInfoDTO(createMap)
+        return errorService.wrap(basicMapInfoDTO)
     }
 
     fun getById(id: Long): MapEntity {
@@ -50,22 +54,6 @@ class MapService(
         log.info("Fetching all maps basic info")
         val all = mapRepository.findAll()
         return all.map { entity -> getBasicMapInfoDTO(entity) }
-    }
-
-    private fun validateCreation(createMapRequest: CreateMapRequest) {
-        val errors = ArrayList<String>()
-
-        if (createMapRequest.roadNodes.isEmpty())
-            errors.add("Cannot create map without any road nodes")
-
-        if (createMapRequest.roads.isEmpty())
-            errors.add("Cannot create map without any roads")
-
-        if (createMapRequest.roadNodes.none { it.type == RoadNodeType.GATEWAY })
-            errors.add("Map has to contain at least one gateway")
-
-        if (errors.isNotEmpty())
-            throw InvalidMapConfigurationException(errors)
     }
 
     private fun getBasicMapInfoDTO(entity: MapEntity) = BasicMapInfoDTO(
