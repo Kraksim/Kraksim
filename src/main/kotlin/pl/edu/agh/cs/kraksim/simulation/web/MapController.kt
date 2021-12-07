@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.common.exception.ErrorWrapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapMapper
 import pl.edu.agh.cs.kraksim.simulation.application.MapService
-import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
+import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.BasicMapInfoDTO
+import pl.edu.agh.cs.kraksim.simulation.domain.MapDTO
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
 import javax.validation.Valid
 
@@ -16,7 +17,8 @@ import javax.validation.Valid
 @RestController
 class MapController(
     val mapper: MapMapper,
-    val service: MapService
+    val service: MapService,
+    val mapRepository: MapRepository,
 ) {
 
     @PostMapping("/create")
@@ -35,6 +37,12 @@ class MapController(
     fun getMap(@PathVariable id: Long): ResponseEntity<MapDTO> {
         val result = mapper.convertToDto(service.getById(id))
         return ResponseEntity.ok(result)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteMap(@PathVariable id: Long): ResponseEntity<Void> {
+        mapRepository.deleteById(id)
+        return ResponseEntity.noContent().build()
     }
 
     @GetMapping("/basic/{id}")

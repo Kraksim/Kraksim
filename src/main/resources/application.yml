@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:2731/postgres
+    url: jdbc:postgresql://kraksim-db.c1e5c3vhfdpy.eu-central-1.rds.amazonaws.com:5432/postgres
     username: postgres
-    password: postgres
+    password: zmien-na-haslo-prawdziwe
   jpa:
     properties.hibernate:
       dialect: org.hibernate.dialect.PostgreSQLDialect
