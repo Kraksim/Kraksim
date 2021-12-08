@@ -10,6 +10,7 @@ import pl.edu.agh.cs.kraksim.simulation.web.request.*
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType.Companion.isSingleLaneBased
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
 
@@ -176,8 +177,20 @@ class RequestToEntityMapper(
         )
 
     private fun validateCreateMap(createMapRequest: CreateMapRequest) {
+        validateCompatibleStrategies(createMapRequest)
         validateRoadNodes(createMapRequest.roadNodes)
         validateRoads(createMapRequest.roads)
+    }
+
+    private fun validateCompatibleStrategies(request: CreateMapRequest) {
+        if (request.compatibleWith.any(::isSingleLaneBased)) {
+            request.roads.flatMap { road -> road.lanes.map { lane -> road to lane } }
+                .forEach { (road, lane) ->
+                    if (lane.startingPoint != 0 || lane.endingPoint != road.length) {
+                        errorService.add("Road name='${road.name}' has lane id='${lane.id}' incompatible with defined strategies - single based strategies must have lanes stretching on full road length")
+                    }
+                }
+        }
     }
 
     private fun validateRoadNodes(roadNodes: List<CreateRoadNodeRequest>) {
