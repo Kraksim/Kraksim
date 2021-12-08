@@ -3,9 +3,11 @@ package pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.multilaneNagel
 import pl.edu.agh.cs.kraksim.common.Direction
 import pl.edu.agh.cs.kraksim.common.random.RandomProvider
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSimulationStrategy
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelLane
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelRoadNode
+import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelSimulationState
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
-import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.*
-import pl.edu.agh.cs.kraksim.core.state.Road
 import java.lang.Integer.max
 import kotlin.math.min
 
@@ -118,6 +120,4 @@ class MultiLaneNagelMovementSimulationStrategy(
             super.slowLastCar(endNode, lane, lastCar)
         }
     }
-
-    override fun getLane(road: Road) = random.getRandomElement(road.lanes.filter { it.physicalStartingPoint == 0 })
 }
