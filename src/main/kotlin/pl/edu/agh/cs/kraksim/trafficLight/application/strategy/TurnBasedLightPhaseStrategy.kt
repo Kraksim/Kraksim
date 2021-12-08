@@ -46,8 +46,16 @@ class TurnBasedLightPhaseStrategy(
     private fun switchLights(intersection: Intersection) {
         val roadsCount = intersection.endingRoads.size
 
+        val lightPhasesOfLanesGroupedByRoad = intersection.getLightPhasesOfLanesGroupedByRoad()
+        if (lightPhasesOfLanesGroupedByRoad.size == 1) {
+            lightPhasesOfLanesGroupedByRoad.forEach {
+                it.forEach { phase -> phase.state = GREEN }
+            }
+            return
+        }
+
         val phasesToChange =
-            intersection.getLightPhasesOfLanesGroupedByRoad()
+            lightPhasesOfLanesGroupedByRoad
                 .onEach { lanes -> lanes.forEach { it.phaseTime++ } }
                 .filter { roadPhases -> roadPhases[0].phaseTime == roadPhases[0].period }
 
