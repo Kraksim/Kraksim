@@ -6,4 +6,5 @@ interface RoadNode {
     val id: Long
     val endingRoads: Map<RoadId, Road>
     val startingRoads: Map<RoadId, Road>
+    val name: String
 }

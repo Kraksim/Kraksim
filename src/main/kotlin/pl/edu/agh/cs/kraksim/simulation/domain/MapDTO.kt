@@ -24,7 +24,8 @@ class BasicMapInfoDTO(
 class BasicEdgeDto(
     val from: Long,
     val to: Long,
-    val roadThickness: Int
+    val roadThickness: Int,
+    val roadName: String,
 )
 
 class BasicRoadNodeDto(

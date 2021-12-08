@@ -57,7 +57,8 @@ class OneLaneNagelStateBuilder(
                 val gateway = NagelGateway(
                     id = id,
                     startingRoads = startingRoads,
-                    endingRoads = endingRoads
+                    endingRoads = endingRoads,
+                    name = id.toString()
                 )
                 gateways.add(gateway)
             }
@@ -85,7 +86,8 @@ class OneLaneNagelStateBuilder(
             startingRoads = startingRoads,
             directions = directions,
             phases = endingRoads.flatMap { it.lanes }
-                .associate { lane -> lane.id to TrafficLightPhase(Int.MAX_VALUE, LightColor.RED) }
+                .associate { lane -> lane.id to TrafficLightPhase(Int.MAX_VALUE, LightColor.RED) },
+            name = id.toString()
         )
     }
 

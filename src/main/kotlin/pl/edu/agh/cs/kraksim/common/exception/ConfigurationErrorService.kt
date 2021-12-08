@@ -8,6 +8,8 @@ import org.springframework.web.context.annotation.RequestScope
 class ConfigurationErrorService {
 
     val errors = ArrayList<String>()
+    val errorMessage
+        get() = errors.joinToString(separator = ", \n")
 
     fun add(message: String) {
         errors.add(message)
@@ -24,7 +26,7 @@ class ConfigurationErrorService {
     }
 
     fun <T> wrap(result: T): ErrorWrapper<T> {
-        return ErrorWrapper(result, errors.joinToString(separator = ", \n"))
+        return ErrorWrapper(result, errorMessage)
     }
 }
 

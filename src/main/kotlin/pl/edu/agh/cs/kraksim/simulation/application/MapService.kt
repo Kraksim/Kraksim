@@ -10,8 +10,6 @@ import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.simulation.db.MapRepository
 import pl.edu.agh.cs.kraksim.simulation.domain.*
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateMapRequest
-import pl.edu.agh.cs.kraksim.simulation.web.request.CreateRoadNodeRequest
-import java.lang.IllegalArgumentException
 import kotlin.random.Random
 
 @Service
@@ -88,6 +86,7 @@ class MapService(
                     to = toMap[e.id]?.id
                         ?: throw InvalidMapConfigurationException(listOf("Road with name='${e.name}' has no attached end")),
                     roadThickness = e.lanes.size,
+                    roadName = e.name,
                 )
             }
     }
