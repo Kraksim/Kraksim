@@ -51,6 +51,7 @@ class TurnBasedLightPhaseStrategy(
             lightPhasesOfLanesGroupedByRoad.forEach {
                 it.forEach { phase -> phase.state = GREEN }
             }
+            return
         }
 
         val phasesToChange =
