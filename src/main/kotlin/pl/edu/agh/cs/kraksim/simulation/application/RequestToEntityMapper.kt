@@ -208,7 +208,7 @@ class RequestToEntityMapper(
         if (roadNodes.isEmpty())
             errorService.add("Cannot create map without any road nodes")
         if (roadNodes.filter { it.type == RoadNodeType.GATEWAY }.size < 2)
-            errorService.add("Map has to contain at least one gateway")
+            errorService.add("Map has to contain at least two gateways")
 
         roadNodes.forEach { validateRoadNode(it, roads) }
         roadNodes.getRepeatsBy { it.name }

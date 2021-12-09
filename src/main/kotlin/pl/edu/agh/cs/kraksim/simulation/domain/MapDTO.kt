@@ -7,6 +7,7 @@ class MapDTO(
     val roadNodes: List<RoadNodeDTO>,
     val roads: List<RoadDTO>,
     val name: String,
+    var description: String,
     val compatibleWith: List<MovementSimulationStrategyType>,
     val id: Long = 0
 )

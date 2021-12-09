@@ -8,10 +8,11 @@ import pl.edu.agh.cs.kraksim.gps.GPSType
 
 class CarDTO(
     var carId: CarId,
-    var velocity: Velocity, // todo x5
+    var velocity: Velocity,
     var currentLaneId: LaneId?,
     var positionRelativeToStart: Int,
-    var gps: GPSDTO
+    var gps: GPSDTO,
+    var brakeLightOn: Boolean? = null
 ) {
     var id: Long = 0
 }

@@ -21,9 +21,9 @@ class DijkstraBasedGPS {
         getRoadWeight: (Road) -> Double,
         gpsType: GPSType
     ): GPS {
-        require(source != target) { "GPS route target and source cannot be the same gateway (name=${source.name})" }
+        require(source != target) { "GPS route target and source cannot be the same gateway (name=${source.name}, id=${target.id})" }
         val route = calculateDijkstra(state, source, target, getRoadWeight)
-        if (route.isEmpty()) throw IllegalStateException("Target gateway (name=${target.name}) cannot be reached from source (name=${source.name})")
+        if (route.isEmpty()) throw IllegalStateException("Target gateway (name=${target.name}, id=${target.id}) cannot be reached from source (name=${source.name}, id=${source.id})")
         return GPS(route, gpsType)
     }
 
