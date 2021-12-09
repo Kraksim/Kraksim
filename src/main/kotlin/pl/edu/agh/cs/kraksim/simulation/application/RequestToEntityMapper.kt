@@ -367,6 +367,10 @@ class RequestToEntityMapper(
             errorService.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road starting from it")
         }
 
+        if (request.endingRoadsIds.isEmpty()) {
+            errorService.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road ending from it")
+        }
+
         if (initialTurnDirectionsSpecified) {
             validateTurnDirections(roads, request, turnDirections!!)
         }
