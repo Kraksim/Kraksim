@@ -204,7 +204,7 @@ class RoadLengthGPSTest @Autowired constructor(
 
         // then
         assertThatThrownBy(gpsLambda)
-            .hasMessage("Target gateway (id=12) cannot be reached from source (id=10)")
+            .hasMessage("Target gateway (name=12, id=12) cannot be reached from source (name=10, id=10)")
     }
 
     /*
@@ -227,7 +227,7 @@ class RoadLengthGPSTest @Autowired constructor(
 
         // then
         assertThatThrownBy(gpsLambda)
-            .hasMessage("GPS route target and source cannot be the same gateway (id=10)")
+            .hasMessage("GPS route target and source cannot be the same gateway (name=10, id=10)")
     }
 
     /*

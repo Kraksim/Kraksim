@@ -1,7 +1,6 @@
 package pl.edu.agh.cs.kraksim.common
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class CachedValueTest {
@@ -22,6 +21,7 @@ internal class CachedValueTest {
     }
 
     @Test
+    @Suppress("UNUSED_VARIABLE")
     fun `Given cached value, when get with different value return value based on populator called on new value`() {
         // given
         val populator: (String) -> Int = {

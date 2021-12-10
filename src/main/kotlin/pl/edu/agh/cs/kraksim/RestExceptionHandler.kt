@@ -8,12 +8,15 @@ import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import pl.edu.agh.cs.kraksim.common.exception.ConfigurationErrorService
 import pl.edu.agh.cs.kraksim.common.exception.InvalidConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import javax.validation.ConstraintViolationException
 
 @ControllerAdvice
-class RestExceptionHandler {
+class RestExceptionHandler(
+    val errorService: ConfigurationErrorService
+) {
 
     private val log = LogManager.getLogger()
 
@@ -47,12 +50,18 @@ class RestExceptionHandler {
     @ExceptionHandler(value = [IllegalStateException::class])
     protected fun handleIllegalState(ex: IllegalStateException): ResponseEntity<Any> {
         log.error(ex.stackTraceToString())
+        if (errorService.errors.isNotEmpty()) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.errorMessage)
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.message)
     }
 
     @ExceptionHandler(value = [Exception::class])
     protected fun handleDefault(ex: Exception): ResponseEntity<Any> {
         log.error(ex.stackTraceToString())
+        if (errorService.errors.isNotEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorService.errorMessage)
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server error.")
     }
 

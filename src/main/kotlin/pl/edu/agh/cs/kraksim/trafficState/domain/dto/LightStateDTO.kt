@@ -24,7 +24,9 @@ class PhaseDTO(
 class LightPhaseStrategyDTO(
     var algorithm: AlgorithmType,
     var turnLength: Int,
-    var intersections: List<IntersectionId>
+    var intersections: List<IntersectionId>,
+    val phiFactor: Double? = null,
+    val minPhaseLength: Int? = null,
 ) {
     var id: Long = 0
 }

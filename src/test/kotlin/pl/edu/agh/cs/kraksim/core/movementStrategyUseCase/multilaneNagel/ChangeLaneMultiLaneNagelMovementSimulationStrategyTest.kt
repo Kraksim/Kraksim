@@ -83,7 +83,7 @@ internal class ChangeLaneMultiLaneNagelMovementSimulationStrategyTest {
         val lane = state.getLane(roadId = 0, laneId = 11)
         val car1 = createTestCar(state.roads[0], state.roads[1])
             .apply { moveToLaneFront(lane, 0) }
-        val car2 = createTestCar(state.roads[0], state.roads[1])
+        createTestCar(state.roads[0], state.roads[1])
             .apply { moveToLaneFront(state.getLane(roadId = 0, laneId = 10), 0) }
         val strategy = testMultiLaneNagelMovementSimulationStrategy()
 

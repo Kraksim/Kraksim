@@ -2,6 +2,7 @@ package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.apache.logging.log4j.LogManager
 import org.springframework.stereotype.Component
+import pl.edu.agh.cs.kraksim.common.RoadId
 import pl.edu.agh.cs.kraksim.common.exception.ConfigurationErrorService
 import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
 import pl.edu.agh.cs.kraksim.common.getRepeatsBy
@@ -10,6 +11,7 @@ import pl.edu.agh.cs.kraksim.simulation.web.request.*
 import pl.edu.agh.cs.kraksim.trafficLight.domain.TrafficLightPhase
 import pl.edu.agh.cs.kraksim.trafficLight.web.request.CreateLightPhaseStrategyRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.*
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType.Companion.isSingleLaneBased
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateGatewayStateRequest
 import pl.edu.agh.cs.kraksim.trafficState.domain.request.CreateInitialSimulationStateRequest
 
@@ -176,17 +178,39 @@ class RequestToEntityMapper(
         )
 
     private fun validateCreateMap(createMapRequest: CreateMapRequest) {
-        validateRoadNodes(createMapRequest.roadNodes)
+        validateRoadNodes(createMapRequest.roadNodes, createMapRequest.roads)
         validateRoads(createMapRequest.roads)
+        validateCompatibleStrategies(createMapRequest)
     }
 
-    private fun validateRoadNodes(roadNodes: List<CreateRoadNodeRequest>) {
+    private fun validateCompatibleStrategies(request: CreateMapRequest) {
+        if (request.compatibleWith.any(::isSingleLaneBased)) {
+            request.roads.flatMap { road -> road.lanes.map { lane -> road to lane } }
+                .forEach { (road, lane) ->
+                    if (lane.startingPoint != 0 || lane.endingPoint != road.length) {
+                        errorService.add("Road name='${road.name}' has lane id='${lane.id}' incompatible with defined strategies - single based strategies must have lanes stretching on full road length")
+                    }
+                }
+
+            val roadMap = request.roads.associateBy { it.id }
+
+            request.roadNodes.filter { it.type == RoadNodeType.INTERSECTION }
+                .filter { !it.overrideTurnDirectionsTurnEverywhere }
+                .filter { it.turnDirections != null }
+                .filter { roadNode -> roadNode.turnDirections!!.size != roadNode.endingRoadsIds.size * roadNode.startingRoadsIds.map { roadMap[it]!! }.flatMap { it.lanes }.size }
+                .forEach {
+                    errorService.add("Road node name='${it.name}' has turnDirections incompatible with defined strategies - single based strategies must have intersections built so from every lane you can turn everywhere")
+                }
+        }
+    }
+
+    private fun validateRoadNodes(roadNodes: List<CreateRoadNodeRequest>, roads: List<CreateRoadRequest>) {
         if (roadNodes.isEmpty())
             errorService.add("Cannot create map without any road nodes")
-        if (roadNodes.none { it.type == RoadNodeType.GATEWAY })
-            errorService.add("Map has to contain at least one gateway")
+        if (roadNodes.filter { it.type == RoadNodeType.GATEWAY }.size < 2)
+            errorService.add("Map has to contain at least two gateways")
 
-        roadNodes.forEach { validateRoadNode(it) }
+        roadNodes.forEach { validateRoadNode(it, roads) }
         roadNodes.getRepeatsBy { it.name }
             .forEach { errorService.add("Bad intersection configuration name='${it.key}' - road node names have to be unique") }
     }
@@ -306,25 +330,76 @@ class RequestToEntityMapper(
         return false
     }
 
-    private fun validateRoadNode(request: CreateRoadNodeRequest) {
+    private fun validateRoadNode(request: CreateRoadNodeRequest, roads: List<CreateRoadRequest>) {
+
         val initialTurnDirectionsSpecified = request.turnDirections != null && request.turnDirections.isNotEmpty()
         val overrideTurnDirections = request.overrideTurnDirectionsTurnEverywhere
 
         if (request.type == RoadNodeType.INTERSECTION) {
-            if (!initialTurnDirectionsSpecified && !overrideTurnDirections)
-                errorService.add("Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere")
-            else if (initialTurnDirectionsSpecified && overrideTurnDirections) {
-                log.warn("Specified turn directions for node name='${request.name}' will be ignored!")
-            }
-
-            if (request.startingRoadsIds.isEmpty()) {
-                errorService.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road starting from it")
-            }
+            validateIntersection(
+                initialTurnDirectionsSpecified,
+                overrideTurnDirections,
+                request,
+                roads,
+                request.turnDirections
+            )
         } else {
             if (initialTurnDirectionsSpecified || overrideTurnDirections) {
                 log.warn("Even through node name='${request.name}' type is Gateway there were turnDirections or overrideTurnDirectionsTurnEverywhere specified - they will be ignored!")
             }
         }
+    }
+
+    private fun validateIntersection(
+        initialTurnDirectionsSpecified: Boolean,
+        overrideTurnDirections: Boolean,
+        request: CreateRoadNodeRequest,
+        roads: List<CreateRoadRequest>,
+        turnDirections: List<CreateTurnDirectionRequest>?
+    ) {
+        if (!initialTurnDirectionsSpecified && !overrideTurnDirections)
+            errorService.add("Bad intersection configuration name='${request.name}' - specify either turn directions or turn on flag to override everywhere")
+        else if (initialTurnDirectionsSpecified && overrideTurnDirections) {
+            log.warn("Specified turn directions for node name='${request.name}' will be ignored!")
+        }
+
+        if (request.startingRoadsIds.isEmpty()) {
+            errorService.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road starting from it")
+        }
+
+        if (request.endingRoadsIds.isEmpty()) {
+            errorService.add("Bad intersection configuration name='${request.name}' - intersection must have at least one road ending from it")
+        }
+
+        if (initialTurnDirectionsSpecified) {
+            validateTurnDirections(roads, request, turnDirections!!)
+        }
+    }
+
+    private fun validateTurnDirections(
+        roads: List<CreateRoadRequest>,
+        request: CreateRoadNodeRequest,
+        turnDirections: List<CreateTurnDirectionRequest>
+    ) {
+        val startingRoadsMaps: Map<RoadId, CreateRoadRequest> =
+            roads.associateBy { it.id }.filter { request.startingRoadsIds.contains(it.key) }
+        val endingLanesMap: Map<Long, CreateLaneRequest> =
+            roads.filter { request.endingRoadsIds.contains(it.id) }.flatMap { it.lanes }.associateBy { it.id }
+
+        request.turnDirections!!.forEach {
+            if (!startingRoadsMaps.containsKey(it.destinationRoadId)) {
+                errorService.add("Bad intersection configuration name='${request.name}' - intersection doesn't have starting road with id='${it.destinationRoadId}' defined in turnDirections")
+            }
+
+            if (!endingLanesMap.containsKey(it.sourceLaneId)) {
+                errorService.add("Bad intersection configuration name='${request.name}' - intersection doesn't have ending lane with id='${it.destinationRoadId}' defined in turnDirections")
+            }
+        }
+
+        turnDirections.getRepeatsBy { it.destinationRoadId to it.sourceLaneId }
+            .forEach { (direction, count) ->
+                errorService.add("Bad intersection configuration name='${request.name}' - intersection has repeated turnDirections='$direction' $count times")
+            }
     }
 
     private fun getTurnDirections(

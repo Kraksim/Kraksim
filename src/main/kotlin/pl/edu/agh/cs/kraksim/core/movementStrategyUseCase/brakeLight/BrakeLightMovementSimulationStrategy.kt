@@ -6,7 +6,6 @@ import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.NagelMovementSim
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelCar
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelLane
 import pl.edu.agh.cs.kraksim.core.movementStrategyUseCase.nagel.state.NagelSimulationState
-import pl.edu.agh.cs.kraksim.core.state.Car
 import pl.edu.agh.cs.kraksim.core.state.Gateway
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import kotlin.math.min
@@ -83,13 +82,12 @@ class BrakeLightMovementSimulationStrategy(
             val distanceToMoveOnCurrentLane = min(car.distanceFromEndOfLane, car.velocity)
             val distanceTotal =
                 if (car.velocity > distanceToMoveOnCurrentLane)
-                    car.gps.getTargetLaneInNextRoad(this::getLane)
-                        .getFreeSpaceInFront() + distanceToMoveOnCurrentLane
+                    getTargetLane(car).getFreeSpaceInFront() + distanceToMoveOnCurrentLane
                 else
                     distanceToMoveOnCurrentLane
             val ts = min(car.velocity, threshold)
             val timeToReachNext = if (car.velocity != 0) distanceTotal / car.velocity else ts + 1
-            val carOnNextRoad: NagelCar? = car.gps.getTargetLaneInNextRoad(this::getLane).cars.getOrNull(0) as NagelCar?
+            val carOnNextRoad: NagelCar? = getTargetLane(car).cars.getOrNull(0)
             val probability =
                 if (carOnNextRoad?.brakeLightOn == true && timeToReachNext < ts)
                     breakLightReactionProbability

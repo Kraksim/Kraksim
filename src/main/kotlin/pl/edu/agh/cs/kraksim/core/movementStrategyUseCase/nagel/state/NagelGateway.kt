@@ -8,7 +8,8 @@ class NagelGateway(
     override val id: Long,
     endingRoads: List<NagelRoad>,
     startingRoads: List<NagelRoad>,
-    override var generators: List<Generator> = emptyList()
+    override var generators: List<Generator> = emptyList(),
+    override val name: String
 ) : NagelRoadNode, Gateway {
 
     override val finishedCars: ArrayList<NagelCar> = ArrayList()

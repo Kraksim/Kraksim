@@ -15,7 +15,8 @@ abstract class StatisticsMapper {
     @Mappings(
         value = [
             Mapping(source = "simulationEntity.id", target = "simulationId"),
-            Mapping(source = "simulationEntity.mapEntity.roads", target = "roadNamesList")
+            Mapping(source = "simulationEntity.mapEntity.roads", target = "roadNamesList"),
+            Mapping(target = "roadNames", ignore = true)
         ]
     )
     abstract fun convertToDto(

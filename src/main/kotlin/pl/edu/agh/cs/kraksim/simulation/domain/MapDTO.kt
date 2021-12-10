@@ -7,6 +7,7 @@ class MapDTO(
     val roadNodes: List<RoadNodeDTO>,
     val roads: List<RoadDTO>,
     val name: String,
+    var description: String,
     val compatibleWith: List<MovementSimulationStrategyType>,
     val id: Long = 0
 )
@@ -24,7 +25,8 @@ class BasicMapInfoDTO(
 class BasicEdgeDto(
     val from: Long,
     val to: Long,
-    val roadThickness: Int
+    val roadThickness: Int,
+    val roadName: String,
 )
 
 class BasicRoadNodeDto(

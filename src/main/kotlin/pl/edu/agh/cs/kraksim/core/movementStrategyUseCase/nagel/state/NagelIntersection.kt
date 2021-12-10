@@ -14,8 +14,8 @@ class NagelIntersection(
     override val directions: List<IntersectionTurningLaneDirection>,
     endingRoads: List<NagelRoad>,
     startingRoads: List<NagelRoad>,
-    override val phases: Map<LaneId, TrafficLightPhase>
-//    val position: Position
+    override val phases: Map<LaneId, TrafficLightPhase>,
+    override val name: String
 ) : NagelRoadNode, Intersection {
 
     override val startingRoads: Map<RoadId, NagelRoad> = startingRoads.associateBy { it.id }

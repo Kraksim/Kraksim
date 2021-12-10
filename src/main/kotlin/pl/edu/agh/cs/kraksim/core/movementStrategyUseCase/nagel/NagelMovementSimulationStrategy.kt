@@ -147,8 +147,8 @@ open class NagelMovementSimulationStrategy(
             }
     }
 
-    private fun getTargetLane(lastCar: NagelCar) =
+    protected fun getTargetLane(lastCar: NagelCar) =
         lastCar.gps.getTargetLaneInNextRoad(this::getLane) as NagelLane
 
-    protected open fun getLane(road: Road) = road.lanes[0]
+    private fun getLane(road: Road) = random.getRandomElement(road.lanes.filter { it.physicalStartingPoint == 0 })
 }

@@ -53,7 +53,8 @@ class NagelMapFactory {
             startingRoads = node.startingRoads.map { roadIdMap[it.id]!! },
             // values of phases are defined by state, here we insert any (MAX_VALUE, RED) and replace them when given state
             phases = node.endingRoads.flatMap { roadIdMap[it.id]!!.lanes }
-                .associate { lane -> lane.id to TrafficLightPhase(Int.MAX_VALUE, TrafficLightPhase.LightColor.RED) }
+                .associate { lane -> lane.id to TrafficLightPhase(Int.MAX_VALUE, TrafficLightPhase.LightColor.RED) },
+            name = node.name
         )
     }
 
@@ -61,7 +62,8 @@ class NagelMapFactory {
         return NagelGateway(
             id = node.id,
             endingRoads = node.endingRoads.map { roadIdMap[it.id]!! },
-            startingRoads = node.startingRoads.map { roadIdMap[it.id]!! }
+            startingRoads = node.startingRoads.map { roadIdMap[it.id]!! },
+            name = node.name
         )
     }
 

@@ -23,7 +23,16 @@ class MovementSimulationStrategyEntity(
 enum class MovementSimulationStrategyType {
     NAGEL_SCHRECKENBERG,
     MULTI_LANE_NAGEL_SCHRECKENBERG,
-    BRAKE_LIGHT
+    BRAKE_LIGHT;
+
+    companion object {
+        private val singleLaneBasedStrategies
+            get() = listOf(NAGEL_SCHRECKENBERG, BRAKE_LIGHT)
+
+        fun isSingleLaneBased(strategy: MovementSimulationStrategyType): Boolean {
+            return singleLaneBasedStrategies.contains(strategy)
+        }
+    }
 }
 
 enum class RandomProviderType {
