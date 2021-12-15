@@ -13,7 +13,7 @@ class MapEntity(
     var roads: List<RoadEntity>,
     var name: String = "",
     var description: String = "",
-    @Column
+    @Column(length = 10485760)
     @Convert(converter = MovementEnumToStringConverter::class)
     var compatibleWith: List<MovementSimulationStrategyType>,
 ) {
