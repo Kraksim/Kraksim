@@ -28,7 +28,7 @@ class CarEntity(
 
 @Entity
 class GPSEntity(
-    @Column
+    @Column(length = 10485760)
     @Convert(converter = LongArrayToStringConverter::class)
     var route: List<RoadId>,
     var type: GPSType

@@ -35,6 +35,7 @@ class LightPhaseStrategyEntity(
     var turnLength: Int? = null,
     val phiFactor: Double? = null,
     val minPhaseLength: Int? = null,
+    @Column(length = 10485760)
     @Convert(converter = LongArrayToStringConverter::class)
     var intersections: List<IntersectionId>
 ) {

@@ -33,10 +33,10 @@ class StatisticsEntity(
 class StatisticsValuesEntity(
     @Embedded
     val speedStatistics: SpeedStatisticsEntity,
-    @Column
+    @Column(length = 10485760)
     @Convert(converter = MapToStringConverter::class)
     val density: Map<RoadId, Density>,
-    @Column
+    @Column(length = 10485760)
     @Convert(converter = MapToStringConverter::class)
     val roadFlowRatio: Map<RoadId, FlowRatio>
 ) {
@@ -49,7 +49,7 @@ class StatisticsValuesEntity(
 @Embeddable
 class SpeedStatisticsEntity(
     val wholeMapAverageSpeed: AverageSpeed,
-    @Column
+    @Column(length = 10485760)
     @Convert(converter = MapToStringConverter::class)
     val roadAverageSpeed: Map<RoadId, AverageSpeed>
 )
