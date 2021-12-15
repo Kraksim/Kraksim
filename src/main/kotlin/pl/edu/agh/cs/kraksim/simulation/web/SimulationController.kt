@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationMapper
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationService
+import pl.edu.agh.cs.kraksim.simulation.db.BasicSimulationInfo
 import pl.edu.agh.cs.kraksim.simulation.domain.BasicSimulationInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationDTO
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
@@ -34,17 +35,14 @@ class SimulationController(
     @GetMapping("/all")
     fun getSimulations(): ResponseEntity<List<BasicSimulationInfoDTO>> {
         val simulations = service.getAllSimulationsInfo()
-        val dtos = simulations.map {
-            BasicSimulationInfoDTO(
-                id = it.id,
-                name = it.name,
-                type = it.simulationType,
-                mapId = it.mapEntity.id,
-                isFinished = it.finished,
-                turn = it.simulationStateEntities.map { it.turn }.maxOrNull() ?: 0,
-                movementSimulationStrategyType = it.movementSimulationStrategy.type
-            )
-        }
+        val dtos = basicSimulationInfoDTOS(simulations)
+        return ResponseEntity.ok(dtos)
+    }
+
+    @GetMapping("/basic")
+    fun getSimulationBasicInfo(@RequestParam("id") simulationIds: List<Long>): ResponseEntity<List<BasicSimulationInfoDTO>> {
+        val simulations = service.getGivenSimulationsInfo(simulationIds)
+        val dtos = basicSimulationInfoDTOS(simulations)
         return ResponseEntity.ok(dtos)
     }
 
@@ -71,4 +69,17 @@ class SimulationController(
     fun deleteSimulation(@PathVariable("id") id: Long) {
         service.deleteSimulation(id)
     }
+
+    private fun basicSimulationInfoDTOS(simulations: List<BasicSimulationInfo>) =
+        simulations.map {
+            BasicSimulationInfoDTO(
+                id = it.id,
+                name = it.name,
+                type = it.simulationType,
+                mapId = it.mapEntity.id,
+                isFinished = it.finished,
+                turn = it.simulationStateEntities.map { it.turn }.maxOrNull() ?: 0,
+                movementSimulationStrategyType = it.movementSimulationStrategy.type
+            )
+        }
 }

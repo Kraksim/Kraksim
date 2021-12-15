@@ -5,6 +5,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.edu.agh.cs.kraksim.common.IntersectionId
+import pl.edu.agh.cs.kraksim.common.MapId
 import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
@@ -107,6 +108,16 @@ class SimulationService(
     fun getAllSimulationsInfo(): List<BasicSimulationInfo> {
         log.info("Fetching all simulation basic info")
         return repository.findAllBy()
+    }
+
+    fun getGivenSimulationsInfo(ids: List<Long>): List<BasicSimulationInfo> {
+        log.info("Fetching all simulation basic info")
+        return repository.findAllByIdIn(ids)
+    }
+
+    fun getSimulationCountWhere(mapIds: List<Long>): Map<MapId, Long> {
+        val mapIdToSimulationCount = repository.countAllByMapEntity(mapIds)
+        return mapIdToSimulationCount.associate { it }
     }
 
     private fun checkIfFinished(simulationState: SimulationState) {

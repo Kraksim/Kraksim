@@ -19,7 +19,8 @@ class BasicMapInfoDTO(
     val id: Long = 0,
     val compatibleWith: List<MovementSimulationStrategyType>,
     val nodes: List<BasicRoadNodeDto>,
-    val edges: List<BasicEdgeDto>
+    val edges: List<BasicEdgeDto>,
+    val simulationsCount: Long
 )
 
 class BasicEdgeDto(
