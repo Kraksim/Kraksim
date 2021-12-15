@@ -61,8 +61,7 @@ class SOTLLightPhaseStrategy(
                 if (duration * carsCount >= phiFactor && minPhaseLength <= duration) {
                     phase.state = GREEN
                     // calculate green light length
-                    val lastCarPosition = lane.cars
-                        .minByOrNull { it.positionRelativeToStart }?.positionRelativeToStart ?: 0
+                    val lastCarPosition = lane.cars.firstOrNull()?.positionRelativeToStart ?: 0
                     val lengthToEnd = lane.physicalLength - lastCarPosition
                     // all cars should go through this green light, so we can limit this by 1 * length to beat
                     phase.phaseTime = 0

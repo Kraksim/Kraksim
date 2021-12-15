@@ -1,8 +1,10 @@
 package pl.edu.agh.cs.kraksim.simulation.application
 
 import org.apache.logging.log4j.LogManager
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.edu.agh.cs.kraksim.common.MapId
 import pl.edu.agh.cs.kraksim.common.exception.ConfigurationErrorService
 import pl.edu.agh.cs.kraksim.common.exception.ErrorWrapper
 import pl.edu.agh.cs.kraksim.common.exception.InvalidMapConfigurationException
@@ -20,6 +22,9 @@ class MapService(
 ) {
     private val log = LogManager.getLogger()
 
+    @Autowired
+    lateinit var simulationService: SimulationService
+
     fun createMap(createMapRequest: CreateMapRequest): MapEntity {
         log.info("Creating map name=${createMapRequest.name}")
         val map = mapper.createMap(createMapRequest)
@@ -33,7 +38,7 @@ class MapService(
         createMap.id = Random.nextLong()
         createMap.roadNodes.forEach { it.id = Random.nextLong() }
         createMap.roads.forEach { it.id = Random.nextLong() }
-        val basicMapInfoDTO = getBasicMapInfoDTO(createMap)
+        val basicMapInfoDTO = getBasicMapInfoDTO(createMap, 0)
         return errorService.wrap(basicMapInfoDTO)
     }
 
@@ -45,23 +50,26 @@ class MapService(
     fun getBasicById(id: Long): BasicMapInfoDTO {
         log.info("Fetching basic map id=$id")
         val map = mapRepository.findByIdOrNull(id) ?: throw ObjectNotFoundException("Couldn't find map with id = $id")
-        return getBasicMapInfoDTO(map)
+        val simulationsCount: Map<MapId, Long> = simulationService.getSimulationCountWhere(listOf(id))
+        return getBasicMapInfoDTO(map, simulationsCount[id] ?: 0)
     }
 
     fun getAllMapsBasicInfo(): List<BasicMapInfoDTO> {
         log.info("Fetching all maps basic info")
         val all = mapRepository.findAll()
-        return all.map { entity -> getBasicMapInfoDTO(entity) }
+        val simulations: Map<MapId, Long> = simulationService.getSimulationCountWhere(all.map { it.id })
+        return all.map { entity -> getBasicMapInfoDTO(entity, simulations[entity.id] ?: 0) }
     }
 
-    private fun getBasicMapInfoDTO(entity: MapEntity) = BasicMapInfoDTO(
+    private fun getBasicMapInfoDTO(entity: MapEntity, simulationsCount: Long) = BasicMapInfoDTO(
         type = entity.type,
         name = entity.name,
         description = entity.description,
         id = entity.id,
         compatibleWith = entity.compatibleWith,
         nodes = calculateNodes(entity),
-        edges = calculateEdges(entity)
+        edges = calculateEdges(entity),
+        simulationsCount = simulationsCount
     )
 
     private fun calculateEdges(entity: MapEntity): List<BasicEdgeDto> {
