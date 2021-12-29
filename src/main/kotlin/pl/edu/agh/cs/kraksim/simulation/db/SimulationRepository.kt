@@ -13,9 +13,9 @@ import javax.persistence.LockModeType
 @Repository
 interface SimulationRepository : JpaRepository<SimulationEntity, Long> {
 
-    fun findAllBy(): List<BasicSimulationInfo>
+    fun findAllByOrderById(): List<BasicSimulationInfo>
 
-    fun findAllByIdIn(id: List<Long>): List<BasicSimulationInfo>
+    fun findAllByIdInOrderById(id: List<Long>): List<BasicSimulationInfo>
 
     @Query("SELECT new kotlin.Pair(e.mapEntity.id, COUNT(e.id)) from SimulationEntity e WHERE e.mapEntity.id in ?1 GROUP BY e.mapEntity.id")
     fun countAllByMapEntity(mapIds: List<Long>): List<Pair<MapId, Long>>

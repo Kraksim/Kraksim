@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pl.edu.agh.cs.kraksim.common.IntersectionId
 import pl.edu.agh.cs.kraksim.common.MapId
-import pl.edu.agh.cs.kraksim.common.exception.InvalidSimulationStateConfigurationException
+import pl.edu.agh.cs.kraksim.common.exception.ConfigurationErrorService
 import pl.edu.agh.cs.kraksim.common.exception.ObjectNotFoundException
 import pl.edu.agh.cs.kraksim.core.state.SimulationState
 import pl.edu.agh.cs.kraksim.gps.GpsFactory
@@ -18,6 +18,8 @@ import pl.edu.agh.cs.kraksim.statistics.application.StatisticsFactory
 import pl.edu.agh.cs.kraksim.trafficLight.application.LightPhaseManagerFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.MovementSimulationStrategyFactory
 import pl.edu.agh.cs.kraksim.trafficState.application.StateFactory
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.AlgorithmType
+import pl.edu.agh.cs.kraksim.trafficState.domain.entity.LightPhaseStrategyEntity
 import pl.edu.agh.cs.kraksim.trafficState.domain.entity.MovementSimulationStrategyType
 
 @Service
@@ -30,7 +32,8 @@ class SimulationService(
     val simulationFactory: SimulationFactory,
     val gpsFactory: GpsFactory,
     val requestMapper: RequestToEntityMapper,
-    val mapService: MapService
+    val mapService: MapService,
+    val errorService: ConfigurationErrorService
 ) {
     private val log = LogManager.getLogger()
 
@@ -41,13 +44,10 @@ class SimulationService(
         log.info("Simulation id=$simulationId runs simulate for $times times, current turn=${simulationEntity.latestTrafficStateEntity.turn}")
 
         val simulationState = stateFactory.from(simulationEntity)
-        val movementStrategy =
-            movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
-        val lightPhaseManager =
-            lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
+        val movementStrategy = movementSimulationStrategyFactory.from(simulationEntity.movementSimulationStrategy)
+        val lightPhaseManager = lightPhaseManagerFactory.from(simulationState, simulationEntity.lightPhaseStrategies)
         val statisticsManager = statisticsFactory.createStatisticsManager(
-            simulationEntity.statisticsEntities,
-            simulationEntity.expectedVelocity
+            simulationEntity.statisticsEntities, simulationEntity.expectedVelocity
         )
 
         val simulation = simulationFactory.from(
@@ -71,8 +71,9 @@ class SimulationService(
 
             simulationEntity.apply {
                 simulationStateEntities.add(stateEntity)
-                statisticsEntities +=
-                    statisticsFactory.createStatisticsEntity(statisticsManager.latestState, simulationEntity)
+                statisticsEntities += statisticsFactory.createStatisticsEntity(
+                    statisticsManager.latestState, simulationEntity
+                )
                 finished = simulation.state.finished
             }
         }
@@ -92,10 +93,8 @@ class SimulationService(
         val simulationEntity = requestMapper.createSimulation(request, mapEntity)
         val simulationState = stateFactory.from(simulationEntity)
 
-        val exceptions: List<String> = validateState(simulationState, simulationEntity)
-        if (exceptions.isNotEmpty()) {
-            throw InvalidSimulationStateConfigurationException(exceptions)
-        }
+        validateState(simulationState, simulationEntity)
+        errorService.validate()
 
         return repository.save(simulationEntity)
     }
@@ -107,12 +106,12 @@ class SimulationService(
 
     fun getAllSimulationsInfo(): List<BasicSimulationInfo> {
         log.info("Fetching all simulation basic info")
-        return repository.findAllBy()
+        return repository.findAllByOrderById()
     }
 
     fun getGivenSimulationsInfo(ids: List<Long>): List<BasicSimulationInfo> {
         log.info("Fetching all simulation basic info")
-        return repository.findAllByIdIn(ids)
+        return repository.findAllByIdInOrderById(ids)
     }
 
     fun getSimulationCountWhere(mapIds: List<Long>): Map<MapId, Long> {
@@ -129,54 +128,58 @@ class SimulationService(
                 .all { it.carsToRelease == 0 }
     }
 
-    private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity): List<String> {
-        return listOf(
-            validateLightPhaseStrategies(simulationState, simulationEntity),
-            validateGenerators(simulationState),
-            validateBrakeLight(simulationEntity)
-        ).flatten()
-    }
-
-    private fun validateBrakeLight(simulationEntity: SimulationEntity): List<String> {
-
-        val movementSimulationStrategy = simulationEntity.movementSimulationStrategy
-        return if (
-            movementSimulationStrategy.type == MovementSimulationStrategyType.BRAKE_LIGHT &&
-            (
-                movementSimulationStrategy.threshold == null ||
-                    movementSimulationStrategy.accelerationDelayProbability == null ||
-                    movementSimulationStrategy.breakLightReactionProbability == null
-                )
-        ) listOf("Lacking parameters for brake light strategy")
-        else emptyList()
+    private fun validateState(simulationState: SimulationState, simulationEntity: SimulationEntity) {
+        validateLightPhaseStrategies(simulationState, simulationEntity)
+        validateGenerators(simulationState)
+        validateBrakeLight(simulationEntity)
     }
 
     private fun validateLightPhaseStrategies(
         simulationState: SimulationState,
         simulationEntity: SimulationEntity
-    ): List<String> {
+    ) {
         val intersectionsWithStrategy: Set<IntersectionId> =
             simulationEntity.lightPhaseStrategies.flatMap { strategy -> strategy.intersections }.toSet()
-        return simulationState.intersections.keys.mapNotNull {
+        simulationState.intersections.keys.forEach {
             if (!intersectionsWithStrategy.contains(it)) {
-                it
-            } else {
-                null
+                errorService.add("Intersection with id=$it doesn't contain traffic light strategy")
             }
-        }.map { "Intersection with id=$it doesn't contain traffic light strategy" }
+        }
+        simulationEntity.lightPhaseStrategies.forEach { validateStrategy(it) }
+    }
+
+    private fun validateStrategy(it: LightPhaseStrategyEntity) {
+        val isSOTL = it.algorithm == AlgorithmType.SOTL
+        val isTurnBased = it.algorithm == AlgorithmType.TURN_BASED
+        val hasBadSOTLParameters = it.minPhaseLength == null || it.phiFactor == null
+        val hasBadTurnBasedParameters = it.turnLength == null
+
+        if ((isSOTL && hasBadSOTLParameters) || (isTurnBased && hasBadTurnBasedParameters))
+            errorService.add("Light phase strategy for intersections ids=${it.intersections} lacks parameters")
     }
 
     private fun validateGenerators(simulationState: SimulationState) =
         simulationState.gateways.flatMap { (_, gateway) -> gateway.generators.map { Pair(gateway, it) } }
-            .mapNotNull { (gateway, generator) ->
+            .forEach { (gateway, generator) ->
                 try {
                     gpsFactory.from(gateway, generator, simulationState)
                 } catch (e: Exception) {
-                    return@mapNotNull when (e) {
-                        is IllegalArgumentException, is IllegalStateException -> e.message
+                    when (e) {
+                        is IllegalArgumentException, is IllegalStateException -> errorService.add(e.message)
                         else -> throw e
                     }
                 }
-                return@mapNotNull null
             }
+
+    private fun validateBrakeLight(simulationEntity: SimulationEntity) {
+        val movementSimulationStrategy = simulationEntity.movementSimulationStrategy
+        val isBrakeLight = movementSimulationStrategy.type == MovementSimulationStrategyType.BRAKE_LIGHT
+        val hasBadBrakeLightParameters =
+            movementSimulationStrategy.threshold == null ||
+                movementSimulationStrategy.accelerationDelayProbability == null ||
+                movementSimulationStrategy.breakLightReactionProbability == null
+        if (isBrakeLight && hasBadBrakeLightParameters) {
+            errorService.add("Lacking parameters for brake light strategy")
+        }
+    }
 }
