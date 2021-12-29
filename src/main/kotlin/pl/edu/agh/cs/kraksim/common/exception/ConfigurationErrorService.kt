@@ -11,8 +11,8 @@ class ConfigurationErrorService {
     val errorMessage
         get() = errors.joinToString(separator = ", \n")
 
-    fun add(message: String) {
-        errors.add(message)
+    fun add(message: String?) {
+        message?.apply { errors.add(this) }
     }
 
     fun addAll(messages: List<String>) {

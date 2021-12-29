@@ -56,7 +56,7 @@ class MapService(
 
     fun getAllMapsBasicInfo(): List<BasicMapInfoDTO> {
         log.info("Fetching all maps basic info")
-        val all = mapRepository.findAll()
+        val all = mapRepository.findAllByOrderById()
         val simulations: Map<MapId, Long> = simulationService.getSimulationCountWhere(all.map { it.id })
         return all.map { entity -> getBasicMapInfoDTO(entity, simulations[entity.id] ?: 0) }
     }

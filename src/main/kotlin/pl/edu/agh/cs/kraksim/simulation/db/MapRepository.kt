@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository
 import pl.edu.agh.cs.kraksim.simulation.domain.MapEntity
 
 @Repository
-interface MapRepository : JpaRepository<MapEntity, Long>
+interface MapRepository : JpaRepository<MapEntity, Long> {
+    fun findAllByOrderById(): List<MapEntity>
+}

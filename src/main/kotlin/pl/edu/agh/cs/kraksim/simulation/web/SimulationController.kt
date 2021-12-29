@@ -4,14 +4,20 @@ import org.apache.logging.log4j.LogManager
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import pl.edu.agh.cs.kraksim.common.unwrapExecutionException
+import pl.edu.agh.cs.kraksim.common.whileWithTimeout
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationMapper
 import pl.edu.agh.cs.kraksim.simulation.application.SimulationService
 import pl.edu.agh.cs.kraksim.simulation.db.BasicSimulationInfo
 import pl.edu.agh.cs.kraksim.simulation.domain.BasicSimulationInfoDTO
 import pl.edu.agh.cs.kraksim.simulation.domain.SimulationDTO
 import pl.edu.agh.cs.kraksim.simulation.web.request.CreateSimulationRequest
+import java.util.concurrent.Executors
 import javax.validation.Valid
 import javax.validation.constraints.Positive
+
+private const val N = 1000
+private const val MAX_WAIT_TIME = 15000L
 
 @RequestMapping("/simulation")
 @RestController
@@ -22,6 +28,7 @@ class SimulationController(
 ) {
 
     private val log = LogManager.getLogger()
+    private val executor = Executors.newFixedThreadPool(N)
 
     @GetMapping("/{id}")
     fun getSimulation(
@@ -50,10 +57,21 @@ class SimulationController(
     fun simulateStep(
         @RequestParam("id") simulationId: Long,
         @RequestParam("times") @Valid @Positive times: Int,
-    ): ResponseEntity<Void> {
-        service.simulateStep(simulationId, times)
-        log.info("Simulation id=$simulationId has been committed to db")
-        return ResponseEntity.noContent().build()
+    ): ResponseEntity<Result> = unwrapExecutionException {
+        val submit = executor.submit {
+            service.simulateStep(simulationId, times)
+            log.info("Simulation id=$simulationId has been committed to db")
+        }
+
+        whileWithTimeout(MAX_WAIT_TIME) {
+            if (submit.isDone) {
+                submit.get() // throws exception if exception has occurred in task
+                log.info("Returning that simulation has finished")
+                return ResponseEntity.ok(Result(ResultType.FINISHED))
+            }
+        }
+        log.info("Returning that simulation is still simulating")
+        return ResponseEntity.ok(Result(ResultType.STILL_SIMULATING))
     }
 
     @PostMapping("/create")
@@ -82,4 +100,7 @@ class SimulationController(
                 movementSimulationStrategyType = it.movementSimulationStrategy.type
             )
         }
+
+    class Result(val type: ResultType)
+    enum class ResultType { FINISHED, STILL_SIMULATING }
 }
